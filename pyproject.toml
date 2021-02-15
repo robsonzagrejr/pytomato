@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "trab-formais"
+version = "0.1.0"
+description = ""
+authors = ["robson <r.zagre.jr@gmail.com>, "]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+dash = "^1.19.0"
+dash-table = "^4.11.2"
+dash-bootstrap-components = "^0.11.3"
+
