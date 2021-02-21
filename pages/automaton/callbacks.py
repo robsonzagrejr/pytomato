@@ -2,10 +2,30 @@ import dash
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+import base64
 
 import pytomato.automato as tomato_auto
 
 def register_callbacks(app):
+    @app.callback(
+        [
+            Output('automaton-download','download'),
+            Output('automaton-download', 'href'),
+        ],
+        [
+            Input('automaton-dropdown', 'value'),
+        ],
+        [
+            State('store-automaton', 'data')
+        ],
+    )
+    def automaton_download(automaton_selected, automaton_data):
+        if automaton_selected:
+            data = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
+            data = f"data:text/plain;UTF-8,{data}"
+            return f"{automaton_selected}", data
+        return '', ''
+
 
     @app.callback(
         [
@@ -48,6 +68,8 @@ def register_callbacks(app):
             Output('automaton-alert', 'children'),
         ],
         [
+            Input('automaton-upload','contents'),
+            Input('automaton-upload', 'filename'),
             Input('automaton-btn-add', 'n_clicks'),
             Input('automaton-btn-update', 'n_clicks'),
             Input('automaton-btn-rm', 'n_clicks'),
@@ -61,6 +83,8 @@ def register_callbacks(app):
         ]
     )
     def update_automaton_data(
+            file_content,
+            file_name,
             add_click,
             update_click,
             rm_click,
@@ -73,7 +97,25 @@ def register_callbacks(app):
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-        if triggered_id == 'automaton-btn-add' and automaton_name:
+        if triggered_id == 'automaton-upload' or triggered_id == 'automaton-filename':
+            if file_name:
+                automaton_id = file_name.replace(' ','_').lower()
+
+                alert_text = f'Gramática {automaton_name} adicionada com sucesso :D'
+                alert_type = 'success'
+                keys = [v['value'] for v in automaton_options]
+                if automaton_id in keys:
+                    alert_text = f"Gramática '{automaton_name}' já existe :X"
+                    alert_type = 'danger'
+                else:
+                    decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
+                    automaton_obj = tomato_auto.texto_para_obj(decoded_content)
+                    automaton_data[automaton_id] = automaton_obj
+
+                alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+                return automaton_data, alert
+
+        elif triggered_id == 'automaton-btn-add' and automaton_name:
             automaton_id = automaton_name.replace(' ','_').lower()
 
             alert_text = f'Automato {automaton_name} adicionado com sucesso :D'
@@ -107,7 +149,7 @@ def register_callbacks(app):
 
         return automaton_data, []
 
-    
+
     @app.callback(
         [
             Output('automaton-table', 'data'),
@@ -145,6 +187,3 @@ def register_callbacks(app):
                 data.append(row)
             return data, columns
         return [], []
-
-
-

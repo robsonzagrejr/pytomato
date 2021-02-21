@@ -42,6 +42,19 @@ widgets = {
     'automaton_alert': html.Div(
         id='automaton-alert',
     ),
+    'automaton_upload': dcc.Upload(
+        id='automaton-upload',
+        children=html.Div([
+            html.A('Upload')
+        ]),
+        multiple=False,
+        className='btn btn btn-outline-dark'
+    ),
+    'automaton_download': html.A(
+        "Dowload",
+        id='automaton-download',
+        className='btn btn btn-outline-dark'
+    ),
     'automaton_table': DataTable(
         id='automaton-table',
         editable=True,

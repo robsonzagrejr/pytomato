@@ -7,7 +7,6 @@ import base64
 import pytomato.gramatica as tomato_gram
 
 def register_callbacks(app):
-    # Download | Upload
     @app.callback(
         [
             Output('grammar-download','download'),
@@ -22,14 +21,10 @@ def register_callbacks(app):
     )
     def grammar_download(grammar_selected, grammar_data):
         if grammar_selected:
-            #data = base64.b64encode(grammar_data[grammar_selected]['gramatica']).decode()
             data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
-            #data = data.encode(encoding='UTF-8').decode()
-            data = data.encode()
             data = f"data:text/plain;UTF-8,{data}"
             return f"{grammar_selected}", data
         return '', ''
-
 
     @app.callback(
         [
@@ -112,15 +107,12 @@ def register_callbacks(app):
                     alert_text = f"Gramática '{grammar_name}' já existe :X"
                     alert_type = 'danger'
                 else:
-                    print(file_content)
-                    grammar_obj = tomato_gram.texto_para_obj(file_content, grammar_id)
-                    print(grammar_obj)
+                    decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
+                    grammar_obj = tomato_gram.texto_para_obj(decoded_content, grammar_id)
                     grammar_data[grammar_id] = grammar_obj
 
                 alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
                 return grammar_data, alert
-
-
 
         elif triggered_id == 'grammar-btn-add' and grammar_name:
             grammar_id = grammar_name.replace(' ','_').lower()
@@ -155,5 +147,3 @@ def register_callbacks(app):
             return grammar_data, alert
 
         return grammar_data, []
-
-    

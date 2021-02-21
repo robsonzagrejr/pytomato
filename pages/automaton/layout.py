@@ -22,8 +22,16 @@ inputs = dbc.Container(
                         widgets['automaton_dropdown'],
                     ],
                     md=3
-                )
-            ]
+                ),
+                dbc.Col(
+                    [
+                        widgets['automaton_download'],
+                        widgets['automaton_upload'],
+                    ],
+                    md=6,
+                ),
+            ],
+            align="end",
         ),
         html.Br(),
         dbc.Row(
