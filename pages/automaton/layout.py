@@ -1,22 +1,9 @@
+
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 
-from components import (
+from .components import (
     widgets
-)
-
-header = dbc.Container(
-    children=[
-        html.Br(),
-        html.Br(),
-        dbc.Row(
-            children=[
-                dbc.Col(
-                    html.H1("Trabalho de Formais"),
-                ),
-            ]
-        )
-    ]
 )
 
 inputs = dbc.Container(
@@ -24,7 +11,7 @@ inputs = dbc.Container(
         html.Br(),
         html.Br(),
         dbc.Row(
-            html.H3('Gramática'),
+            html.H3('Automato'),
         ),
         dbc.Row(
             [
@@ -55,7 +42,7 @@ outputs = dbc.Container(
             [
                 dbc.Col(
                     [
-                        widgets['automaton_table'],
+                        #widgets['automaton_table'],
                     ],
                     md=12,
                 ),
@@ -64,3 +51,7 @@ outputs = dbc.Container(
     ]
 )
 
+layout = [
+    inputs,
+    outputs
+]
