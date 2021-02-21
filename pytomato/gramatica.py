@@ -26,9 +26,11 @@ def retornar_gramatica(objeto):
     
     return texto
 
-texto= "S -> aA | bB | cS\n\
-        A -> aS | bC | b | cA\n\
-        B -> aC | a | bS | cB\n\
-        C -> aB | bA | cC | c"
 
-print(retornar_gramatica(traduzir_gramatica(texto, 'nome')))
+if __name__ == '__main__':
+    texto= "S -> aA | bB | cS\n\
+            A -> aS | bC | b | cA\n\
+            B -> aC | a | bS | cB\n\
+            C -> aB | bA | cC | c"
+
+    print(retornar_gramatica(traduzir_gramatica(texto, 'nome')))

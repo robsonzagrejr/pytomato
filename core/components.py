@@ -17,10 +17,15 @@ def make_navbar(url_base):
         dark=True,
     )
 
+stores = {
+    'store-grammar': dcc.Store(data={}, id='store-grammar', storage_type='local'),
+}
+
 page_content = html.Div(
     [
         dcc.Location(id='url', refresh=False),
-        html.Div(id='page-content')
+        stores['store-grammar'],
+        html.Div(id='page-content'),
     ]
 )
 

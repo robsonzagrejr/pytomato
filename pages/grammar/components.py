@@ -21,21 +21,22 @@ widgets = {
         id='grammar-btn-add',
         color='dark',
         outline=True,
-        style={'margin-right': '3%'},
+        className='btn',
     ),
     'grammar_btn_update': dbc.Button(
         "Atualizar",
         id='grammar-btn-update',
         color='secondary',
         outline=True,
-        style={'margin-right': '3%'},
+        className='btn',
+        style={'display': 'none'},
     ),
     'grammar_btn_rm': dbc.Button(
         "Remover",
-        id='grammar-btn-add',
+        id='grammar-btn-rm',
         color='danger',
         outline=True,
-        style={'margin-right': '3%'},
+        className='btn',
     ),
     
     'grammar_table': DataTable(
