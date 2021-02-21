@@ -58,6 +58,8 @@ inputs = dbc.Container(
                 ),
             ]
         ),
+        html.Br(),
+        widgets['grammar_alert'],
         ]
 )
 
@@ -66,7 +68,6 @@ outputs = dbc.Container(
     children=[
         html.Br(),
         html.Hr(),
-        html.Div(id='dict-store'),
     ]
 )
 

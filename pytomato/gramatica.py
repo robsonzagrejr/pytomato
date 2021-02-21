@@ -3,10 +3,11 @@ def traduzir_gramatica(text, nome):
     linhas = text.split('\n')
     gramatica = {}
     for linha in linhas:
-        nomeEstado, estado = linha.split('->')
-        transicoes = estado.split('|')
-        
-        gramatica[nomeEstado] = transicoes
+        if '->' in linha:
+            nomeEstado, estado = linha.split('->')
+            transicoes = estado.split('|')
+            
+            gramatica[nomeEstado] = transicoes
     
     return {
         'nome': nome,

@@ -20,12 +20,15 @@ url_base = '/'
 if app.config['url_base_pathname'] is not None:
     url_base = app.config['url_base_pathname']
 
-app.layout = html.Div(
-    children=[
-        make_navbar(url_base),
-        page_content
-    ]
-)
+
+def serve_layout():
+    return html.Div(
+        children=[
+            make_navbar(url_base),
+            page_content
+        ]
+    )
+app.layout=serve_layout()
 
 register_callbacks(app)
 

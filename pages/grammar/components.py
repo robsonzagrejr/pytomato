@@ -38,7 +38,9 @@ widgets = {
         outline=True,
         className='btn',
     ),
-    
+    'grammar_alert': html.Div(
+        id='grammar-alert',
+    ),
     'grammar_table': DataTable(
         id='grammar-table',
         columns=[

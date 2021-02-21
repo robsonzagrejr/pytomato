@@ -1,4 +1,3 @@
-
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 
@@ -11,25 +10,57 @@ inputs = dbc.Container(
         html.Br(),
         html.Br(),
         dbc.Row(
-            html.H3('Automato'),
+            html.H1('Automato'),
         ),
+        html.Br(),
+        html.Br(),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        widgets['grammar_text_area'],
+                        html.Label('Selecione o Automato:'),
+                        widgets['automaton_dropdown'],
                     ],
-                    md=6,
+                    md=7
+                )
+            ]
+        ),
+        html.Br(),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.Label('Nome:'),
+                        widgets['automaton_input'],
+                    ],
+                    md=3
                 ),
                 dbc.Col(
                     [
-                        widgets['grammar_table'],
+                        widgets['automaton_btn_add'],
+                        widgets['automaton_btn_update'],
+                        widgets['automaton_btn_rm'],
                     ],
                     md=6,
                 ),
+            ],
+            align="end",
+        ),
+        html.Br(),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.Label('Gramática:'),
+                        widgets['automaton_text_area'],
+                    ],
+                    md=7,
+                ),
             ]
         ),
-    ]
+        html.Br(),
+        widgets['automaton_alert'],
+        ]
 )
 
 
@@ -37,17 +68,6 @@ outputs = dbc.Container(
     children=[
         html.Br(),
         html.Hr(),
-        dbc.Row(html.H3('Automato')),
-        dbc.Row(
-            [
-                dbc.Col(
-                    [
-                        #widgets['automaton_table'],
-                    ],
-                    md=12,
-                ),
-            ]
-        )
     ]
 )
 
