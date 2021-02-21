@@ -1,44 +1,46 @@
 def para_estrutura_de_dados(texto):
     linhas = texto.split("\n")
-    '''
-    numero_de_estados = linhas[0]
-    estado_inicial = linhas[1]
-    estados_de_aceitacao = linhas[2].split(',')
-    alfabeto = linhas[3].split(',')
-    '''
+    estrutura = {}
+    estrutura['n_estados'] = linhas[0]
+    estrutura['inicial'] = linhas[1]
+    estrutura['aceitacao'] = linhas[2].split(',')
+    estrutura['alfabeto'] = linhas[3].split(',')
     transicoes = {}
     for t in range(4, len(linhas)):
-        transicao = linhas[t].split(',')
-        estado = transicao[0]
-        
-        if (not (estado in transicoes)):
-            transicoes[estado] = {}
+        if (linhas[t]):
+            transicao = linhas[t].split(',')
+            estado = transicao[0]
 
-        simbolo_do_alfabeto = transicao[1]
+            if (not (estado in transicoes)):
+                transicoes[estado] = {}
 
-        if (not (simbolo_do_alfabeto in transicoes[estado]) ):
-            transicoes[estado][simbolo_do_alfabeto] = []
+            simbolo_do_alfabeto = transicao[1]
 
-        estados_alvo = transicao[2].split('-')
-        for e in estados_alvo:
-            transicoes[estado][simbolo_do_alfabeto].append(e)
+            if (not (simbolo_do_alfabeto in transicoes[estado]) ):
+                transicoes[estado][simbolo_do_alfabeto] = []
 
-    return transicoes
+            estados_alvo = transicao[2].split('-')
+            for e in estados_alvo:
+                transicoes[estado][simbolo_do_alfabeto].append(e)
+    estrutura['transicoes'] = transicoes
+    return estrutura
 
-def para_texto(n_estados, inicial, aceitacao, alfabeto, transicoes):
+def para_texto(estrutura):
     texto = ''
-    texto += n_estados + '\n'
-    texto += inicial + '\n'
-    texto += ','.join(aceitacao) + '\n'
-    texto += ','.join(alfabeto) + '\n'
-    for estado in transicoes:
-        for simbolo in transicoes[estado]:
-            texto += estado + ',' + simbolo + ',' + '-'.join(transicoes[estado][simbolo]) + '\n'
-    return texto
+    texto += estrutura['n_estados'] + '\n'
+    texto += estrutura['inicial'] + '\n'
+    texto += ','.join(estrutura['aceitacao']) + '\n'
+    texto += ','.join(estrutura['alfabeto']) + '\n'
+    for estado in estrutura['transicoes']:
+        for simbolo in estrutura['transicoes'][estado]:
+            texto += estado + ',' + simbolo + ',' + '-'.join(estrutura['transicoes'][estado][simbolo]) + '\n'
+    return texto[:-1]
 
 '''
 afnd_file = open("modelos/AFD", "r")
 texto = (afnd_file.read())
-transicoes = para_estrutura_de_dados(texto)
-print(transicoes)
+estrutura_de_dados = para_estrutura_de_dados(texto)
+print(estrutura_de_dados)
+novo_texto = para_texto(estrutura_de_dados)
+print(novo_texto)
 '''
