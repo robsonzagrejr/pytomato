@@ -14,7 +14,8 @@ widgets = {
     ),
     'grammar_text_area': dbc.Textarea(
         id='grammar-text-area',
-        placeholder="Digite a Gramática"
+        placeholder="Digite a Gramática",
+        className='bigarea',
     ),
     'grammar_btn_add': dbc.Button(
         "Adicionar",
@@ -40,6 +41,19 @@ widgets = {
     ),
     'grammar_alert': html.Div(
         id='grammar-alert',
+    ),
+    'grammar_upload': dcc.Upload(
+        id='grammar-upload',
+        children=html.Div([
+            html.A('Upload')
+        ]),
+        multiple=False,
+        className='btn btn btn-outline-dark'
+    ),
+    'grammar_download': html.A(
+        "Dowload",
+        id='grammar-download',
+        className='btn btn btn-outline-dark'
     ),
     'grammar_table': DataTable(
         id='grammar-table',

@@ -2,3 +2,7 @@
     margin-right: 3%;
 }
 
+.bigarea{
+    min-height: 250px;
+    height: 400px;
+}

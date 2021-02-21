@@ -1,4 +1,4 @@
-def traduzir_gramatica(text, nome):
+def texto_para_obj(text, nome):
     text = text.replace(' ', '')
     linhas = text.split('\n')
     gramatica = {}
@@ -14,7 +14,7 @@ def traduzir_gramatica(text, nome):
         'gramatica': gramatica
     }
 
-def retornar_gramatica(objeto):
+def obj_para_texto(objeto):
     gramatica = objeto['gramatica']
     texto = ''
     for nomeEstado, estado in gramatica.items():

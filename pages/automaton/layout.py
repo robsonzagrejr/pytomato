@@ -21,7 +21,7 @@ inputs = dbc.Container(
                         html.Label('Selecione o Automato:'),
                         widgets['automaton_dropdown'],
                     ],
-                    md=7
+                    md=3
                 )
             ]
         ),
@@ -51,7 +51,7 @@ inputs = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.Label('Gramática:'),
+                        html.Label('Automato:'),
                         widgets['automaton_text_area'],
                     ],
                     md=7,
@@ -68,6 +68,9 @@ outputs = dbc.Container(
     children=[
         html.Br(),
         html.Hr(),
+        widgets['automaton_table'],
+        html.Br(),
+        html.Br(),
     ]
 )
 

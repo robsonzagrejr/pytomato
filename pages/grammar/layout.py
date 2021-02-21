@@ -21,9 +21,17 @@ inputs = dbc.Container(
                         html.Label('Selecione a Gramática:'),
                         widgets['grammar_dropdown'],
                     ],
-                    md=7
-                )
-            ]
+                    md=3
+                ),
+                dbc.Col(
+                    [
+                        widgets['grammar_download'],
+                        widgets['grammar_upload'],
+                    ],
+                    md=6,
+                ),
+            ],
+            align="end",
         ),
         html.Br(),
         dbc.Row(

@@ -3,7 +3,7 @@ from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 
-import pytomato.automato as tomato_gram
+import pytomato.automato as tomato_auto
 
 def register_callbacks(app):
 
@@ -26,8 +26,7 @@ def register_callbacks(app):
         if automaton_options:
             keys = [v['value'] for v in automaton_options]
             if automaton_selected in keys:
-                automaton_text
-                = tomato_gram.retornar_gramatica(automaton_data[automaton_selected])
+                automaton_text = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
                 return automaton_selected, automaton_text, True, {'display': 'none'}, {}
         return "", "", False, {}, {'display': 'none'}
 
@@ -77,33 +76,31 @@ def register_callbacks(app):
         if triggered_id == 'automaton-btn-add' and automaton_name:
             automaton_id = automaton_name.replace(' ','_').lower()
 
-            alert_text = f'Gramática {automaton_name} adicionada com sucesso :D'
+            alert_text = f'Automato {automaton_name} adicionado com sucesso :D'
             alert_type = 'success'
             keys = [v['value'] for v in automaton_options]
             if automaton_id in keys:
-                alert_text = f"Gramática '{automaton_name}' já existe :X"
+                alert_text = f"Automato '{automaton_name}' já existe :X"
                 alert_type = 'danger'
             else:
-                automaton_obj = tomato_gram.traduzir_gramatica(automaton_text,
-                        automaton_id)
+                automaton_obj = tomato_auto.texto_para_obj(automaton_text)
                 automaton_data[automaton_id] = automaton_obj
 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
             return automaton_data, alert
 
         elif triggered_id == 'automaton-btn-update' and automaton_selected:
-            automaton_obj = tomato_gram.traduzir_gramatica(automaton_text,
-                    automaton_selected)
+            automaton_obj = tomato_auto.texto_para_obj(automaton_text)
             automaton_data[automaton_selected] = automaton_obj
 
-            alert_text = f"Gramática '{automaton_selected}' atualizada com sucesso :)"
+            alert_text = f"Automato '{automaton_selected}' atualizado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
             return automaton_data, alert 
 
         elif triggered_id == 'automaton-btn-rm' and automaton_selected:
             automaton_data.pop(automaton_selected, None)
-            alert_text = f"Gramática '{automaton_selected}' deletada com sucesso :)"
+            alert_text = f"Automato '{automaton_selected}' deletado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
             return automaton_data, alert
@@ -111,3 +108,43 @@ def register_callbacks(app):
         return automaton_data, []
 
     
+    @app.callback(
+        [
+            Output('automaton-table', 'data'),
+            Output('automaton-table', 'columns'),
+        ],
+        [
+            Input('automaton-dropdown', 'value'),
+            Input('store-automaton', 'data'),
+        ],
+    )
+    def update_automaton_table(automaton_selected, automaton_data):
+        if automaton_selected:
+            automaton = automaton_data[automaton_selected]
+            columns = [
+                {
+                    'name': l,
+                    'id':l,
+                    #'editable': True
+                }
+                for l in [''] + automaton['alfabeto']
+            ]
+            data = []
+            for estado, trans in automaton['transicoes'].items():
+                row = {} 
+                estado_label = estado
+                if estado == automaton['inicial']:
+                    estado_label = '->' + estado_label
+                if estado in automaton['aceitacao']:
+                    estado_label = '*' + estado_label
+
+                row[''] = estado_label
+                for letra, estado_alvo in trans.items():
+                    alvo = "{"+','.join(estado_alvo)+"}"
+                    row[letra] = alvo
+                data.append(row)
+            return data, columns
+        return [], []
+
+
+

@@ -2,10 +2,34 @@ import dash
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+import base64
 
 import pytomato.gramatica as tomato_gram
 
 def register_callbacks(app):
+    # Download | Upload
+    @app.callback(
+        [
+            Output('grammar-download','download'),
+            Output('grammar-download', 'href'),
+        ],
+        [
+            Input('grammar-dropdown', 'value'),
+        ],
+        [
+            State('store-grammar', 'data')
+        ],
+    )
+    def grammar_download(grammar_selected, grammar_data):
+        if grammar_selected:
+            #data = base64.b64encode(grammar_data[grammar_selected]['gramatica']).decode()
+            data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
+            #data = data.encode(encoding='UTF-8').decode()
+            data = data.encode()
+            data = f"data:text/plain;UTF-8,{data}"
+            return f"{grammar_selected}", data
+        return '', ''
+
 
     @app.callback(
         [
@@ -26,7 +50,7 @@ def register_callbacks(app):
         if grammar_options:
             keys = [v['value'] for v in grammar_options]
             if grammar_selected in keys:
-                grammar_text = tomato_gram.retornar_gramatica(grammar_data[grammar_selected])
+                grammar_text = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
                 return grammar_selected, grammar_text, True, {'display': 'none'}, {}
         return "", "", False, {}, {'display': 'none'}
 
@@ -48,6 +72,8 @@ def register_callbacks(app):
             Output('grammar-alert', 'children'),
         ],
         [
+            Input('grammar-upload','contents'),
+            Input('grammar-upload', 'filename'),
             Input('grammar-btn-add', 'n_clicks'),
             Input('grammar-btn-update', 'n_clicks'),
             Input('grammar-btn-rm', 'n_clicks'),
@@ -61,6 +87,8 @@ def register_callbacks(app):
         ]
     )
     def update_grammar_data(
+            file_content,
+            file_name,
             add_click,
             update_click,
             rm_click,
@@ -73,7 +101,28 @@ def register_callbacks(app):
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-        if triggered_id == 'grammar-btn-add' and grammar_name:
+        if triggered_id == 'grammar-upload' or triggered_id == 'grammar-filename':
+            if file_name:
+                grammar_id = file_name.replace(' ','_').lower()
+
+                alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
+                alert_type = 'success'
+                keys = [v['value'] for v in grammar_options]
+                if grammar_id in keys:
+                    alert_text = f"Gramática '{grammar_name}' já existe :X"
+                    alert_type = 'danger'
+                else:
+                    print(file_content)
+                    grammar_obj = tomato_gram.texto_para_obj(file_content, grammar_id)
+                    print(grammar_obj)
+                    grammar_data[grammar_id] = grammar_obj
+
+                alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+                return grammar_data, alert
+
+
+
+        elif triggered_id == 'grammar-btn-add' and grammar_name:
             grammar_id = grammar_name.replace(' ','_').lower()
 
             alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
@@ -83,14 +132,14 @@ def register_callbacks(app):
                 alert_text = f"Gramática '{grammar_name}' já existe :X"
                 alert_type = 'danger'
             else:
-                grammar_obj = tomato_gram.traduzir_gramatica(grammar_text, grammar_id)
+                grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_id)
                 grammar_data[grammar_id] = grammar_obj
 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
             return grammar_data, alert
 
         elif triggered_id == 'grammar-btn-update' and grammar_selected:
-            grammar_obj = tomato_gram.traduzir_gramatica(grammar_text, grammar_selected)
+            grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_selected)
             grammar_data[grammar_selected] = grammar_obj
 
             alert_text = f"Gramática '{grammar_selected}' atualizada com sucesso :)"

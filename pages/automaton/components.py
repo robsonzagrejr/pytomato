@@ -10,11 +10,12 @@ widgets = {
     ),
     'automaton_input': dbc.Input(
         id='automaton-input',
-        placeholder='Gramatica label',
+        placeholder='Automato label',
     ),
     'automaton_text_area': dbc.Textarea(
         id='automaton-text-area',
-        placeholder="Digite a Gramática"
+        placeholder="Digite o Automato",
+        className='bigarea',
     ),
     'automaton_btn_add': dbc.Button(
         "Adicionar",
@@ -43,23 +44,13 @@ widgets = {
     ),
     'automaton_table': DataTable(
         id='automaton-table',
-        columns=[
-            {'name':'nonterminal','id':'nonterminal'},
-            {'name':'first set','id':'first set',},
-            {'name':'follow set','id':'follow set',},
-            {'name':'nullable','id':'nullable',},
-            {'name':'endable','id':'endable',},
-        ],
-        data = [
-            {'nonterminal':'S'},
-        ],
-        editable=False,
-        filter_action="native",
-        sort_action="native",
-        sort_mode="multi",
-        page_action="native",
-        page_current=0,
-        page_size=10,
+        editable=True,
+        #filter_action="native",
+        #sort_action="native",
+        #sort_mode="multi",
+        #page_action="native",
+        #page_current=0,
+        #page_size=10,
         style_table={
             'overflow': 'auto',
             'margin': '0 15px 0 15px',
