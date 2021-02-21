@@ -2,13 +2,12 @@ from dash import Dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 
-from layout import (
-    header,
-    inputs,
-    outputs
+from core.components import (
+    make_navbar,
+    page_content
 )
-from components import navbar
-from callbacks import register_callbacks
+
+from core.callbacks import register_callbacks
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -16,14 +15,20 @@ app.config.suppress_callback_exceptions = True
 
 app.title = 'Linguagens Formais'
 
-app.layout = html.Div(
-    children=[
-        navbar,
-        header,
-        inputs,
-        outputs
-    ]
-)
+
+url_base = '/'
+if app.config['url_base_pathname'] is not None:
+    url_base = app.config['url_base_pathname']
+
+
+def serve_layout():
+    return html.Div(
+        children=[
+            make_navbar(url_base),
+            page_content
+        ]
+    )
+app.layout=serve_layout()
 
 register_callbacks(app)
 
