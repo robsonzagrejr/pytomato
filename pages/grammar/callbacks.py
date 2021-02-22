@@ -14,14 +14,13 @@ def register_callbacks(app):
         ],
         [
             Input('grammar-dropdown', 'value'),
-        ],
-        [
-            State('store-grammar', 'data')
+            Input('store-grammar', 'data'),
         ],
     )
     def grammar_download(grammar_selected, grammar_data):
-        if grammar_selected:
+        if grammar_selected and grammar_selected in grammar_data.keys():
             data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
+            data = data.replace('\n', "%0D%0A");
             data = f"data:text/plain;UTF-8,{data}"
             return f"{grammar_selected}", data
         return '', ''

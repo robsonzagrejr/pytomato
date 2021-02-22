@@ -22,14 +22,14 @@ widgets = {
         id='automaton-btn-add',
         color='dark',
         outline=True,
-        className='btn',
+        className='btn-margin',
     ),
     'automaton_btn_update': dbc.Button(
         "Atualizar",
         id='automaton-btn-update',
         color='secondary',
         outline=True,
-        className='btn',
+        className='btn-margin',
         style={'display': 'none'},
     ),
     'automaton_btn_rm': dbc.Button(
@@ -37,7 +37,7 @@ widgets = {
         id='automaton-btn-rm',
         color='danger',
         outline=True,
-        className='btn',
+        className='btn-margin',
     ),
     'automaton_alert': html.Div(
         id='automaton-alert',
@@ -48,12 +48,12 @@ widgets = {
             html.A('Upload')
         ]),
         multiple=False,
-        className='btn btn btn-outline-dark'
+        className='btn btn-margin btn-outline-dark'
     ),
     'automaton_download': html.A(
         "Dowload",
         id='automaton-download',
-        className='btn btn btn-outline-dark'
+        className='btn btn-margin btn-outline-dark'
     ),
     'automaton_table': DataTable(
         id='automaton-table',

@@ -26,9 +26,14 @@ inputs = dbc.Container(
                 dbc.Col(
                     [
                         widgets['automaton_download'],
+                    ],
+                    md=1,
+                ),
+                dbc.Col(
+                    [
                         widgets['automaton_upload'],
                     ],
-                    md=6,
+                    md=1,
                 ),
             ],
             align="end",
