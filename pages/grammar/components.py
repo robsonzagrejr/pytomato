@@ -22,14 +22,14 @@ widgets = {
         id='grammar-btn-add',
         color='dark',
         outline=True,
-        className='btn',
+        className='btn-margin',
     ),
     'grammar_btn_update': dbc.Button(
         "Atualizar",
         id='grammar-btn-update',
         color='secondary',
         outline=True,
-        className='btn',
+        className='btn-margin',
         style={'display': 'none'},
     ),
     'grammar_btn_rm': dbc.Button(
@@ -37,7 +37,7 @@ widgets = {
         id='grammar-btn-rm',
         color='danger',
         outline=True,
-        className='btn',
+        className='btn-margin',
     ),
     'grammar_alert': html.Div(
         id='grammar-alert',
@@ -48,12 +48,12 @@ widgets = {
             html.A('Upload')
         ]),
         multiple=False,
-        className='btn btn btn-outline-dark'
+       className='btn btn-margin btn-outline-dark'
     ),
     'grammar_download': html.A(
         "Dowload",
         id='grammar-download',
-        className='btn btn btn-outline-dark'
+        className='btn btn-margin btn-outline-dark'
     ),
     'grammar_table': DataTable(
         id='grammar-table',

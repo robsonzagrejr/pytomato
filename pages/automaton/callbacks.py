@@ -14,9 +14,7 @@ def register_callbacks(app):
         ],
         [
             Input('automaton-dropdown', 'value'),
-        ],
-        [
-            State('store-automaton', 'data')
+            Input('store-automaton', 'data')
         ],
     )
     def automaton_download(automaton_selected, automaton_data):
