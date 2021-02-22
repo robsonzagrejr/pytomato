@@ -13,7 +13,7 @@ pytomato - Sistema Interativo de Linguagens Formais e Compiladores
 ## 2. Visão Geral
 
 - Instâncias serão salvas no navegador.
-- Na caixa de texto serão inseridos os autômatos/gramáticas em formato texto seguindo as sintaxes apresentadas na.
+- Na caixa de texto serão inseridos os autômatos/gramáticas em formato texto seguindo as sintaxes apresentadas na Seção 3.
 - O programa converte texto em estruturas de dados/objetos internamente.
 - Funcionalidade de Download/Upload de autômatos e gramáticas.
 - Nomes dos objetos personalizáveis
