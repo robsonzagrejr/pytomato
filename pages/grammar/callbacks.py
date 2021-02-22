@@ -25,6 +25,7 @@ def register_callbacks(app):
             keys = [v['value'] for v in grammar_options]
             if grammar_selected and grammar_selected in keys:
                 data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
+                data = data.replace('\n', "%0D%0A");
                 data = f"data:text/plain;UTF-8,{data}"
                 return f"{grammar_selected}", data
         return '', ''

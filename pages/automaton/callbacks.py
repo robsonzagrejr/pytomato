@@ -25,6 +25,7 @@ def register_callbacks(app):
             keys = [v['value'] for v in automaton_options]
             if automaton_selected and automaton_selected in keys:
                 data = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
+                data = data.replace('\n', "%0D%0A");
                 data = f"data:text/plain;UTF-8,{data}"
                 return f"{automaton_selected}", data
         return '', ''
