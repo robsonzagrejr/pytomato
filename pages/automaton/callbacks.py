@@ -16,12 +16,17 @@ def register_callbacks(app):
             Input('automaton-dropdown', 'value'),
             Input('store-automaton', 'data')
         ],
+        [
+            State('automaton-dropdown', 'options'),
+        ]
     )
-    def automaton_download(automaton_selected, automaton_data):
-        if automaton_selected:
-            data = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
-            data = f"data:text/plain;UTF-8,{data}"
-            return f"{automaton_selected}", data
+    def automaton_download(automaton_selected, automaton_data, automaton_options):
+        if automaton_options:
+            keys = [v['value'] for v in automaton_options]
+            if automaton_selected and automaton_selected in keys:
+                data = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
+                data = f"data:text/plain;UTF-8,{data}"
+                return f"{automaton_selected}", data
         return '', ''
 
 
