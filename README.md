@@ -46,6 +46,7 @@ transicao_n
 #### 3.1.2. Exemplo de Autômato em Tabela/Texto
 
 <center>
+
 . | a | b
 ------------ | ------------- | -------------
 ->0 | 1 | 2 
@@ -53,6 +54,7 @@ transicao_n
 *2 | 4 | 2 
 3 | 1 | 3 
 4 | 4 | 2 
+
 </center>
 
 O autômato acima convertido para texto seguindo a sintaxe:
