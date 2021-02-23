@@ -5,7 +5,10 @@ import dash_bootstrap_components as dbc
 import base64
 
 import pytomato.gramatica as tomato_gram
+"""Funções de Callback
 
+Funções que definem as triggers e execução de cada callback.
+"""
 def register_callbacks(app):
     @app.callback(
         [
@@ -17,6 +20,11 @@ def register_callbacks(app):
             Input('store-grammar', 'data'),
         ],
     )
+    """Callback Download Gramática
+
+    Callback para chamada de download de gramáticas
+    em arquivo de texto.
+    """
     def grammar_download(grammar_selected, grammar_data):
         if grammar_selected and grammar_selected in grammar_data.keys():
             data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
@@ -40,6 +48,11 @@ def register_callbacks(app):
             Input('store-grammar', 'data')
         ]
     )
+    """Callback Seleção Gramática
+
+    Callback para gerenciar a seleção e display do
+    dropdown das gramáticas.
+    """
     def select_grammar(grammar_selected, grammar_options, grammar_data):
         if grammar_options:
             keys = [v['value'] for v in grammar_options]
@@ -80,6 +93,11 @@ def register_callbacks(app):
             State('store-grammar', 'data')
         ]
     )
+    """Callback Update Gramática
+
+    Callback que gerencia criação, exclusão, upload, alteração
+    de gramática.
+    """
     def update_grammar_data(
             file_content,
             file_name,
