@@ -109,11 +109,26 @@ make install
 ## 5. Execução
 
 Para executar o app digite:
-
-`make app`
+```
+make app
+```
 
 Entre no seu navegador e digite **http://0.0.0.0:8080/** como URL.
 
+Caso tenha problema de versionamento com o python, outra forma de instanciar o servidor é via docker:
+
+```
+docker-compose up -d
+```
+
+Com isso, é possível também alterar a porta na qual o servidor vai ser acessado, basta alterar com a porta de sua preferência no arquivo *docker-compose.yml*:
+
+```yml
+ports:
+    - "PORTA:8080" 
+```
+
+Entre no seu navegador e digite **http://0.0.0.0:`PORTA`/** como URL.
 ## 6. Organização Do Código
 
 No diretório **./pytomato/** temos os métodos de conversão de gramáticas e autômatos (.txt para instâncias de objetos/estruturas de dados e vice-versa).
