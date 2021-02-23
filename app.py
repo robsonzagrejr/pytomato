@@ -1,4 +1,4 @@
-""" Importe Dependências 
+""" Importe 
 
 Importação da framework Dash e das blibliotecas para
 utilizar componetes Bootstrap e HTML.
