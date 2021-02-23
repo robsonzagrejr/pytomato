@@ -1,3 +1,4 @@
+# recebe um automato em formato .txt e retorna ele em estrutura de dados
 def texto_para_obj(texto):
     linhas = texto.split("\n")
     estrutura = {}
@@ -25,7 +26,7 @@ def texto_para_obj(texto):
     estrutura['transicoes'] = transicoes
     return estrutura
 
-
+# recebe um automato formato de estrutura de dados e faz a conversao dele para .txt
 def obj_para_texto(estrutura):
     texto = ''
     texto += estrutura['n_estados'] + '\n'

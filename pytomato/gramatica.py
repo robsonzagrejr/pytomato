@@ -1,3 +1,4 @@
+# recebe uma gramatica em formato .txt e seu nome e retorna ela de forma estruturada
 def texto_para_obj(text, nome):
     text = text.replace(' ', '')
     linhas = text.split('\n')
@@ -13,7 +14,7 @@ def texto_para_obj(text, nome):
         'nome': nome,
         'gramatica': gramatica
     }
-
+# recebe uma gramatica em forma de estrura de dados e retorna ela em formato .txt
 def obj_para_texto(objeto):
     gramatica = objeto['gramatica']
     texto = ''

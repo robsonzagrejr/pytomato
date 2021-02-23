@@ -1,3 +1,4 @@
+# Dependencias
 from dash import Dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -9,7 +10,7 @@ from core.components import (
 
 from core.callbacks import register_callbacks
 
-
+# Instanciando Dash, usando estilo bootstrap
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config.suppress_callback_exceptions = True
 
@@ -29,10 +30,10 @@ def serve_layout():
         ]
     )
 app.layout=serve_layout()
-
+#registra os callbacks
 register_callbacks(app)
 
-
+# roda o servidor no ip 0.0.0.0/8080
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8080, debug=True)
 

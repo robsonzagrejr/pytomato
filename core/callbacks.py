@@ -3,7 +3,7 @@ from dash.dependencies import Input, Output, State
 
 import pages.grammar as grammar
 import pages.automaton as automaton
-
+# registra os callbacks no app que fazer a interface de entrada/saida com nosso código python
 def register_callbacks(app):
 
     @app.callback(
