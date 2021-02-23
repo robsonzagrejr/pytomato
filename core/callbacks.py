@@ -1,9 +1,15 @@
 from dash import callback_context
 from dash.dependencies import Input, Output, State
 
+# Importe das funções de backend.
 import pages.grammar as grammar
 import pages.automaton as automaton
-# registra os callbacks no app que fazer a interface de entrada/saida com nosso código python
+
+"""Callbacks para Páginas
+
+Define os callbacks(inputs/outputs/states) para cada
+página, Gramática e Autômato.
+"""
 def register_callbacks(app):
 
     @app.callback(

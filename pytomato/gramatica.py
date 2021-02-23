@@ -1,4 +1,8 @@
-# recebe uma gramatica em formato .txt e seu nome e retorna ela de forma estruturada
+"""Conversão de Texto x Objeto
+
+Recebe duas strings, Gramática e Nome, do usuário e as
+converte em objeto e insere na estrutura de dicionário.
+"""
 def texto_para_obj(text, nome):
     text = text.replace(' ', '')
     linhas = text.split('\n')
@@ -14,7 +18,11 @@ def texto_para_obj(text, nome):
         'nome': nome,
         'gramatica': gramatica
     }
-# recebe uma gramatica em forma de estrura de dados e retorna ela em formato .txt
+"""Conversão de Objeto x Texto
+
+Recebe um objeto, Gramática, da estrutura dicionário e converte
+para formato padrão e retorna essa string.
+"""
 def obj_para_texto(objeto):
     gramatica = objeto['gramatica']
     texto = ''
@@ -28,7 +36,10 @@ def obj_para_texto(objeto):
     
     return texto
 
+"""Teste
 
+Main criado para testar as funções.
+"""
 if __name__ == '__main__':
     texto= "S -> aA | bB | cS\n\
             A -> aS | bC | b | cA\n\
