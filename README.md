@@ -100,7 +100,18 @@ A -> bA | a
 
 Optamos por usar a framework *Dash* (Componentes HTML em classes python), biblioteca para buildar apps web usando código em Python.
 
->Requisitos: poetry, python3 e makefile.
+>Pré-Requisitos: python3, pip3, e makefile.
+
+
+### 4.1 Instalando *poetry* e dependências do app
+
+Para instalar o *poetry*, use pip:
+
+```
+pip3 install poetry
+```
+
+Após a instalação do *poetry*, para instalar as dependências do app execute:
 
 ```
 make install
@@ -114,6 +125,8 @@ make app
 ```
 
 Entre no seu navegador e digite **http://0.0.0.0:8080/** como URL.
+
+### 5.1 Alternativa de execução (Requer Docker)
 
 Caso tenha problema de versionamento com o python, outra forma de instanciar o servidor é via docker:
 
@@ -129,6 +142,7 @@ ports:
 ```
 
 Entre no seu navegador e digite **http://0.0.0.0:`PORTA`/** como URL.
+
 ## 6. Organização Do Código
 
 No diretório **./pytomato/** temos os métodos de conversão de gramáticas e autômatos (.txt para instâncias de objetos/estruturas de dados e vice-versa).
