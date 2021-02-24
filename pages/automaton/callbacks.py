@@ -20,12 +20,13 @@ def register_callbacks(app):
             Input('store-automaton', 'data')
         ],
     )
-    """Callback Download Autômato
-
-    Callback para chamada de download de autômato
-    em arquivo de texto.
-    """
     def automaton_download(automaton_selected, automaton_data):
+        """Callback Download Autômato
+
+        Callback para chamada de download de autômato
+        em arquivo de texto.
+        """
+     
         if automaton_selected and automaton_selected in automaton_data.keys():
             data = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
             data = data.replace('\n', "%0D%0A");
@@ -49,12 +50,13 @@ def register_callbacks(app):
             Input('store-automaton', 'data')
         ]
     )
-    """Callback Seleção Autômato
-
-    Callback para gerenciar a seleção e display do
-    dados dos autômatos.
-    """
     def select_automaton(automaton_selected, automaton_options, automaton_data):
+        """Callback Seleção Autômato
+
+        Callback para gerenciar a seleção e display do
+        dados dos autômatos.
+        """
+
         if automaton_options:
             keys = [v['value'] for v in automaton_options]
             if automaton_selected in keys:
@@ -94,11 +96,6 @@ def register_callbacks(app):
             State('store-automaton', 'data')
         ]
     )
-    """Callback Update Autômato
-
-    Callback que gerência criação, exclusão, upload, alteração
-    de autômato.
-    """
     def update_automaton_data(
             file_content,
             file_name,
@@ -111,6 +108,12 @@ def register_callbacks(app):
             automaton_text,
             automaton_data
         ):
+        """Callback Update Autômato
+
+        Callback que gerência criação, exclusão, upload, alteração
+        de autômato.
+        """
+    
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
@@ -177,12 +180,13 @@ def register_callbacks(app):
             Input('store-automaton', 'data'),
         ],
     )
-    """Callback Update Tabela Autômato
-
-    Callback que gerência atualização dos dados
-    na tabela de representação do autômato.
-    """
     def update_automaton_table(automaton_selected, automaton_data):
+        """Callback Update Tabela Autômato
+
+        Callback que gerência atualização dos dados
+        na tabela de representação do autômato.
+        """
+    
         if automaton_selected in automaton_data.keys():
             automaton = automaton_data[automaton_selected]
             columns = [
@@ -209,3 +213,4 @@ def register_callbacks(app):
                 data.append(row)
             return data, columns
         return [], []
+

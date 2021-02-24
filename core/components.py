@@ -18,7 +18,7 @@ def make_navbar(url_base):
             dbc.NavItem(dbc.NavLink("Gramática", href=f"{url_base}grammar")),
             dbc.NavItem(dbc.NavLink("Automato", href=f"{url_base}automaton")),
         ],
-        brand="Linguagens Formais",
+        brand="Pytomato",
         brand_href="#",
         color="dark",
         dark=True,

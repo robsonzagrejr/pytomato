@@ -20,12 +20,13 @@ def register_callbacks(app):
             Input('store-grammar', 'data'),
         ],
     )
-    """Callback Download Gramática
-
-    Callback para chamada de download de gramáticas
-    em arquivo de texto.
-    """
     def grammar_download(grammar_selected, grammar_data):
+        """Callback Download Gramática
+
+        Callback para chamada de download de gramáticas
+        em arquivo de texto.
+        """
+     
         if grammar_selected and grammar_selected in grammar_data.keys():
             data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
             data = data.replace('\n', "%0D%0A");
@@ -48,12 +49,13 @@ def register_callbacks(app):
             Input('store-grammar', 'data')
         ]
     )
-    """Callback Seleção Gramática
-
-    Callback para gerenciar a seleção e display do
-    dropdown das gramáticas.
-    """
     def select_grammar(grammar_selected, grammar_options, grammar_data):
+        """Callback Seleção Gramática
+
+        Callback para gerenciar a seleção e display do
+        dropdown das gramáticas.
+        """
+    
         if grammar_options:
             keys = [v['value'] for v in grammar_options]
             if grammar_selected in keys:
@@ -93,11 +95,6 @@ def register_callbacks(app):
             State('store-grammar', 'data')
         ]
     )
-    """Callback Update Gramática
-
-    Callback que gerencia criação, exclusão, upload, alteração
-    de gramática.
-    """
     def update_grammar_data(
             file_content,
             file_name,
@@ -110,6 +107,12 @@ def register_callbacks(app):
             grammar_text,
             grammar_data
         ):
+        """Callback Update Gramática
+
+        Callback que gerencia criação, exclusão, upload, alteração
+        de gramática.
+        """
+    
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
@@ -164,3 +167,4 @@ def register_callbacks(app):
             return grammar_data, alert
 
         return grammar_data, []
+

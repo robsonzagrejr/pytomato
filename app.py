@@ -23,7 +23,7 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.config.suppress_callback_exceptions = True
 
 #Definição do Título
-app.title = 'Linguagens Formais'
+app.title = 'PyTomato'
 
 
 url_base = '/'
