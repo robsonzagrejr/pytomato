@@ -84,6 +84,10 @@ outputs = dbc.Container(
         widgets['automaton_table'],
         html.Br(),
         html.Br(),
+        html.Br(),
+        html.Br(),
+        html.Br(),
+        html.Br(),
     ]
 )
 

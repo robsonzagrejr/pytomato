@@ -57,7 +57,7 @@ widgets = {
     ),
     'automaton_table': DataTable(
         id='automaton-table',
-        editable=True,
+        editable=False,
         #filter_action="native",
         #sort_action="native",
         #sort_mode="multi",
