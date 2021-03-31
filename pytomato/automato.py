@@ -53,10 +53,10 @@ def obj_para_texto(estrutura):
 Main criado para testar as funções.
 """
 if __name__ == '__main__':
-    afnd_file = open("modelos/AFD_com_epslon", "r")
+    afnd_file = open("AFD_com_epslon", "r")
     texto = (afnd_file.read())
     estrutura_de_dados = texto_para_obj(texto)
-    print(estrutura_de_dados)
-    novo_texto = obj_para_texto(estrutura_de_dados)
-    print(novo_texto)
+    import conversions    
+    conversions.afd_para_gramatica(estrutura_de_dados)
+    novo_texto = obj_para_texto(estrutura_de_dados)    
 

@@ -46,4 +46,4 @@ if __name__ == '__main__':
             B -> aC | a | bS | cB\n\
             C -> aB | bA | cC | c"
 
-    print(retornar_gramatica(traduzir_gramatica(texto, 'nome')))
+    print(texto_para_obj(texto, 'nome'))
