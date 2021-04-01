@@ -1,4 +1,10 @@
 from collections import defaultdict
+class RegularGrammar():
+	def __init__(self, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao):
+		self.gramatica_inicial = gramatica_inicial
+		self.gramatica_nao_terminais = gramatica_nao_terminais
+		self.gramatica_terminais = gramatica_terminais
+		self.regras_producao = regras_producao
 def get_afd_states(afd):
 	states = []
 	for i in afd['transicoes']:
@@ -20,11 +26,28 @@ def afd_para_gramatica(estrutura):
 	if estrutura['inicial'] in estrutura['aceitacao']:	
 		regras_producao["S'"] = regras_producao[gramatica_inicial].union('&')
 		gramatica_inicial = "S'"	
-	print(gramatica_inicial)
-	print(gramatica_nao_terminais)
-	print(gramatica_terminais)
-	regras_producao = dict(regras_producao)
-	print(regras_producao)	
-	return (regras_producao, gramatica_inicial, gramatica_nao_terminais, gramatica_terminais)
-def gramatica_para_afnd(estrutura):
-	pass
+	regras_producao = dict(regras_producao)	
+	gram = RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+	return gram
+def gramatica_para_afd(gram):
+	afd = {}
+	afd['n_estados'] = len(gram.gramatica_nao_terminais)
+	afd['inicial'] = gram.gramatica_inicial	
+	afd['aceitacao'] = ['new_final_state']
+	afd['alfabeto'] = gram.gramatica_terminais
+	afd['transicoes'] = {}
+	if ('&' in gram.regras_producao['{}'.format(gram.gramatica_inicial)]):
+		afd['aceitacao'].append(afd['inicial'])	
+	for a in gram.gramatica_nao_terminais:
+		afd['transicoes'][a] = {}
+	for a,b in gram.regras_producao.items():
+		aux = list(b)
+		for x in aux:
+			if len(x) == 2:
+				afd['transicoes'][a][x[0]] = x[1]
+	for a,b in gram.regras_producao.items():
+		aux = list(b)
+		for x in aux:
+			if len(x) == 1:
+				afd['transicoes'][a] = 'new_final_state'	
+	return afd

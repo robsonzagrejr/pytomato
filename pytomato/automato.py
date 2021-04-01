@@ -56,7 +56,9 @@ if __name__ == '__main__':
     afnd_file = open("AFD_com_epslon", "r")
     texto = (afnd_file.read())
     estrutura_de_dados = texto_para_obj(texto)
+    print(estrutura_de_dados)    
     import conversions    
-    conversions.afd_para_gramatica(estrutura_de_dados)
+    gram = conversions.afd_para_gramatica(estrutura_de_dados)
+    aut = conversions.gramatica_para_afd(gram)    
     novo_texto = obj_para_texto(estrutura_de_dados)    
 
