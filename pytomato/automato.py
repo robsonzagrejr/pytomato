@@ -59,6 +59,8 @@ if __name__ == '__main__':
     print(estrutura_de_dados)    
     import conversions    
     gram = conversions.afd_para_gramatica(estrutura_de_dados)
-    aut = conversions.gramatica_para_afd(gram)    
+    print(gram)
+    aut = conversions.gramatica_para_afd(gram)
+    print(aut)
     novo_texto = obj_para_texto(estrutura_de_dados)    
 
