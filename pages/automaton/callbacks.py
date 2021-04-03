@@ -81,6 +81,7 @@ def register_callbacks(app):
         [
             Output('store-automaton', 'data'),
             Output('automaton-alert', 'children'),
+            Output('automaton-upload', 'filename'),
         ],
         [
             Input('automaton-upload','contents'),
@@ -140,7 +141,7 @@ def register_callbacks(app):
                     automaton_data[automaton_id] = automaton_obj
 
                 alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-                return automaton_data, alert
+                return automaton_data, alert, ""
 
         elif triggered_id == 'automaton-btn-add' and automaton_name:
             automaton_id = automaton_name.replace(' ','_').lower()
@@ -156,7 +157,7 @@ def register_callbacks(app):
                 automaton_data[automaton_id] = automaton_obj
 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert
+            return automaton_data, alert, ""
 
         elif (triggered_id == 'automaton-btn-update' or triggered_id=='automaton-btn-update-from-table' )and automaton_selected:
             
@@ -171,16 +172,16 @@ def register_callbacks(app):
             alert_text = f"Automato '{automaton_selected}' atualizado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert 
+            return automaton_data, alert, "" 
 
         elif triggered_id == 'automaton-btn-rm' and automaton_selected:
             automaton_data.pop(automaton_selected, None)
             alert_text = f"Automato '{automaton_selected}' deletado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert
+            return automaton_data, alert, ""
 
-        return automaton_data, []
+        return automaton_data, [], ""
 
 
     @app.callback(
