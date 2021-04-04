@@ -87,12 +87,34 @@ def uniao(automato_1, automato_2):
     antigo_aceitacao = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
     for antigo_a in antigo_aceitacao:
         trans_antigo_a = transicoes.get(antigo_a, {})
-        trans_antigo_a['&'] = [automato_u['aceitacao'][0]]
+        trans_antigo_a['&'] = automato_u['aceitacao']
         transicoes[antigo_a] = trans_antigo_a
     automato_u['transicoes'] = transicoes
 
     return automato_u 
 
+
+def intersecao(automato_1, automato_2):
+    automato_1_r = _add_prefixo_estado('a1', automato_1)
+    automato_2_r = _add_prefixo_estado('a2', automato_2)
+
+    automato_i = {}
+    automato_i['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados'])
+    automato_i['inicial'] = automato_1_r['inicial']
+    automato_i['aceitacao'] = automato_2_r['aceitacao']
+    automato_i['alfabeto'] = list(set(automato_1_r['alfabeto'] + automato_2_r['alfabeto']))
+
+    transicoes = automato_1_r['transicoes'].copy()
+    transicoes.update(automato_2_r['transicoes'])
+    antigo_aceitacao_1 = automato_1_r['aceitacao']
+    for antigo_a in antigo_aceitacao_1:
+        trans_antigo_a = transicoes.get(antigo_a, {})
+        trans_antigo_a['&'] = [automato_2_r['inicial']]
+        transicoes[antigo_a] = trans_antigo_a
+
+    automato_i['transicoes'] = transicoes
+
+    return automato_i
 
 
 """Teste
@@ -118,4 +140,7 @@ if __name__ == '__main__':
     automato_1 = texto_para_obj(afd_file.read())
     automato_2 = automato_1.copy()
     print(uniao(automato_1, automato_2))
+
+    print("=============Intersecao===========")
+    print(intersecao(automato_1, automato_2))
 
