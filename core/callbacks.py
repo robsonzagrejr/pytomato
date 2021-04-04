@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output, State
 # Importe das funções de backend.
 import pages.grammar as grammar
 import pages.automaton as automaton
+import pages.regular_exp as regular_exp
 
 """Callbacks para Páginas
 
@@ -28,7 +29,11 @@ def register_callbacks(app):
 
         elif pathname == f'{base}automaton':
             return automaton.layout
+
+        elif pathname == f'{base}regular_exp':
+            return regular_exp.layout
         
 
     grammar.register_callbacks(app)
     automaton.register_callbacks(app)
+    regular_exp.register_callbacks(app)

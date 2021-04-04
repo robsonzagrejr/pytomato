@@ -17,6 +17,7 @@ def make_navbar(url_base):
         children=[
             dbc.NavItem(dbc.NavLink("Gramática", href=f"{url_base}grammar")),
             dbc.NavItem(dbc.NavLink("Automato", href=f"{url_base}automaton")),
+            dbc.NavItem(dbc.NavLink("Expressão Regular", href=f"{url_base}regular_exp")),
         ],
         brand="Pytomato",
         brand_href="#",
@@ -27,6 +28,7 @@ def make_navbar(url_base):
 stores = {
     'store-grammar': dcc.Store(data={}, id='store-grammar', storage_type='local'),
     'store-automaton': dcc.Store(data={}, id='store-automaton', storage_type='local'),
+    'store-regular-exp': dcc.Store(data={}, id='store-regular-exp', storage_type='local'),
 }
 
 page_content = html.Div(
@@ -34,6 +36,7 @@ page_content = html.Div(
         dcc.Location(id='url', refresh=False),
         stores['store-grammar'],
         stores['store-automaton'],
+        stores['store-regular-exp'],
         html.Div(id='page-content'),
     ]
 )
