@@ -55,9 +55,16 @@ widgets = {
         id='automaton-download',
         className='btn btn-margin btn-outline-dark'
     ),
+    'automaton_btn_update_from_table': dbc.Button(
+        "Atualizar a partir da Tabela",
+        id='automaton-btn-update-from-table',
+        color='secondary',
+        outline=True,
+        style={'display': 'none'},
+    ),
     'automaton_table': DataTable(
         id='automaton-table',
-        editable=False,
+        editable=True,
         #filter_action="native",
         #sort_action="native",
         #sort_mode="multi",

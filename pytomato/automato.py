@@ -135,6 +135,59 @@ def intersecao(automato_1, automato_2):
     return automato_i
 
 
+"""Conversão de Tabela -> Objeto
+
+Recebe uma tabela separada em linhas e cabeçalho.
+Cada linha contem um estado, que a identifica, e as transicoes que saem desse estado a partir de cada simbolo do alfabeto.
+O cabeçalho contem os simbolos do alfabeto, alem de um elemento vazio (''), e possivelmente, por conveniencia o epsilon (&)
+A partir desses dados, a funcao monta um objeto, estrutura (dicionario) que descreve um automato, e entao o retorna
+"""
+def table_to_automaton(linhas, cabecalho):
+    # inicializando variaveis
+    estrutura = {}
+    estado_inicial = ''
+    estados_de_aceitacao = []
+    alfabeto = []
+    transicoes = {}
+
+    # resgatar o alfabeto
+    for c in range(1,len(cabecalho)):
+        alfabeto.append(cabecalho[c]['name'])
+
+    # para cada linha da tabela
+    for linha in linhas:
+        estado_label = linha['']
+
+        estado_sem_seta_e_asterisco = estado_label.replace('->','').replace('*','')
+
+        # encontrar estado inicial
+        if estado_label.find("->") >= 0:
+            estado_inicial = estado_sem_seta_e_asterisco
+        
+        # encontrar estados de aceitacao
+        if estado_label.find("*") >= 0:
+            estados_de_aceitacao.append(estado_sem_seta_e_asterisco)
+
+        # resgatar cada transicao referente ao 'estado_sem_seta_e_asterisco'
+        transicoes[estado_sem_seta_e_asterisco] = {}
+        # para cada simbolo do alfabeto
+        for simbolo_do_alfabeto in linha.keys():
+            if simbolo_do_alfabeto != '':
+                # pegar os estados alvo da transicao, caso haja algum estado alvo
+                estados_alvo = linha[simbolo_do_alfabeto]
+                if not estados_alvo in ['','\n','\r',None] :
+                    # e entao resgatar todas as transicoes pelo simbolo do alfabeto em questao
+                    estados_alvo_sem_chave_e_virgula = estados_alvo.replace('{','').replace('}','').split(',')
+                    transicoes[estado_sem_seta_e_asterisco][simbolo_do_alfabeto] = estados_alvo_sem_chave_e_virgula
+
+    estrutura['n_estados'] = str(len(linhas))
+    estrutura['inicial'] = estado_inicial
+    estrutura['aceitacao'] = estados_de_aceitacao
+    estrutura['alfabeto'] = alfabeto
+    estrutura['transicoes'] = transicoes
+
+    return estrutura
+
 """Teste
 
 Main criado para testar as funções.

@@ -41,8 +41,9 @@ def register_callbacks(app):
             Output('automaton-text-area', 'value'),
             Output('automaton-input', 'disabled'),
             Output('automaton-btn-add', 'style'),
-            Output('automaton-btn-update', 'style')
-        
+            Output('automaton-btn-update', 'style'),
+            Output('automaton-btn-update-from-table', 'style'),
+
         ],
         [
             Input('automaton-dropdown', 'value'),
@@ -61,8 +62,8 @@ def register_callbacks(app):
             keys = [v['value'] for v in automaton_options]
             if automaton_selected in keys:
                 automaton_text = tomato_auto.obj_para_texto(automaton_data[automaton_selected])
-                return automaton_selected, automaton_text, True, {'display': 'none'}, {}
-        return "", "", False, {}, {'display': 'none'}
+                return automaton_selected, automaton_text, True, {'display': 'none'}, {}, {}
+        return "", "", False, {}, {'display': 'none'}, {'display': 'none'}
 
 
     @app.callback(
@@ -80,15 +81,19 @@ def register_callbacks(app):
         [
             Output('store-automaton', 'data'),
             Output('automaton-alert', 'children'),
+            Output('automaton-upload', 'filename'),
         ],
         [
             Input('automaton-upload','contents'),
             Input('automaton-upload', 'filename'),
             Input('automaton-btn-add', 'n_clicks'),
             Input('automaton-btn-update', 'n_clicks'),
+            Input('automaton-btn-update-from-table', 'n_clicks'),
             Input('automaton-btn-rm', 'n_clicks'),
         ],
         [
+            State('automaton-table', 'data'),
+            State('automaton-table', 'columns'),
             State('automaton-dropdown', 'value'),
             State('automaton-dropdown', 'options'),
             State('automaton-input', 'value'),
@@ -101,7 +106,10 @@ def register_callbacks(app):
             file_name,
             add_click,
             update_click,
+            update_from_table_click,
             rm_click,
+            automaton_table_data,
+            automaton_table_columns,
             automaton_selected,
             automaton_options,
             automaton_name,
@@ -133,7 +141,7 @@ def register_callbacks(app):
                     automaton_data[automaton_id] = automaton_obj
 
                 alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-                return automaton_data, alert
+                return automaton_data, alert, ""
 
         elif triggered_id == 'automaton-btn-add' and automaton_name:
             automaton_id = automaton_name.replace(' ','_').lower()
@@ -149,25 +157,31 @@ def register_callbacks(app):
                 automaton_data[automaton_id] = automaton_obj
 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert
+            return automaton_data, alert, ""
 
-        elif triggered_id == 'automaton-btn-update' and automaton_selected:
-            automaton_obj = tomato_auto.texto_para_obj(automaton_text)
+        elif (triggered_id == 'automaton-btn-update' or triggered_id=='automaton-btn-update-from-table' )and automaton_selected:
+            
+            automaton_obj = None
+            if triggered_id == 'automaton-btn-update':
+                automaton_obj = tomato_auto.texto_para_obj(automaton_text)
+            else:
+                automaton_obj = tomato_auto.table_to_automaton(automaton_table_data, automaton_table_columns)
+
             automaton_data[automaton_selected] = automaton_obj
 
             alert_text = f"Automato '{automaton_selected}' atualizado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert 
+            return automaton_data, alert, "" 
 
         elif triggered_id == 'automaton-btn-rm' and automaton_selected:
             automaton_data.pop(automaton_selected, None)
             alert_text = f"Automato '{automaton_selected}' deletado com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return automaton_data, alert
+            return automaton_data, alert, ""
 
-        return automaton_data, []
+        return automaton_data, [], ""
 
 
     @app.callback(
