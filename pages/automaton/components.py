@@ -86,5 +86,26 @@ widgets = {
         size='sm'
 
     ),
+    'automaton_operation_dropdown': dcc.Dropdown(
+        id='automaton-operation-dropdown',
+        options = [
+            {'label': 'Minimização', 'value': 'minimization'},
+            {'label': 'Determinização', 'value': 'determinization'},
+            {'label': 'União', 'value': 'union'},
+            {'label': 'Intercessão', 'value': 'intersection'},
+        ],
+        multi=False,
+        value='minimization'
+    ),
+    'automaton_second_dropdown': dcc.Dropdown(
+        id='automaton-second-dropdown',
+    ),
+    'automaton_btn_apply_operation': dbc.Button(
+        "Aplicar Operação",
+        id='automaton-btn-apply-operation',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
 }
 

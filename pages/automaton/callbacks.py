@@ -20,7 +20,6 @@ def register_callbacks(app):
         ],
     )
     def toggle_collapse_tip(n, is_open):
-        print('aja')
         if n:
             return not is_open
         return is_open
@@ -83,14 +82,35 @@ def register_callbacks(app):
 
 
     @app.callback(
-        Output('automaton-dropdown', 'options'),
+        [
+            Output('automaton-dropdown', 'options'),
+            Output('automaton-second-dropdown', 'options'),
+        ],
         [
             Input('store-automaton', 'data'),
         ],
     )
     def update_options(automaton_data):
         options = [{'label': k, 'value': k} for k in automaton_data.keys()]
-        return options
+        return options, options
+
+
+    @app.callback(
+        [
+            Output('automaton-second-dropdown', 'disabled'),
+            Output('automaton-second-dropdown', 'value'),
+        ],
+        [
+            Input('automaton-operation-dropdown', 'value'),
+        ],
+        [
+            State('automaton-second-dropdown', 'value'),
+        ]
+    )
+    def manage_automato_operation_select(automaton_operation_val, automaton_second_val):
+        if automaton_operation_val in ['union', 'intersection']:
+            return False, automaton_second_val
+        return True, None
 
 
     @app.callback(
