@@ -11,6 +11,22 @@ Funções que definem as triggers e execução de cada callback.
 """
 def register_callbacks(app):
     @app.callback(
+        Output("automaton-collapse-tip", "is_open"),
+        [
+            Input("automaton-btn-collapse-tip", "n_clicks"),
+        ],
+        [
+            State("automaton-collapse-tip", "is_open")
+        ],
+    )
+    def toggle_collapse_tip(n, is_open):
+        print('aja')
+        if n:
+            return not is_open
+        return is_open
+
+    
+    @app.callback(
         [
             Output('automaton-download','download'),
             Output('automaton-download', 'href'),

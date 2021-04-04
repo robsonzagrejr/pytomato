@@ -55,6 +55,8 @@ widgets = {
         id='automaton-download',
         className='btn btn-margin btn-outline-dark'
     ),
+
+    #Table
     'automaton_btn_update_from_table': dbc.Button(
         "Atualizar a partir da Tabela",
         id='automaton-btn-update-from-table',
@@ -75,6 +77,14 @@ widgets = {
             'overflow': 'auto',
             'margin': '0 15px 0 15px',
         },
+    ),
+    'automaton_btn_collapse_tip': dbc.Button(
+        "?",
+        id='automaton-btn-collapse-tip',
+        color='dark',
+        outline=True,
+        size='sm'
+
     ),
 }
 

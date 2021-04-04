@@ -71,24 +71,27 @@ inputs = dbc.Container(
                 ),
                 dbc.Col(
                     [
-                        html.Br(),
-                        html.Label("n_de_estados"),
-                        html.Br(),
-                        html.Label("estado_inicial"),
-                        html.Br(),
-                        html.Label("estados_de_aceitacao"),
-                        html.Br(),
-                        html.Label("alfabeto"),
-                        html.Br(),
-                        html.Label("transicao_1"),
-                        html.Br(),
-                        html.Label("transicao_2"),
-                        html.Br(),
-                        html.Label("."),
-                        html.Br(),
-                        html.Label("."),
-                        html.Br(),
-                        html.Label("transicao_n"),
+                        widgets['automaton_btn_collapse_tip'],
+                        dbc.Collapse(
+                            [
+                                html.Label("n_de_estados"),
+                                html.Br(),
+                                html.Label("estado_inicial"),
+                                html.Br(),
+                                html.Label("estados_de_aceitacao"),
+                                html.Br(),
+                                html.Label("alfabeto"),
+                                html.Br(),
+                                html.Label("transicao_1"),
+                                html.Br(),
+                                html.Label("transicao_2"),
+                                html.Br(),
+                                html.Label("..."),
+                                html.Br(),
+                                html.Label("transicao_n"),
+                            ],
+                            id='automaton-collapse-tip'
+                        )
                     ]
                 ),
             ]
