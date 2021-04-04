@@ -1,5 +1,4 @@
 """Conversão de Texto x Objeto
-
 Recebe duas strings, Gramática e Nome, do usuário e as
 converte em objeto e insere na estrutura de dicionário.
 """
@@ -19,7 +18,6 @@ def texto_para_obj(text, nome):
         'gramatica': gramatica
     }
 """Conversão de Objeto x Texto
-
 Recebe um objeto, Gramática, da estrutura dicionário e converte
 para formato padrão e retorna essa string.
 """
@@ -37,7 +35,6 @@ def obj_para_texto(objeto):
     return texto
 
 """Teste
-
 Main criado para testar as funções.
 """
 if __name__ == '__main__':
