@@ -49,7 +49,12 @@ def obj_para_texto(estrutura):
     return texto[:-1]
 
 
-"""
+"""Adição de prefixo em estados
+
+Recebe um prefixo o qual será adicionado a todos os estados do automato.
+Resolve o problema de estados com mesmo nome em operações envolvendo dois
+automatos.
+Retorna o mesmo automato porem com os estados posusindo tal prefixo.
 """
 def _add_prefixo_estado(prefixo, automato):
     automato_r = {} 
@@ -67,7 +72,12 @@ def _add_prefixo_estado(prefixo, automato):
     return automato_r
 
 
-"""
+"""União de automatos
+
+Recebe dois automatos e faz a união dos mesmos construindo
+um automato com um novo estado de aceitação e inicial, fazendo episolon
+transições. Renomeia os estados dos automatos que recebeu para previnir
+possíveis erros.
 """
 def uniao(automato_1, automato_2):
     automato_1_r = _add_prefixo_estado('a1', automato_1)
@@ -94,6 +104,14 @@ def uniao(automato_1, automato_2):
     return automato_u 
 
 
+"""Intercessão de automatos
+
+Recebe dois automatos e faz a intercessão dos mesmos construindo
+um automato com o estado de aceitação do automato_2 e inicial do automato_1,
+fazendo episolon transições entre o final do automato_1 e o inicio do
+automato_2. Renomeia os estados dos automatos que recebeu para previnir
+possíveis erros.
+"""
 def intersecao(automato_1, automato_2):
     automato_1_r = _add_prefixo_estado('a1', automato_1)
     automato_2_r = _add_prefixo_estado('a2', automato_2)
