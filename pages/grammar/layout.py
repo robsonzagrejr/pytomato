@@ -53,6 +53,7 @@ inputs = dbc.Container(
                         widgets['grammar_btn_add'],
                         widgets['grammar_btn_update'],
                         widgets['grammar_btn_rm'],
+                        widgets['grammar_btn_convert_af'],
                     ],
                     md=6,
                 ),

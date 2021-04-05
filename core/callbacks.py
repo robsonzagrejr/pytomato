@@ -1,10 +1,13 @@
-from dash import callback_context
+import dash
+from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 
 # Importe das funções de backend.
 import pages.grammar as grammar
 import pages.automaton as automaton
 import pages.regular_exp as regular_exp
+
+import pytomato as tomato
 
 """Callbacks para Páginas
 
@@ -16,7 +19,7 @@ def register_callbacks(app):
     @app.callback(
         Output('page-content', 'children'),
         [
-        Input('url', 'pathname')
+            Input('url', 'pathname')
         ]
     )
     def display_page(pathname):
@@ -37,3 +40,38 @@ def register_callbacks(app):
     grammar.register_callbacks(app)
     automaton.register_callbacks(app)
     regular_exp.register_callbacks(app)
+
+
+    """Callback que irá lidar com conversões entre tipos
+    """
+    """
+    @app.callback(
+        Output('store-convertion-helper', 'data'),
+        [
+            Input('grammar-btn-convert-af', 'n_clicks'),
+            Input('regular-exp-btn-convert-af', 'n_clicks'),
+        ],
+        [
+            State('store-grammar', 'data'),
+            State('store-automaton', 'data'),
+            State('store-regular-exp', 'data'),
+        ]
+    )
+    def display_page(
+        btn_grammar_automaton,
+        btn_regular_exp_automaton,
+        grammar_data, 
+        automaton_data,
+        regular_exp_data
+        ):
+        ctx = dash.callback_context
+        triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        if triggered_id == 'grammar-btn-convert-af':
+            print('conversao de Gramatica para AF')
+        elif triggered_id == 'regular-exp-btn-convert-af':
+            print('conversao de ER para AF')
+
+        raise PreventUpdate
+    """
+     

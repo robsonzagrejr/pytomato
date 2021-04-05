@@ -39,8 +39,11 @@ quebra de linha.
 """
 def obj_para_texto(estrutura):
     texto = ''
-    texto += estrutura['n_estados'] + '\n'
-    texto += estrutura['inicial'] + '\n'
+    texto += str(estrutura['n_estados']) + '\n'
+    if isinstance(estrutura['inicial'], list):
+        texto += ','.join(estrutura['inicial']) + '\n'
+    else:
+        texto += estrutura['inicial'] + '\n'
     texto += ','.join(estrutura['aceitacao']) + '\n'
     texto += ','.join(estrutura['alfabeto']) + '\n'
     for estado in estrutura['transicoes']:
@@ -194,7 +197,7 @@ Main criado para testar as funções.
 """
 if __name__ == '__main__':
     #Conversao
-    afnd_file = open("AFD_com_epslon", "r")
+    afnd_file = open("../examples/AFD_com_epslon", "r")
     texto = (afnd_file.read())
     estrutura_de_dados = texto_para_obj(texto)
     print(estrutura_de_dados)    

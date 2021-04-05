@@ -184,9 +184,10 @@ def afd(followpos, nodes_idx, initial_state):
     return automata
 
 def format_afd(automata, initial_state, final, alphabet):
+    initial_state = [str(i) for i in initial_state]
     afd = dict()
     afd['n_estados'] = len(automata)
-    afd['inicial'] = initial_state
+    afd['inicial'] = "{"  + ', '.join(initial_state) + "}"
     afd['aceitacao'] = list()
     afd['alfabeto'] = list(alphabet)
     afd['transicoes'] = dict()
@@ -199,13 +200,14 @@ def format_afd(automata, initial_state, final, alphabet):
             tr = automata.get(transiction).get(a)
             if (tr):
                 t[a] = [str(tr)]
-            else:
-                t[a] = []
+            #else:
+            #    t[a] = []
         afd.get('transicoes')[transiction] = t
         
     return afd
 
 def er_to_afd(string):
+    string = f"{string}#"
     tree = render_tree(string)
     n_nodes, nodes_idx = define_nodes(tree)
     followpos, initial_state = define_followpos(tree, n_nodes)

@@ -53,6 +53,7 @@ inputs = dbc.Container(
                         widgets['regular_exp_btn_add'],
                         widgets['regular_exp_btn_update'],
                         widgets['regular_exp_btn_rm'],
+                        widgets['regular_exp_btn_convert_af'],
                     ],
                     md=6,
                 ),
@@ -73,6 +74,7 @@ inputs = dbc.Container(
         ),
         html.Br(),
         widgets['regular_exp_alert'],
+        widgets['regular_exp_helper_alert'],
         ]
 )
 

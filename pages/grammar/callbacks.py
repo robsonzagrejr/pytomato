@@ -131,7 +131,7 @@ def register_callbacks(app):
                     grammar_obj = tomato_gram.texto_para_obj(decoded_content, grammar_id)
                     grammar_data[grammar_id] = grammar_obj
 
-                alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+                alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
                 return grammar_data, alert
 
         elif triggered_id == 'grammar-btn-add' and grammar_name:
@@ -147,7 +147,7 @@ def register_callbacks(app):
                 grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_id)
                 grammar_data[grammar_id] = grammar_obj
 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return grammar_data, alert
 
         elif triggered_id == 'grammar-btn-update' and grammar_selected:
@@ -156,14 +156,14 @@ def register_callbacks(app):
 
             alert_text = f"Gramática '{grammar_selected}' atualizada com sucesso :)"
             alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return grammar_data, alert 
 
         elif triggered_id == 'grammar-btn-rm' and grammar_selected:
             grammar_data.pop(grammar_selected, None)
             alert_text = f"Gramática '{grammar_selected}' deletada com sucesso :)"
             alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
+            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return grammar_data, alert
 
         return grammar_data, []
