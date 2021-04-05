@@ -225,6 +225,7 @@ def register_callbacks(app):
         Output('store-automaton', 'data'),
         [
             Input('store-regular-exp-helper', 'data'),
+            Input('store-grammar-helper', 'data'),
             Input('store-automaton-helper', 'data'),
         ],
         [
@@ -233,6 +234,7 @@ def register_callbacks(app):
     )
     def update_automaton_data(
             regular_exp_conv_data,
+            grammar_conv_data,
             automaton_helper_data,
 
             automaton_data
@@ -249,12 +251,21 @@ def register_callbacks(app):
             if 'type' not in automaton_helper_data.keys():
                 return automaton_helper_data
 
-        if triggered_id == 'store-regular-exp-helper' and 'type' in regular_exp_conv_data.keys():
+        elif triggered_id == 'store-regular-exp-helper' and 'type' in regular_exp_conv_data.keys():
             if regular_exp_conv_data['type'] == 'AF':
                 automaton_name = regular_exp_conv_data['name']
                 automaton_obj = regular_exp_conv_data['data']
                 automaton_data[automaton_name] = automaton_obj
                 return automaton_data
+
+        elif triggered_id == 'store-grammar-helper' and 'type' in grammar_conv_data.keys():
+            if grammar_conv_data['type'] == 'AF':
+                automaton_name = grammar_conv_data['name']
+                automaton_obj = grammar_conv_data['data']
+                #automaton_data[automaton_name] = automaton_obj #FIXME
+                return automaton_data
+
+
 
         return automaton_data
 

@@ -27,6 +27,7 @@ def make_navbar(url_base):
 
 stores = {
     'store-grammar': dcc.Store(data={}, id='store-grammar', storage_type='local'),
+    'store-grammar-helper': dcc.Store(data={}, id='store-grammar-helper', storage_type='memory'),
     'store-automaton': dcc.Store(data={}, id='store-automaton', storage_type='local'),
     'store-automaton-helper': dcc.Store(data={}, id='store-automaton-helper', storage_type='memory'),
     'store-regular-exp': dcc.Store(data={}, id='store-regular-exp', storage_type='local'),
@@ -37,6 +38,7 @@ page_content = html.Div(
     [
         dcc.Location(id='url', refresh=False),
         stores['store-grammar'],
+        stores['store-grammar-helper'],
         stores['store-automaton'],
         stores['store-automaton-helper'],
         stores['store-regular-exp'],

@@ -207,7 +207,7 @@ def register_callbacks(app):
             State('store-regular-exp', 'data')
         ]
     )
-    def regular_exp_to_af(regular_exp_data_helper, regular_exp_data):
+    def regular_exp_data(regular_exp_data_helper, regular_exp_data):
         """Callback Download Gramática
 
         """

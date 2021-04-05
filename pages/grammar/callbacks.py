@@ -77,7 +77,7 @@ def register_callbacks(app):
 
     @app.callback(
         [
-            Output('store-grammar', 'data'),
+            Output('store-grammar-helper', 'data'),
             Output('grammar-alert', 'children'),
         ],
         [
@@ -86,13 +86,15 @@ def register_callbacks(app):
             Input('grammar-btn-add', 'n_clicks'),
             Input('grammar-btn-update', 'n_clicks'),
             Input('grammar-btn-rm', 'n_clicks'),
+            Input('grammar-btn-convert-af', 'n_clicks'),
         ],
         [
             State('grammar-dropdown', 'value'),
             State('grammar-dropdown', 'options'),
             State('grammar-input', 'value'),
             State('grammar-text-area', 'value'),
-            State('store-grammar', 'data')
+            State('store-grammar', 'data'),
+            State('store-automaton', 'data'),
         ]
     )
     def update_grammar_data(
@@ -101,11 +103,14 @@ def register_callbacks(app):
             add_click,
             update_click,
             rm_click,
+            gr_convert_af_click,
+
             grammar_selected,
             grammar_options,
             grammar_name,
             grammar_text,
-            grammar_data
+            grammar_data,
+            automaton_data,
         ):
         """Callback Update Gramática
 
@@ -166,5 +171,46 @@ def register_callbacks(app):
             alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return grammar_data, alert
 
+        elif (triggered_id == 'grammar-btn-convert-af' and
+             grammar_selected and grammar_selected in grammar_data.keys()):
+
+            grammar_txt = grammar_data[grammar_selected]['gramatica']
+            new_automaton = {} #FIXME
+            name = f"gr_{grammar_selected}"
+            helper_data = {
+                'type': 'AF',
+                'name': name,
+                'data': new_automaton
+            }
+            alert_type = 'success'
+            alert_text = f"Automato '{name}' criado a partir da Gramática com sucesso ! :)"
+            if name in automaton_data.keys():
+                alert_type = 'warning'
+                alert_text = f"Automato '{name}' atualizado com sucesso ! :)"
+
+            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+
+            return helper_data, alert
+
         return grammar_data, []
+
+
+    #Conversoes
+    @app.callback(
+        Output('store-grammar', 'data'),
+        [
+            Input('store-grammar-helper', 'data'),
+        ],
+        [
+            State('store-grammar', 'data')
+        ]
+    )
+    def grammar_data(grammar_data_helper, grammar_data):
+        """Callback Download Gramática
+
+        """
+        if 'type' not in grammar_data_helper.keys():
+            return grammar_data_helper
+     
+        return grammar_data
 
