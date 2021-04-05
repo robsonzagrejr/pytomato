@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import base64
 
 import pytomato.automato as tomato_auto
+import pages.automaton.data as d
 """Funções de Callback
 
 Funções que definem as triggers e execução de cada callback.
@@ -126,6 +127,7 @@ def register_callbacks(app):
             Input('automaton-btn-update', 'n_clicks'),
             Input('automaton-btn-update-from-table', 'n_clicks'),
             Input('automaton-btn-rm', 'n_clicks'),
+            Input('automaton-btn-apply-operation', 'n_clicks'),
         ],
         [
             State('automaton-table', 'data'),
@@ -134,6 +136,9 @@ def register_callbacks(app):
             State('automaton-dropdown', 'options'),
             State('automaton-input', 'value'),
             State('automaton-text-area', 'value'),
+            State('automaton-operation-dropdown', 'value'),
+            State('automaton-operation-dropdown', 'options'),
+            State('automaton-second-dropdown', 'value'),
             State('store-automaton', 'data')
         ]
     )
@@ -144,6 +149,7 @@ def register_callbacks(app):
             update_click,
             update_from_table_click,
             rm_click,
+            operation_click,
 
             automaton_table_data,
             automaton_table_columns,
@@ -151,6 +157,9 @@ def register_callbacks(app):
             automaton_options,
             automaton_name,
             automaton_text,
+            automaton_operation_val,
+            automaton_operation_options,
+            automaton_second_val,
             automaton_data
         ):
         """Callback Update Autômato
@@ -164,58 +173,48 @@ def register_callbacks(app):
 
         if triggered_id == 'automaton-upload' or triggered_id == 'automaton-filename':
             if file_name:
-                automaton_id = file_name.replace(' ','_').lower()
-
-                alert_text = f'Gramática {automaton_name} adicionada com sucesso :D'
-                alert_type = 'success'
-                keys = [v['value'] for v in automaton_options]
-                if automaton_id in keys:
-                    alert_text = f"Gramática '{automaton_name}' já existe :X"
-                    alert_type = 'danger'
-                else:
-                    decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
-                    automaton_obj = tomato_auto.texto_para_obj(decoded_content)
-                    automaton_data[automaton_id] = automaton_obj
-
-                alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+                automaton_data, alert = d.upload_automaton(
+                        file_name,
+                        file_content,
+                        automaton_options,
+                        automaton_data,
+                )
                 return automaton_data, alert, ""
 
         elif triggered_id == 'automaton-btn-add' and automaton_name:
-            automaton_id = automaton_name.replace(' ','_').lower()
+            automaton_data, alert = d.add_automaton(
+                    automaton_name,
+                    automaton_text,
+                    automaton_options,
+                    automaton_data
+            )
 
-            alert_text = f'Automato {automaton_name} adicionado com sucesso :D'
-            alert_type = 'success'
-            keys = [v['value'] for v in automaton_options]
-            if automaton_id in keys:
-                alert_text = f"Automato '{automaton_name}' já existe :X"
-                alert_type = 'danger'
-            else:
-                automaton_obj = tomato_auto.texto_para_obj(automaton_text)
-                automaton_data[automaton_id] = automaton_obj
-
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return automaton_data, alert, ""
 
         elif (triggered_id == 'automaton-btn-update' or triggered_id=='automaton-btn-update-from-table' )and automaton_selected:
-            
-            automaton_obj = None
-            if triggered_id == 'automaton-btn-update':
-                automaton_obj = tomato_auto.texto_para_obj(automaton_text)
-            else:
-                automaton_obj = tomato_auto.table_to_automaton(automaton_table_data, automaton_table_columns)
 
-            automaton_data[automaton_selected] = automaton_obj
-
-            alert_text = f"Automato '{automaton_selected}' atualizado com sucesso :)"
-            alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+            automaton_data, alert = d.update_automaton(
+                    automaton_text,
+                    automaton_selected,
+                    automaton_table_data,
+                    automaton_table_columns,
+                    automaton_data,
+                    triggered_id
+            )
             return automaton_data, alert, "" 
 
         elif triggered_id == 'automaton-btn-rm' and automaton_selected:
-            automaton_data.pop(automaton_selected, None)
-            alert_text = f"Automato '{automaton_selected}' deletado com sucesso :)"
-            alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+            automaton_data, alert = d.remove_automaton(automaton_selected, automaton_data)
+            return automaton_data, alert, "" 
+
+        elif triggered_id == 'automaton-btn-apply-operation' and automaton_selected:
+            automaton_data, alert = d.apply_operation_automaton(
+                automaton_operation_val,
+                automaton_operation_options,
+                automaton_selected,
+                automaton_second_val,
+                automaton_data,
+            )
             return automaton_data, alert, ""
 
         return automaton_data, [], ""
@@ -264,8 +263,6 @@ def register_callbacks(app):
                 automaton_obj = grammar_conv_data['data']
                 #automaton_data[automaton_name] = automaton_obj #FIXME
                 return automaton_data
-
-
 
         return automaton_data
 
