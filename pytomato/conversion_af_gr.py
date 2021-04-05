@@ -38,7 +38,7 @@ def create_grammar_with_dict(arg_dict):
     gramatica_nao_terminais = search_non_terminal(arg_dict['gramatica'])
     gramatica_terminais = search_terminal(arg_dict['gramatica'])
     regras_producao = search_productions(arg_dict['gramatica'])
-    return RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    return RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
 
 
 class RegularGrammar():
