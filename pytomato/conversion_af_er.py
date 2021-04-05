@@ -217,6 +217,12 @@ def er_to_afd(string):
     return format_afd(automata, initial_state, final, alphabet)
 
 
-er_to_afd('(&|b)(ab)*(&|a)#')
-# er_to_afd('a(a|b)*a#')
-# er_to_afd('aa*(bb*aa*b)*#')
+
+"""Teste
+Main criado para testar as funções.
+"""
+if __name__ == '__main__':
+    er_to_afd('(&|b)(ab)*(&|a)#')
+    # er_to_afd('a(a|b)*a#')
+    # er_to_afd('aa*(bb*aa*b)*#')
+

@@ -4,6 +4,8 @@ from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import base64
 
+import pytomato.expressao_regular as tomato_er
+
 """Funções de Callback
 
 Funções que definem as triggers e execução de cada callback.
@@ -19,19 +21,18 @@ def register_callbacks(app):
             Input('store-regular-exp', 'data'),
         ],
     )
-    def grammar_download(grammar_selected, grammar_data):
+    def regular_exp_download(regular_exp_selected, regular_exp_data):
         """Callback Download Gramática
 
         Callback para chamada de download de gramáticas
         em arquivo de texto.
         """
      
-        if grammar_selected and grammar_selected in grammar_data.keys():
-            #data = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
-            data = ''
+        if regular_exp_selected and regular_exp_selected in regular_exp_data.keys():
+            data = tomato_er.obj_para_texto(regular_exp_data[regular_exp_selected])
             data = data.replace('\n', "%0D%0A");
             data = f"data:text/plain;UTF-8,{data}"
-            return f"{grammar_selected}", data
+            return f"{regular_exp_selected}", data
         return '', ''
 
     @app.callback(
@@ -49,19 +50,18 @@ def register_callbacks(app):
             Input('store-regular-exp', 'data')
         ]
     )
-    def select_grammar(grammar_selected, grammar_options, grammar_data):
+    def select_regular_exp(regular_exp_selected, regular_exp_options, regular_exp_data):
         """Callback Seleção Gramática
 
         Callback para gerenciar a seleção e display do
         dropdown das gramáticas.
         """
     
-        if grammar_options:
-            keys = [v['value'] for v in grammar_options]
-            if grammar_selected in keys:
-                #grammar_text = tomato_gram.obj_para_texto(grammar_data[grammar_selected])
-                grammar_text = ""
-                return grammar_selected, grammar_text, True, {'display': 'none'}, {}
+        if regular_exp_options:
+            keys = [v['value'] for v in regular_exp_options]
+            if regular_exp_selected in keys:
+                regular_exp_text = tomato_er.obj_para_texto(regular_exp_data[regular_exp_selected])
+                return regular_exp_selected, regular_exp_text, True, {'display': 'none'}, {}
         return "", "", False, {}, {'display': 'none'}
 
 
@@ -71,8 +71,8 @@ def register_callbacks(app):
             Input('store-regular-exp', 'data'),
         ],
     )
-    def update_options(grammar_data):
-        options = [{'label': k, 'value': k} for k in grammar_data.keys()]
+    def update_options(regular_exp_data):
+        options = [{'label': k, 'value': k} for k in regular_exp_data.keys()]
         return options
 
 
@@ -96,17 +96,17 @@ def register_callbacks(app):
             State('store-regular-exp', 'data')
         ]
     )
-    def update_grammar_data(
+    def update_regular_exp_data(
             file_content,
             file_name,
             add_click,
             update_click,
             rm_click,
-            grammar_selected,
-            grammar_options,
-            grammar_name,
-            grammar_text,
-            grammar_data
+            regular_exp_selected,
+            regular_exp_options,
+            regular_exp_name,
+            regular_exp_text,
+            regular_exp_data
         ):
         """Callback Update Gramática
 
@@ -119,56 +119,53 @@ def register_callbacks(app):
 
         if triggered_id == 'regular-exp-upload' or triggered_id == 'regular-exp-filename':
             if file_name:
-                grammar_id = file_name.replace(' ','_').lower()
+                regular_exp_id = file_name.replace(' ','_').lower()
 
-                alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
+                alert_text = f'Expressão Regular {regular_exp_name} adicionada com sucesso :D'
                 alert_type = 'success'
-                keys = [v['value'] for v in grammar_options]
-                if grammar_id in keys:
-                    alert_text = f"Gramática '{grammar_name}' já existe :X"
+                keys = [v['value'] for v in regular_exp_options]
+                if regular_exp_id in keys:
+                    alert_text = f"Expressão Regular'{regular_exp_name}' já existe :X"
                     alert_type = 'danger'
                 else:
                     decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
-                    #grammargrammar_obj = tomato_gram.texto_para_obj(decoded_content, grammar_id)
-                    grammar_obj = {}
-                    grammar_data[grammar_id] = grammar_obj
+                    regular_exp_obj = tomato_er.texto_para_obj(decoded_content, regular_exp_id)
+                    regular_exp_data[regular_exp_id] = regular_exp_obj
 
                 alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-                return grammar_data, alert
+                return regular_exp_data, alert
 
-        elif triggered_id == 'regular-exp-btn-add' and grammar_name:
-            grammar_id = grammar_name.replace(' ','_').lower()
+        elif triggered_id == 'regular-exp-btn-add' and regular_exp_name:
+            regular_exp_id = regular_exp_name.replace(' ','_').lower()
 
-            alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
+            alert_text = f'Expressão Regular {regular_exp_name} adicionada com sucesso :D'
             alert_type = 'success'
-            keys = [v['value'] for v in grammar_options]
-            if grammar_id in keys:
-                alert_text = f"Gramática '{grammar_name}' já existe :X"
+            keys = [v['value'] for v in regular_exp_options]
+            if regular_exp_id in keys:
+                alert_text = f"Expressão Regular '{regular_exp_name}' já existe :X"
                 alert_type = 'danger'
             else:
-                #grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_id)
-                grammar_obj = {}
-                grammar_data[grammar_id] = grammar_obj
+                regular_exp_obj = tomato_er.texto_para_obj(regular_exp_text, regular_exp_id)
+                regular_exp_data[regular_exp_id] = regular_exp_obj
 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return grammar_data, alert
+            return regular_exp_data, alert
 
-        elif triggered_id == 'regular-exp-btn-update' and grammar_selected:
-            #grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_selected)
-            grammar_obj = {}
-            grammar_data[grammar_selected] = grammar_obj
+        elif triggered_id == 'regular-exp-btn-update' and regular_exp_selected:
+            regular_exp_obj = tomato_er.texto_para_obj(regular_exp_text, regular_exp_selected)
+            regular_exp_data[regular_exp_selected] = regular_exp_obj
 
-            alert_text = f"Gramática '{grammar_selected}' atualizada com sucesso :)"
+            alert_text = f"Expressão Regular '{regular_exp_selected}' atualizada com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return grammar_data, alert 
+            return regular_exp_data, alert 
 
-        elif triggered_id == 'regular-exp-btn-rm' and grammar_selected:
-            grammar_data.pop(grammar_selected, None)
-            alert_text = f"Gramática '{grammar_selected}' deletada com sucesso :)"
+        elif triggered_id == 'regular-exp-btn-rm' and regular_exp_selected:
+            regular_exp_data.pop(regular_exp_selected, None)
+            alert_text = f"Expressão Regular '{regular_exp_selected}' deletada com sucesso :)"
             alert_type = "success" 
             alert = dbc.Alert(alert_text, color=alert_type, duration=4000)
-            return grammar_data, alert
+            return regular_exp_data, alert
 
-        return grammar_data, []
+        return regular_exp_data, []
 
