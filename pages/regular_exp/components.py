@@ -76,5 +76,12 @@ widgets = {
             'margin': '0 15px 0 15px',
         },
     ),
+    'regular_exp_btn_convert_af': dbc.Button(
+        "Converter para AF",
+        id='regular-exp-btn-convert-af',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
 }
 

@@ -55,6 +55,8 @@ widgets = {
         id='automaton-download',
         className='btn btn-margin btn-outline-dark'
     ),
+
+    #Table
     'automaton_btn_update_from_table': dbc.Button(
         "Atualizar a partir da Tabela",
         id='automaton-btn-update-from-table',
@@ -76,5 +78,40 @@ widgets = {
             'margin': '0 15px 0 15px',
         },
     ),
+    'automaton_btn_collapse_tip': dbc.Button(
+        "?",
+        id='automaton-btn-collapse-tip',
+        color='dark',
+        outline=True,
+        size='sm'
+
+    ),
+    'automaton_operation_dropdown': dcc.Dropdown(
+        id='automaton-operation-dropdown',
+        options = [
+            {'label': 'Minimização', 'value': 'minimization'},
+            {'label': 'Determinização', 'value': 'determinization'},
+            {'label': 'União', 'value': 'union'},
+            {'label': 'Intercessão', 'value': 'intersection'},
+        ],
+        multi=False,
+        value='minimization'
+    ),
+    'automaton_second_dropdown': dcc.Dropdown(
+        id='automaton-second-dropdown',
+    ),
+    'automaton_btn_apply_operation': dbc.Button(
+        "Aplicar Operação",
+        id='automaton-btn-apply-operation',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
+    'automaton_graph': html.Div(
+        [
+            html.Div(id='automaton-graph', className='graphvis'),
+            html.Div(id='automaton-graph-help'),
+        ]
+    )
 }
 

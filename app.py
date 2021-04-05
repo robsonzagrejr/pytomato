@@ -19,7 +19,14 @@ from core.callbacks import register_callbacks
 Dash instanciado, definindo framework Bootstrap como base
 para criação dos componentes.
 """
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+external_script = [
+    "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+    "assets/script.js"
+]
+
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
+        external_scripts=external_script )
 app.config.suppress_callback_exceptions = True
 
 #Definição do Título
