@@ -291,11 +291,11 @@ def register_callbacks(app):
                 {
                     'name': l,
                     'id':l,
-                    #'editable': True
                 }
                 for l in [''] + automaton['alfabeto']
             ]
             data = []
+            accepted_state = automaton['aceitacao']
             for estado, trans in automaton['transicoes'].items():
                 row = {} 
                 estado_label = estado
@@ -303,12 +303,19 @@ def register_callbacks(app):
                     estado_label = '->' + estado_label
                 if estado in automaton['aceitacao']:
                     estado_label = '*' + estado_label
+                    accepted_state.pop(estado)
 
                 row[''] = estado_label
                 for letra, estado_alvo in trans.items():
                     alvo = "{"+','.join(estado_alvo)+"}"
                     row[letra] = alvo
                 data.append(row)
+
+            for unreached in accepted_state:
+                row = {'': f"*{unreached}"}
+                data.append(row)
+
             return data, columns
+
         return [], []
 

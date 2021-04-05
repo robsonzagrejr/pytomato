@@ -4,6 +4,7 @@ import dash_html_components as html
 
 import base64
 import pytomato.automato as tomato_auto
+import pytomato.operacoes_automato as tomato_op_auto
 
 def upload_automaton(file_name, file_content, automaton_options, automaton_data):
         automaton_id = file_name.replace(' ','_').lower()
@@ -66,11 +67,52 @@ def remove_automaton(automaton_selected, automaton_data):
 
 
 def apply_operation_automaton(operation_type, operation_options, automaton_selected, automaton_second_selected, automaton_data):
-    
     op_name = [v['label'] for v in operation_options if v['value'] == operation_type][0]
-    alert_text = f"Operação {op_name} em automato '{automaton_selected}' efetuada com sucesso :)"
-    alert_type = "success" 
-    alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+    if operation_type in ['union', 'intersection']:
+        alert_text = f"Operação {op_name} entre '{automaton_selected}' e '{automaton_second_selected}' efetuada com sucesso :)"
+        alert_type = "success" 
+        if not automaton_second_selected: 
+            alert_text = f"Operação {op_name} precisa ser entre dois automatos (- -)"
+            alert_type = "danger" 
+            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+            return automaton_data, alert
+
+        if operation_type == 'union':
+            automaton_1 = automaton_data[automaton_selected]
+            automaton_2 = automaton_data[automaton_second_selected]
+            automaton_u = tomato_op_auto.uniao(automaton_1, automaton_2)
+            automaton_u_name = f"{automaton_selected}_u_{automaton_second_selected}"
+            if automaton_u_name in automaton_data.keys():
+                alert_text = f"Automato {automaton_u_name} atualizado com sucesso :)"
+                alert_type = "warning" 
+
+            automaton_data[automaton_u_name] = automaton_u
+
+        elif operation_type == 'intersection':
+            automaton_1 = automaton_data[automaton_selected]
+            automaton_2 = automaton_data[automaton_second_selected]
+            automaton_i = tomato_op_auto.intersecao(automaton_1, automaton_2)
+            automaton_i_name = f"{automaton_selected}_i_{automaton_second_selected}"
+            if automaton_i_name in automaton_data.keys():
+                alert_text = f"Automato {automaton_i_name} atualizado com sucesso :)"
+                alert_type = "warning" 
+
+            automaton_data[automaton_i_name] = automaton_i
+
+
+        alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+
+    else:
+        alert_text = f"Operação {op_name} em automato '{automaton_selected}' efetuada com sucesso :)"
+        alert_type = "success" 
+        if operation_type == 'minimization':
+            print('APPLY Minimization') #FIXME
+
+        elif operation_type == 'determinization':
+            print('APPLY Determinization') #FIXME
+
+
+        alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
     
     return automaton_data, alert
 
