@@ -33,29 +33,30 @@ def search_productions(gramatica):
 
 # instancia uma classe de gramatica regular a partir do dicionario
 def create_grammar_with_dict(arg_dict):
-	gramatica_inicial = search_initial(arg_dict['gramatica'])
-	gramatica_nao_terminais = search_non_terminal(arg_dict['gramatica'])
-	gramatica_terminais = search_terminal(arg_dict['gramatica'])
-	regras_producao = search_productions(arg_dict['gramatica'])
-	return RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    nome = arg_dict['nome']
+    gramatica_inicial = search_initial(arg_dict['gramatica'])
+    gramatica_nao_terminais = search_non_terminal(arg_dict['gramatica'])
+    gramatica_terminais = search_terminal(arg_dict['gramatica'])
+    regras_producao = search_productions(arg_dict['gramatica'])
+    return RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
 
 
 class RegularGrammar():
-		
-	# retorna a gramática em forma de dicionario
-	def asdict(self):
-		regras={}
-		for a,b in self.regras_producao.items():
-			regras[a] = list(b)
-		dic={'nome': self.nome, 'gramatica': regras}
-		return dic
-	def __init__(self, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao):
-		self.gramatica_inicial = gramatica_inicial
-		self.gramatica_nao_terminais = gramatica_nao_terminais
-		self.gramatica_terminais = gramatica_terminais
-		self.regras_producao = regras_producao
-	def __str__(self):
-		return "inicial:{}\nnao_term:{}\nterm:{}\nregr_prod:{}".format(self.gramatica_inicial,self.gramatica_nao_terminais,self.gramatica_terminais,self.regras_producao)
+    # retorna a gramática em forma de dicionario
+    def asdict(self):
+        regras={}
+        for a,b in self.regras_producao.items():
+            regras[a] = list(b)
+        dic={'nome': self.nome, 'gramatica': regras}
+        return dic
+    def __init__(self, nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao):
+        self.nome = nome
+        self.gramatica_inicial = gramatica_inicial
+        self.gramatica_nao_terminais = gramatica_nao_terminais
+        self.gramatica_terminais = gramatica_terminais
+        self.regras_producao = regras_producao
+    def __str__(self):
+        return "inicial:{}\nnao_term:{}\nterm:{}\nregr_prod:{}".format(self.gramatica_inicial,self.gramatica_nao_terminais,self.gramatica_terminais,self.regras_producao)
 
 
 def get_afd_states(afd):
@@ -65,7 +66,7 @@ def get_afd_states(afd):
 	return states
 
 
-def afd_para_gramatica(estrutura):
+def afd_para_gramatica(nome, estrutura):
     gramatica_inicial = estrutura['inicial']
     gramatica_nao_terminais = get_afd_states(estrutura)
     gramatica_terminais = estrutura['alfabeto']	
@@ -85,7 +86,7 @@ def afd_para_gramatica(estrutura):
         regras_producao["S'"] = regras_producao[gramatica_inicial].union('&')
         gramatica_inicial = "S'"	
     regras_producao = dict(regras_producao)	
-    gram = RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    gram = RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
     gram = gram.asdict()
     return gram
 

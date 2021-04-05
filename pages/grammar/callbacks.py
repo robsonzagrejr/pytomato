@@ -176,17 +176,29 @@ def register_callbacks(app):
         Output('store-grammar', 'data'),
         [
             Input('store-grammar-helper', 'data'),
+            Input('store-automaton-helper', 'data'),
         ],
         [
             State('store-grammar', 'data')
         ]
     )
-    def grammar_data(grammar_data_helper, grammar_data):
+    def grammar_data(grammar_data_helper, automaton_data_helper, grammar_data):
         """Callback Download Gramática
 
         """
-        if 'type' not in grammar_data_helper.keys():
-            return grammar_data_helper
+        ctx = dash.callback_context
+        triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        if triggered_id == 'store-grammar-helper':
+            if 'type' not in grammar_data_helper.keys():
+                return grammar_data_helper
+
+        elif triggered_id == 'store-automaton-helper' and 'type' in automaton_data_helper.keys():
+            if automaton_data_helper['type'] == 'GR':
+                grammar_name = automaton_data_helper['name']
+                grammar_obj = automaton_data_helper['data']
+                grammar_data[grammar_name] = grammar_obj
+                return grammar_data
      
         return grammar_data
 

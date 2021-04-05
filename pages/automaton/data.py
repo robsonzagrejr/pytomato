@@ -5,6 +5,7 @@ import dash_html_components as html
 import base64
 import pytomato.automato as tomato_auto
 import pytomato.operacoes_automato as tomato_op_auto
+import pytomato.conversion_af_gr as tomato_gr_conv
 
 def upload_automaton(file_name, file_content, automaton_options, automaton_data):
         automaton_id = file_name.replace(' ','_').lower()
@@ -123,37 +124,22 @@ def apply_operation_automaton(operation_type, operation_options, automaton_selec
     return automaton_data, alert
 
 
-def make_graph(automaton_selected, automaton_data):
-    graph_js = """
-    // create an array with nodes
-    var nodes = new vis.DataSet([
-      { id: 1, label: "Node 1" },
-      { id: 2, label: "Node 2" },
-      { id: 3, label: "Node 3" },
-      { id: 4, label: "Node 4" },
-      { id: 5, label: "Node 5" },
-    ]);
+def convert_automaton_to_gr(automaton_selected, automaton_data, grammar_data):
+    automaton = automaton_data[automaton_selected]
+    name = f"af_{automaton_selected}"
+    new_grammar = tomato_gr_conv.afd_para_gramatica(name, automaton)
+    helper_data = {
+        'type': 'GR',
+        'name': name,
+        'data': new_grammar
+    }
+    alert_type = 'success'
+    alert_text = f"Gramática '{name}' criada a partir de Automato com sucesso ! :)"
+    if name in automaton_data.keys():
+        alert_type = 'warning'
+        alert_text = f"Gramática '{name}' atualizada com sucesso ! :)"
 
-    // create an array with edges
-    var edges = new vis.DataSet([
-      { from: 1, to: 3 },
-      { from: 1, to: 2 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 },
-      { from: 3, to: 3 },
-    ]);
+    alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
 
-    // create a network
-    var container = document.getElementById("mynetwork");
-    var data = {
-      nodes: nodes,
-      edges: edges,
-    };
-    var options = {};
-    var network = new vis.Network(container, data, options);
+    return helper_data, alert
 
-    """
-
-    graph_js= 'alert("KAKAK");'
-
-    return graph_js
