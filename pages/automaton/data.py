@@ -143,3 +143,24 @@ def convert_automaton_to_gr(automaton_selected, automaton_data, grammar_data):
 
     return helper_data, alert
 
+
+def check_word_in_automato(word, automaton_selected, automaton_data):
+    if automaton_selected:
+        automaton = automaton_data[automaton_selected]
+        name = automaton_selected
+        grammar = tomato_gr_conv.afd_para_gramatica(name, automaton)['gramatica']
+
+        #FIXME
+        accept = True
+
+        alert_type = 'success'
+        alert_text = f"Automato '{automaton_selected}' aceita palavra '{word}' ! :)"
+        if not accept:
+            alert_type = 'danger'
+            alert_text = f"Automato '{automaton_selected}' não reconhece palavra '{word}' ! :X"
+    else:
+        alert_type = 'warning'
+        alert_text = f"Selecione um Automato !!"
+
+    alert = dbc.Alert(alert_text, color=alert_type, duration=2000)
+    return alert
