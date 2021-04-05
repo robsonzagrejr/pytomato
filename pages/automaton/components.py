@@ -107,5 +107,11 @@ widgets = {
         outline=True,
         className='btn-margin',
     ),
+    'automaton_graph': html.Div(
+        [
+            html.Div(id='automaton-graph'),
+            html.Div(id='automaton-graph-help'),
+        ]
+    )
 }
 

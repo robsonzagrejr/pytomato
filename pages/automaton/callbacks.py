@@ -303,7 +303,7 @@ def register_callbacks(app):
                     estado_label = '->' + estado_label
                 if estado in automaton['aceitacao']:
                     estado_label = '*' + estado_label
-                    accepted_state.pop(estado)
+                    accepted_state.remove(estado)
 
                 row[''] = estado_label
                 for letra, estado_alvo in trans.items():
@@ -315,7 +315,19 @@ def register_callbacks(app):
                 row = {'': f"*{unreached}"}
                 data.append(row)
 
+
             return data, columns
 
         return [], []
+
+    app.clientside_callback(
+        """
+        function(automatonSelected, automatonData) {
+            return updateGraph(automatonData, automatonSelected);
+        }
+        """,
+        Output('automaton-graph-help', 'children'),
+        Input('automaton-dropdown', 'value'),
+        State('store-automaton', 'data'),
+    )
 
