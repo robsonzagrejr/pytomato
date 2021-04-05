@@ -42,5 +42,8 @@ if __name__ == '__main__':
             A -> aS | bC | b | cA\n\
             B -> aC | a | bS | cB\n\
             C -> aB | bA | cC | c"
-
-    print(texto_para_obj(texto, 'nome'))
+    texto2="S -> & | &D | D | aA\n\
+A -> D | bA | a\n\
+B -> b | D\n\
+S' -> & | &D | D | aA"
+    print(texto_para_obj(texto2, 'nome'))

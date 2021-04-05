@@ -13,12 +13,12 @@ def search_non_terminal(gramatica):
 	return list(gramatica.keys())
 # usado para construir classe RegularGrammar a partir do construtor
 def search_terminal(gramatica):
-	terminais=[]
+	terminais=set()
 	for nonterm,list_prod in gramatica.items():
 		for i in list_prod:
 			if i.islower():
-				terminais.append(i)
-	return terminais
+				terminais.add(i)
+	return list(terminais)
 
 
 # usado para construir classe RegularGrammar a partir do construtor
@@ -37,8 +37,8 @@ def create_grammar_with_dict(arg_dict):
     gramatica_inicial = search_initial(arg_dict['gramatica'])
     gramatica_nao_terminais = search_non_terminal(arg_dict['gramatica'])
     gramatica_terminais = search_terminal(arg_dict['gramatica'])
-    regras_producao = search_productions(arg_dict['gramatica'])
-    return RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    regras_producao = search_productions(arg_dict['gramatica'])    
+    return RegularGrammar(nome,gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
 
 
 class RegularGrammar():
@@ -60,16 +60,22 @@ class RegularGrammar():
 
 
 def get_afd_states(afd):
-	states = []
-	for i in afd['transicoes']:
-		states.append(i)
-	return states
+    states = set()
+    for i in afd['transicoes']:
+        states.add(i)        
+    if len(afd['aceitacao']) > 1:
+        for i in afd['aceitacao']:
+            states.add(i)
+    else:
+        states.add(afd['aceitacao'])
+    states.add(afd['inicial'])
+    return list(states)
 
 
 def afd_para_gramatica(nome, estrutura):
     gramatica_inicial = estrutura['inicial']
-    gramatica_nao_terminais = get_afd_states(estrutura)
-    gramatica_terminais = estrutura['alfabeto']	
+    gramatica_nao_terminais = get_afd_states(estrutura)    
+    gramatica_terminais = list(set(estrutura['alfabeto']))
     #dict subclass that calls a factory function to supply missing values,setting defaultdict to set makes the defaultdict useful for building a dictionary of sets
     regras_producao = defaultdict(set)
     for state, transition in estrutura['transicoes'].items():		
@@ -86,7 +92,7 @@ def afd_para_gramatica(nome, estrutura):
         regras_producao["S'"] = regras_producao[gramatica_inicial].union('&')
         gramatica_inicial = "S'"	
     regras_producao = dict(regras_producao)	
-    gram = RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    gram = RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)        
     gram = gram.asdict()
     return gram
 
@@ -103,7 +109,7 @@ def gramatica_para_afd(gram_dict):
     afd = {}
     afd['n_estados'] = len(gram.gramatica_nao_terminais) + 1
     afd['inicial'] = gram.gramatica_inicial	
-    afd['aceitacao'] = ['t_state']
+    afd['aceitacao'] = ['Z']
     afd['alfabeto'] = gram.gramatica_terminais
     afd['transicoes'] = defaultdict(dict)	
     if ('&' in gram.regras_producao['{}'.format(gram.gramatica_inicial)]):
@@ -117,11 +123,16 @@ def gramatica_para_afd(gram_dict):
                 #for every rule of the form A->aB, we add a transition from state A to state B labelled a				
                 afd['transicoes'][head][x[0]].append(x[1])
             if len(x) == 1:				
-                # for every rule of the form A->a, we add a transition from state A to state t_state labelled a
-                afd['transicoes'][head][x[0]].append('t_state')	
+                # for every rule of the form A->a, we add a transition from state A to state Z labelled a
+                afd['transicoes'][head][x[0]].append('Z')	
     afd['transicoes'] = dict(afd['transicoes'])
     for non_term in gram.gramatica_nao_terminais:
         afd['transicoes'][non_term] = dict(afd['transicoes'][non_term])
     # na verdade afd eh um afnd, deve-se determiniza-lo
     return afd
-
+from automato import texto_para_obj
+file = open("4", "r")
+texto = (file.read())
+estrutura_de_dados = texto_para_obj(texto)
+print(estrutura_de_dados)
+print(afd_para_gramatica('sss',estrutura_de_dados))
