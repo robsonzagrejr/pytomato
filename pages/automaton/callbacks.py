@@ -315,7 +315,6 @@ def register_callbacks(app):
                 row = {'': f"*{unreached}"}
                 data.append(row)
 
-
             return data, columns
 
         return [], []

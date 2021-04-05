@@ -8,8 +8,7 @@
     height: 400px;
 }
 
-#mynetwork {
-  width: 600px;
+.graphvis {
   height: 400px;
   border: 1px solid lightgray;
 }
