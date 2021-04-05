@@ -119,7 +119,7 @@ inputs = dbc.Container(
                 dbc.Col(
                     [
                         widgets['automaton_btn_collapse_tip'],
-                        dbc.Collapse(
+                        dbc.Popover(
                             [
                                 html.Label("n_de_estados"),
                                 html.Br(),
@@ -137,15 +137,18 @@ inputs = dbc.Container(
                                 html.Br(),
                                 html.Label("transicao_n"),
                             ],
-                            id='automaton-collapse-tip'
-                        )
-                    ]
+                            id='automaton-collapse-tip',
+                            target="automaton-text-area",
+                            placement='left',
+                        ),
+                        widgets['automaton_graph'],
+                    ],
                 ),
             ]
         ),
         html.Br(),
         widgets['automaton_alert'],
-        ]
+    ]
 )
 
 
@@ -155,8 +158,6 @@ outputs = dbc.Container(
         html.Hr(),
         widgets['automaton_btn_update_from_table'],
         widgets['automaton_table'],
-        html.Br(),
-        widgets['automaton_graph'],
         html.Br(),
         html.Br(),
         html.Br(),
