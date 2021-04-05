@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 import base64
 
 import pytomato.gramatica as tomato_gram
+import pytomato.conversion_af_gr as tomato_gr_conv
 
 def upload_grammar(file_name, file_content, grammar_options, grammar_data):
     grammar_id = file_name.replace(' ','_').lower()
@@ -58,8 +59,8 @@ def remove_grammar(grammar_selected, grammar_data):
 
 
 def convert_grammar_to_af(grammar_selected, grammar_data, automaton_data):
-    grammar_txt = grammar_data[grammar_selected]['gramatica']
-    new_automaton = {} #FIXME
+    grammar = grammar_data[grammar_selected]
+    new_automaton = tomato_gr_conv.gramatica_para_afd(grammar)
     name = f"gr_{grammar_selected}"
     helper_data = {
         'type': 'AF',

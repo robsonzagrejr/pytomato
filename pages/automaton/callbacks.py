@@ -268,7 +268,7 @@ def register_callbacks(app):
             if grammar_conv_data['type'] == 'AF':
                 automaton_name = grammar_conv_data['name']
                 automaton_obj = grammar_conv_data['data']
-                #automaton_data[automaton_name] = automaton_obj #FIXME
+                automaton_data[automaton_name] = automaton_obj
                 return automaton_data
 
         return automaton_data
