@@ -1,5 +1,46 @@
 from collections import defaultdict
+
+# usado para construir classe RegularGrammar a partir do construtor
+def search_initial(gramatica):
+	if 'S\'' in gramatica:
+		return 'S\''
+	else:
+		return 'S'
+# usado para construir classe RegularGrammar a partir do construtor		
+def search_non_terminal(gramatica):
+	return list(gramatica.keys())
+# usado para construir classe RegularGrammar a partir do construtor
+def search_terminal(gramatica):
+	terminais=[]
+	for nonterm,list_prod in gramatica.items():
+		for i in list_prod:
+			if i.islower():
+				terminais.append(i)
+	return terminais
+# usado para construir classe RegularGrammar a partir do construtor
+def search_productions(gramatica):
+	prod_dict=defaultdict(set)
+	for nonterm,list_prod in gramatica.items():
+		for i in list_prod:
+			prod_dict[nonterm].add(i)
+	prod_dict = dict(prod_dict)
+	return prod_dict
+# instancia uma classe de gramatica regular a partir do dicionario
+def create_grammar_with_dict(arg_dict):
+	gramatica_inicial = search_initial(arg_dict['gramatica'])
+	gramatica_nao_terminais = search_non_terminal(arg_dict['gramatica'])
+	gramatica_terminais = search_terminal(arg_dict['gramatica'])
+	regras_producao = search_productions(arg_dict['gramatica'])
+	return RegularGrammar(gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
 class RegularGrammar():
+		
+	# retorna a gramática em forma de dicionario
+	def asdict(self):
+		regras={}
+		for a,b in self.regras_producao.items():
+			regras[a] = list(b)
+		dic={'nome': 'self.nome', 'gramatica': regras}
+		return dic
 	def __init__(self, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao):
 		self.gramatica_inicial = gramatica_inicial
 		self.gramatica_nao_terminais = gramatica_nao_terminais
@@ -344,3 +385,13 @@ def minimiza_afd(afd):
 	afd_minimizado['n_estados'] = str(len(classes))
 
 	return afd_minimizado
+if __name__ == '__main__':
+    texto= "S -> aA | bB | cS\n\
+            A -> aS | bC | b | cA\n\
+            B -> aC | a | bS | cB\n\
+            C -> aB | bA | cC | c"
+    from gramatica import texto_para_obj
+    obj = texto_para_obj(texto, 'nome')
+    gram = create_grammar_with_dict(arg_dict=obj)
+    print(gram.asdict())
+    print(obj)
