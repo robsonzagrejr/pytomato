@@ -95,6 +95,7 @@ def intersecao(automato_1, automato_2):
 
     return automato_i
 
+
 def afnd_para_afd_sem_epsilon(afnd):
 	afd = {}
 	n_estados = 0
