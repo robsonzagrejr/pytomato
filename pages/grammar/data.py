@@ -57,7 +57,7 @@ def remove_grammar(grammar_selected, grammar_data):
     return grammar_data, alert
 
 
-def convert_grammar_to_af(grammar_selected, grammar_data):
+def convert_grammar_to_af(grammar_selected, grammar_data, automaton_data):
     grammar_txt = grammar_data[grammar_selected]['gramatica']
     new_automaton = {} #FIXME
     name = f"gr_{grammar_selected}"

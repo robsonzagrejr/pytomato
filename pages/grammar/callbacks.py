@@ -164,6 +164,7 @@ def register_callbacks(app):
             helper_data, alert = d.convert_grammar_to_af(
                 grammar_selected,
                 grammar_data,
+                automaton_data
             ) 
             return helper_data, alert
 
