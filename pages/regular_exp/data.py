@@ -60,7 +60,7 @@ def remove_regular_exp(regular_exp_selected, regular_exp_data):
     return regular_exp_data, alert
 
 
-def convert_regular_exp_to_af(regular_exp_selected, regular_exp_data):
+def convert_regular_exp_to_af(regular_exp_selected, regular_exp_data, automaton_data):
     regular_exp_txt = regular_exp_data[regular_exp_selected]['expressao_regular']
     new_automaton= tomato_er_conv.er_to_afd(regular_exp_txt)
     name = f"er_{regular_exp_selected}"

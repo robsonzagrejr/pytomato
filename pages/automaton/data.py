@@ -106,10 +106,16 @@ def apply_operation_automaton(operation_type, operation_options, automaton_selec
         alert_text = f"Operação {op_name} em automato '{automaton_selected}' efetuada com sucesso :)"
         alert_type = "success" 
         if operation_type == 'minimization':
-            print('APPLY Minimization') #FIXME
+            automaton = automaton_data[automaton_selected]
+            new_automaton = tomato_op_auto.minimiza_afd(automaton)
+            new_automaton_name = f"min_{automaton_selected}"
+            automaton_data[new_automaton_name] = new_automaton
 
         elif operation_type == 'determinization':
-            print('APPLY Determinization') #FIXME
+            automaton = automaton_data[automaton_selected]
+            new_automaton = tomato_op_auto.afnd_para_afd(automaton)
+            new_automaton_name = f"det_{automaton_selected}"
+            automaton_data[new_automaton_name] = new_automaton
 
 
         alert = dbc.Alert(alert_text, color=alert_type, duration=1000)

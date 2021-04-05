@@ -85,15 +85,22 @@ def register_callbacks(app):
     @app.callback(
         [
             Output('automaton-dropdown', 'options'),
+            Output('automaton-dropdown', 'value'),
             Output('automaton-second-dropdown', 'options'),
         ],
         [
             Input('store-automaton', 'data'),
         ],
+        [
+            State('automaton-dropdown', 'value'),
+
+        ],
     )
-    def update_options(automaton_data):
+    def update_options(automaton_data, automaton_value):
         options = [{'label': k, 'value': k} for k in automaton_data.keys()]
-        return options, options
+        if automaton_value not in automaton_data.keys():
+            automaton_value = None
+        return options, automaton_value, options
 
 
     @app.callback(
@@ -261,7 +268,7 @@ def register_callbacks(app):
             if grammar_conv_data['type'] == 'AF':
                 automaton_name = grammar_conv_data['name']
                 automaton_obj = grammar_conv_data['data']
-                #automaton_data[automaton_name] = automaton_obj #FIXME
+                automaton_data[automaton_name] = automaton_obj
                 return automaton_data
 
         return automaton_data

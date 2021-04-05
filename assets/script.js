@@ -87,7 +87,6 @@ function updateGraph(automatonData, automatonSelected){
         var options = {};
         var network = new vis.Network(container, data, options);
     }
-
      
     return '';
 }
