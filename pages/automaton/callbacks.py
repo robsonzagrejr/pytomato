@@ -134,6 +134,7 @@ def register_callbacks(app):
             Input('automaton-btn-update', 'n_clicks'),
             Input('automaton-btn-update-from-table', 'n_clicks'),
             Input('automaton-btn-rm', 'n_clicks'),
+            Input('automaton-btn-convert-gr', 'n_clicks'),
             Input('automaton-btn-apply-operation', 'n_clicks'),
         ],
         [
@@ -146,7 +147,8 @@ def register_callbacks(app):
             State('automaton-operation-dropdown', 'value'),
             State('automaton-operation-dropdown', 'options'),
             State('automaton-second-dropdown', 'value'),
-            State('store-automaton', 'data')
+            State('store-automaton', 'data'),
+            State('store-grammar', 'data')
         ]
     )
     def update_automaton_data(
@@ -156,6 +158,7 @@ def register_callbacks(app):
             update_click,
             update_from_table_click,
             rm_click,
+            gr_convert_click,
             operation_click,
 
             automaton_table_data,
@@ -167,7 +170,8 @@ def register_callbacks(app):
             automaton_operation_val,
             automaton_operation_options,
             automaton_second_val,
-            automaton_data
+            automaton_data,
+            grammar_data,
         ):
         """Callback Update Autômato
 
@@ -223,6 +227,17 @@ def register_callbacks(app):
                 automaton_data,
             )
             return automaton_data, alert, ""
+
+        elif (triggered_id == 'automaton-btn-convert-gr' and
+             automaton_selected and automaton_selected in automaton_data.keys()):
+
+            helper_data, alert = d.convert_automaton_to_gr(
+                automaton_selected,
+                automaton_data,
+                grammar_data
+            ) 
+            return helper_data, alert, ""
+
 
         return automaton_data, [], ""
 

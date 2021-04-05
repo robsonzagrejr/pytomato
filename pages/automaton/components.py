@@ -107,6 +107,13 @@ widgets = {
         outline=True,
         className='btn-margin',
     ),
+    'automaton_btn_convert_gr': dbc.Button(
+        "Converter para GR",
+        id='automaton-btn-convert-gr',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
     'automaton_graph': html.Div(
         [
             html.Div(id='automaton-graph', className='graphvis'),
