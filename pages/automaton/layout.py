@@ -154,7 +154,6 @@ inputs = dbc.Container(
 
 outputs = dbc.Container(
     children=[
-        html.Br(),
         html.Hr(),
         widgets['automaton_btn_update_from_table'],
         widgets['automaton_table'],

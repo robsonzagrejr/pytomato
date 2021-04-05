@@ -163,6 +163,7 @@ def register_callbacks(app):
             helper_data, alert = d.convert_regular_exp_to_af(
                 regular_exp_selected,
                 regular_exp_data,
+                automaton_data,
             ) 
             return helper_data, alert
 
