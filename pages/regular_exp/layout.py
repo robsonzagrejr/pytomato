@@ -74,7 +74,6 @@ inputs = dbc.Container(
         ),
         html.Br(),
         widgets['regular_exp_alert'],
-        widgets['regular_exp_helper_alert'],
         ]
 )
 

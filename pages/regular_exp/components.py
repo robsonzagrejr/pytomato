@@ -83,9 +83,5 @@ widgets = {
         outline=True,
         className='btn-margin',
     ),
-    'regular_exp_helper_alert': html.Div(
-        id='regular-exp-helper-alert',
-    ),
- 
 }
 

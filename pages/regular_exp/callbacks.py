@@ -79,7 +79,7 @@ def register_callbacks(app):
 
     @app.callback(
         [
-            Output('store-regular-exp', 'data'),
+            Output('store-regular-exp-helper', 'data'),
             Output('regular-exp-alert', 'children'),
         ],
         [
@@ -88,13 +88,15 @@ def register_callbacks(app):
             Input('regular-exp-btn-add', 'n_clicks'),
             Input('regular-exp-btn-update', 'n_clicks'),
             Input('regular-exp-btn-rm', 'n_clicks'),
+            Input('regular-exp-btn-convert-af', 'n_clicks'),
         ],
         [
             State('regular-exp-dropdown', 'value'),
             State('regular-exp-dropdown', 'options'),
             State('regular-exp-input', 'value'),
             State('regular-exp-text-area', 'value'),
-            State('store-regular-exp', 'data')
+            State('store-regular-exp', 'data'),
+            State('store-automaton', 'data'),
         ]
     )
     def update_regular_exp_data(
@@ -103,11 +105,14 @@ def register_callbacks(app):
             add_click,
             update_click,
             rm_click,
+            er_convert_af_click,
+
             regular_exp_selected,
             regular_exp_options,
             regular_exp_name,
             regular_exp_text,
-            regular_exp_data
+            regular_exp_data,
+            automaton_data,
         ):
         """Callback Update Gramática
 
@@ -168,30 +173,9 @@ def register_callbacks(app):
             alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return regular_exp_data, alert
 
-        return regular_exp_data, []
+        elif (triggered_id == 'regular-exp-btn-convert-af' and
+             regular_exp_selected and regular_exp_selected in regular_exp_data.keys()):
 
-
-    #Conversoes
-    @app.callback(
-        [
-            Output('store-regular-exp-helper', 'data'),
-            Output('regular-exp-helper-alert', 'children'),
-        ],
-        [
-            Input('regular-exp-btn-convert-af', 'n_clicks'),
-        ],
-        [
-            State('regular-exp-dropdown', 'value'),
-            State('store-regular-exp', 'data'),
-            State('store-automaton', 'data'),
-        ],
-    )
-    def regular_exp_to_af(n_click, regular_exp_selected, regular_exp_data, automaton_data):
-        """Callback Download Gramática
-
-        """
-     
-        if regular_exp_selected and regular_exp_selected in regular_exp_data.keys():
             regular_exp_txt = regular_exp_data[regular_exp_selected]['expressao_regular']
             new_automaton= tomato_er_conv.er_to_afd(regular_exp_txt)
             name = f"er_{regular_exp_selected}"
@@ -210,6 +194,25 @@ def register_callbacks(app):
 
             return helper_data, alert
 
-        raise PreventUpdate
+        return regular_exp_data, []
 
+
+    #Conversoes
+    @app.callback(
+        Output('store-regular-exp', 'data'),
+        [
+            Input('store-regular-exp-helper', 'data'),
+        ],
+        [
+            State('store-regular-exp', 'data')
+        ]
+    )
+    def regular_exp_to_af(regular_exp_data_helper, regular_exp_data):
+        """Callback Download Gramática
+
+        """
+        if 'type' not in regular_exp_data_helper.keys():
+            return regular_exp_data_helper
+     
+        return regular_exp_data
 
