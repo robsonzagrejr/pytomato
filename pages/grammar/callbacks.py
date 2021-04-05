@@ -5,6 +5,8 @@ import dash_bootstrap_components as dbc
 import base64
 
 import pytomato.gramatica as tomato_gram
+import pages.grammar.data as d
+
 """Funções de Callback
 
 Funções que definem as triggers e execução de cada callback.
@@ -123,73 +125,46 @@ def register_callbacks(app):
 
         if triggered_id == 'grammar-upload' or triggered_id == 'grammar-filename':
             if file_name:
-                grammar_id = file_name.replace(' ','_').lower()
-
-                alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
-                alert_type = 'success'
-                keys = [v['value'] for v in grammar_options]
-                if grammar_id in keys:
-                    alert_text = f"Gramática '{grammar_name}' já existe :X"
-                    alert_type = 'danger'
-                else:
-                    decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
-                    grammar_obj = tomato_gram.texto_para_obj(decoded_content, grammar_id)
-                    grammar_data[grammar_id] = grammar_obj
-
-                alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+                grammar_data, alert = d.upload_grammar(
+                    file_name,
+                    file_content,
+                    grammar_options,
+                    grammar_data
+                )
                 return grammar_data, alert
 
         elif triggered_id == 'grammar-btn-add' and grammar_name:
-            grammar_id = grammar_name.replace(' ','_').lower()
+            grammar_data, alert = d.add_grammar(
+                grammar_name,
+                grammar_text,
+                grammar_options,
+                grammar_data
+            )
 
-            alert_text = f'Gramática {grammar_name} adicionada com sucesso :D'
-            alert_type = 'success'
-            keys = [v['value'] for v in grammar_options]
-            if grammar_id in keys:
-                alert_text = f"Gramática '{grammar_name}' já existe :X"
-                alert_type = 'danger'
-            else:
-                grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_id)
-                grammar_data[grammar_id] = grammar_obj
-
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
             return grammar_data, alert
 
         elif triggered_id == 'grammar-btn-update' and grammar_selected:
-            grammar_obj = tomato_gram.texto_para_obj(grammar_text, grammar_selected)
-            grammar_data[grammar_selected] = grammar_obj
-
-            alert_text = f"Gramática '{grammar_selected}' atualizada com sucesso :)"
-            alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+            grammar_data, alert = d.update_grammar(
+                grammar_text,
+                grammar_selected,
+                grammar_data
+            )
             return grammar_data, alert 
 
         elif triggered_id == 'grammar-btn-rm' and grammar_selected:
-            grammar_data.pop(grammar_selected, None)
-            alert_text = f"Gramática '{grammar_selected}' deletada com sucesso :)"
-            alert_type = "success" 
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
+            grammar_data, alert = d.remove_grammar(
+                grammar_selected,
+                grammar_data
+            )
             return grammar_data, alert
 
         elif (triggered_id == 'grammar-btn-convert-af' and
              grammar_selected and grammar_selected in grammar_data.keys()):
 
-            grammar_txt = grammar_data[grammar_selected]['gramatica']
-            new_automaton = {} #FIXME
-            name = f"gr_{grammar_selected}"
-            helper_data = {
-                'type': 'AF',
-                'name': name,
-                'data': new_automaton
-            }
-            alert_type = 'success'
-            alert_text = f"Automato '{name}' criado a partir da Gramática com sucesso ! :)"
-            if name in automaton_data.keys():
-                alert_type = 'warning'
-                alert_text = f"Automato '{name}' atualizado com sucesso ! :)"
-
-            alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
-
+            helper_data, alert = d.convert_grammar_to_af(
+                grammar_selected,
+                grammar_data,
+            ) 
             return helper_data, alert
 
         return grammar_data, []
