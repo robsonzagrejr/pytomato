@@ -114,6 +114,32 @@ widgets = {
         outline=True,
         className='btn-margin',
     ),
+    'automaton_btn_modal_execution': dbc.Button(
+        "Verificar palavra",
+        id='automaton-btn-modal-execution',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
+    'automaton_modal_execution': dbc.Modal(
+        [
+            dbc.ModalHeader("Verificar se AF aceita palavra"),
+            dbc.ModalBody(
+                [
+                    dbc.Input(id='automaton-check-word-input', placeholder='Palavra'),
+                    html.Br(),
+                    dbc.Button("Verificar", id="automaton-btn-check-word", className="ml-auto"),
+                ]
+            ),
+            dbc.ModalFooter(
+                [
+                    html.Div(id="automaton-check-word-alert", className='ml-auto'),
+                ]
+            ),
+        ],
+        id="automaton-check-word-modal",
+    ),
+
     'automaton_graph': html.Div(
         [
             html.Div(id='automaton-graph', className='graphvis'),

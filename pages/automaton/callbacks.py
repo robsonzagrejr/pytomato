@@ -12,6 +12,21 @@ Funções que definem as triggers e execução de cada callback.
 """
 def register_callbacks(app):
     @app.callback(
+        Output("automaton-check-word-modal", "is_open"),
+        [
+            Input("automaton-btn-modal-execution", "n_clicks"),
+        ],
+        [
+            State("automaton-check-word-modal", "is_open")
+        ],
+    )
+    def toggle_modal(n, is_open):
+        if n:
+            return not is_open
+        return is_open
+
+
+    @app.callback(
         Output("automaton-collapse-tip", "is_open"),
         [
             Input("automaton-btn-collapse-tip", "n_clicks"),
@@ -352,3 +367,24 @@ def register_callbacks(app):
         State('store-automaton', 'data'),
     )
 
+
+    @app.callback(
+        Output('automaton-check-word-alert', 'children'),
+        [
+            Input('automaton-btn-check-word', 'n_clicks'),
+        ],
+        [
+            State('automaton-check-word-input', 'value'),
+            State('automaton-dropdown', 'value'),
+            State('store-automaton', 'data'),
+        ],
+    )
+    def update_automaton_table(n_click, word, automaton_selected, automaton_data):
+        """Callback que verifica se palavra executa no Automato
+        """
+        alert = []
+        if n_click:
+            alert = d.check_word_in_automato(word, automaton_selected, automaton_data)
+
+        return alert
+    

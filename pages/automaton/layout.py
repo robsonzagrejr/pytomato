@@ -78,6 +78,13 @@ inputs = dbc.Container(
                                     ],
                                     md=6
                                 ),
+                                dbc.Col(
+                                    [
+                                        widgets['automaton_btn_modal_execution'],
+                                        widgets['automaton_btn_convert_gr'],
+                                    ],
+                                    md=6,
+                                ),
                             ],
                             align="end",
                         ),
@@ -93,8 +100,7 @@ inputs = dbc.Container(
                                 ),
                                 dbc.Col(
                                     [
-                                        widgets['automaton_btn_convert_gr'],
-                                        widgets['automaton_btn_apply_operation']
+                                        widgets['automaton_btn_apply_operation'],
                                     ],
                                     md=6
                                 ),
@@ -161,6 +167,7 @@ outputs = dbc.Container(
         html.Br(),
         html.Br(),
         html.Br(),
+        widgets['automaton_modal_execution'],
     ]
 )
 

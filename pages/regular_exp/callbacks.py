@@ -24,9 +24,9 @@ def register_callbacks(app):
         ],
     )
     def regular_exp_download(regular_exp_selected, regular_exp_data):
-        """Callback Download Gramática
+        """Callback Download Expressão Regular
 
-        Callback para chamada de download de gramáticas
+        Callback para chamada de download de expressão regular
         em arquivo de texto.
         """
      
@@ -53,10 +53,10 @@ def register_callbacks(app):
         ]
     )
     def select_regular_exp(regular_exp_selected, regular_exp_options, regular_exp_data):
-        """Callback Seleção Gramática
+        """Callback Seleção Expressão Regular
 
         Callback para gerenciar a seleção e display do
-        dropdown das gramáticas.
+        dropdown das expressões regulares.
         """
     
         if regular_exp_options:
@@ -115,10 +115,10 @@ def register_callbacks(app):
             regular_exp_data,
             automaton_data,
         ):
-        """Callback Update Gramática
+        """Callback Update Expressão Regular
 
         Callback que gerencia criação, exclusão, upload, alteração
-        de gramática.
+        de expressão regular
         """
     
         ctx = dash.callback_context
@@ -181,7 +181,7 @@ def register_callbacks(app):
         ]
     )
     def regular_exp_data(regular_exp_data_helper, regular_exp_data):
-        """Callback Download Gramática
+        """Callback Download Expressão Regular
 
         """
         if 'type' not in regular_exp_data_helper.keys():
