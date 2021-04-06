@@ -62,16 +62,22 @@ class RegularGrammar():
 
 
 def get_afd_states(afd):
-	states = []
-	for i in afd['transicoes']:
-		states.append(i)
-	return states
+    states = set()
+    for i in afd['transicoes']:
+        states.add(i)        
+    if len(afd['aceitacao']) > 1:
+        for i in afd['aceitacao']:
+            states.add(i)
+    else:
+        states.add(afd['aceitacao'])
+    states.add(afd['inicial'])
+    return list(states)
 
 
 def afd_para_gramatica(nome, estrutura):
     gramatica_inicial = estrutura['inicial']
-    gramatica_nao_terminais = get_afd_states(estrutura)
-    gramatica_terminais = estrutura['alfabeto']	
+    gramatica_nao_terminais = get_afd_states(estrutura)    
+    gramatica_terminais = list(set(estrutura['alfabeto']))
     #dict subclass that calls a factory function to supply missing values,setting defaultdict to set makes the defaultdict useful for building a dictionary of sets
     regras_producao = defaultdict(set)
     for state, transition in estrutura['transicoes'].items():		
@@ -88,7 +94,7 @@ def afd_para_gramatica(nome, estrutura):
         regras_producao["S'"] = regras_producao[gramatica_inicial].union('&')
         gramatica_inicial = "S'"	
     regras_producao = dict(regras_producao)	
-    gram = RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)
+    gram = RegularGrammar(nome, gramatica_inicial,gramatica_nao_terminais,gramatica_terminais,regras_producao)        
     gram = gram.asdict()
     return gram
 
@@ -128,4 +134,11 @@ def gramatica_para_afd(gram_dict):
         afd['transicoes'][non_term] = dict(afd['transicoes'][non_term])
     # na verdade afd eh um afnd, deve-se determiniza-lo
     return afd
-
+  
+if __name__ == '__main__':
+    from automato import texto_para_obj
+    file = open("4", "r")
+    texto = (file.read())
+    estrutura_de_dados = texto_para_obj(texto)
+    print(estrutura_de_dados)
+    print(afd_para_gramatica('sss',estrutura_de_dados))

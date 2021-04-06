@@ -106,3 +106,9 @@ if __name__ == '__main__':
     print(texto_para_obj(texto, 'nome'))
 
     print(isValidExpression("a",  { "S": ["aA", "bB", "cS"], "A": ["aS", "bC", "b", "cA"], "B": ["aC", "a", "bS", "cB"], "C": ["aB", "bA", "cC", "c"] }, "a"))
+
+    texto2="S -> & | &D | D | aA\n\
+A -> D | bA | a\n\
+B -> b | D\n\
+S' -> & | &D | D | aA"
+    print(texto_para_obj(texto2, 'nome'))
