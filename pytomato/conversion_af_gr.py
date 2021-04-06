@@ -13,12 +13,14 @@ def search_non_terminal(gramatica):
 	return list(gramatica.keys())
 # usado para construir classe RegularGrammar a partir do construtor
 def search_terminal(gramatica):
-	terminais=[]
-	for nonterm,list_prod in gramatica.items():
-		for i in list_prod:
-			if i.islower():
-				terminais.append(i)
-	return terminais
+    terminais=[]
+    for nonterm,list_prod in gramatica.items():
+        for i in list_prod:
+            if i.islower():
+                i = i.replace('\r', '')
+                i = i.replace('\n', '')
+                terminais.append(i)
+    return terminais
 
 
 # usado para construir classe RegularGrammar a partir do construtor
@@ -103,7 +105,7 @@ def gramatica_para_afd(gram_dict):
     afd = {}
     afd['n_estados'] = len(gram.gramatica_nao_terminais) + 1
     afd['inicial'] = gram.gramatica_inicial	
-    afd['aceitacao'] = ['t_state']
+    afd['aceitacao'] = ['T']
     afd['alfabeto'] = gram.gramatica_terminais
     afd['transicoes'] = defaultdict(dict)	
     if ('&' in gram.regras_producao['{}'.format(gram.gramatica_inicial)]):
@@ -113,12 +115,14 @@ def gramatica_para_afd(gram_dict):
     for head,body in gram.regras_producao.items():
         aux = list(body)
         for x in aux:
+            x = x.replace('\r', '')
+            x = x.replace('\n', '')
             if len(x) == 2:				
                 #for every rule of the form A->aB, we add a transition from state A to state B labelled a				
                 afd['transicoes'][head][x[0]].append(x[1])
             if len(x) == 1:				
                 # for every rule of the form A->a, we add a transition from state A to state t_state labelled a
-                afd['transicoes'][head][x[0]].append('t_state')	
+                afd['transicoes'][head][x[0]].append('T')	
     afd['transicoes'] = dict(afd['transicoes'])
     for non_term in gram.gramatica_nao_terminais:
         afd['transicoes'][non_term] = dict(afd['transicoes'][non_term])

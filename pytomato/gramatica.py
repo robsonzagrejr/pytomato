@@ -1,7 +1,8 @@
 from pytomato.conversion_af_gr import (
     search_initial,
     search_non_terminal,
-    search_terminal)
+    search_terminal
+)
 """Conversão de Texto x Objeto
 Recebe duas strings, Gramática e Nome, do usuário e as
 converte em objeto e insere na estrutura de dicionário.
@@ -52,6 +53,8 @@ def isValidExpression(expression, grammar, previousCharacter = None):
     
     if (len(expression) == 0 and '&' in grammar[initialSymbol]):
         return True
+    elif (len(expression) == 0):
+        return False
 
     character = expression[0]
 
@@ -64,11 +67,12 @@ def isValidExpression(expression, grammar, previousCharacter = None):
 
                 return True
 
-            if (not previousCharacter):
-                return False
+            #if (not previousCharacter):
+            #    breakpoint()
+            #    return False
 
-            if (possibleTerminalSymbol != previousCharacter):
-                continue
+            #if (possibleTerminalSymbol != previousCharacter):
+            #continue
 
             targetCharacter = possibleTerminalSymbol[-1]
             
@@ -88,9 +92,11 @@ def isValidExpression(expression, grammar, previousCharacter = None):
         previousCharacter = c
     return True
 
+
 """Teste
 Main criado para testar as funções.
 """
+tes =  { "S": ["aA", "bB", "cS"], "A": ["aS", "bC", "b", "cA"], "B": ["aC", "a", "bS", "cB"], "C": ["aB", "bA", "cC", "c"] }
 if __name__ == '__main__':
     texto= "S -> aA | bB | cS\n\
             A -> aS | bC | b | cA\n\

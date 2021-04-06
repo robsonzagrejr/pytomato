@@ -20,6 +20,21 @@ def register_callbacks(app):
             State("automaton-check-word-modal", "is_open")
         ],
     )
+    def toggle_modal(n, is_open):
+        if n:
+            return not is_open
+        return is_open
+
+
+    @app.callback(
+        Output("automaton-collapse-tip", "is_open"),
+        [
+            Input("automaton-btn-collapse-tip", "n_clicks"),
+        ],
+        [
+            State("automaton-collapse-tip", "is_open")
+        ],
+    )
     def toggle_collapse_tip(n, is_open):
         if n:
             return not is_open
