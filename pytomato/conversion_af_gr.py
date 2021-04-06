@@ -130,9 +130,4 @@ def gramatica_para_afd(gram_dict):
         afd['transicoes'][non_term] = dict(afd['transicoes'][non_term])
     # na verdade afd eh um afnd, deve-se determiniza-lo
     return afd
-from automato import texto_para_obj
-file = open("4", "r")
-texto = (file.read())
-estrutura_de_dados = texto_para_obj(texto)
-print(estrutura_de_dados)
-print(afd_para_gramatica('sss',estrutura_de_dados))
+
