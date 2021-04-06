@@ -265,7 +265,15 @@ def get_inalcancaveis(afd):
 		estados_alcancaveis.extend(novos_estados)
 		if novos_estados == []:
 			break
-	estados_inalcancaveis = [estado for estado in afd['transicoes'] if estado not in estados_alcancaveis]
+	estados = []
+	for estado in afd['transicoes']:
+		if estado not in estados:
+			estados.append(estado)
+		for simbolo in afd['transicoes'][estado]:
+			if afd['transicoes'][estado][simbolo][0] not in estados:
+				estados.append(afd['transicoes'][estado][simbolo][0])
+			
+	estados_inalcancaveis = [estado for estado in estados if estado not in estados_alcancaveis]
 	return estados_inalcancaveis
 
 
@@ -331,6 +339,7 @@ def get_classes_equivalencia(afd):
 	
 
 def minimiza_afd(afd):	
+	print(afd)
 	afd_minimizado = {}	
 	afd_minimizado['n_estados'] = ""
 	afd_minimizado['inicial'] = ""	
@@ -342,15 +351,21 @@ def minimiza_afd(afd):
 	estados_inalcancaveis = get_inalcancaveis(afd)
 	for estado in estados_inalcancaveis:
 		afd['transicoes'].pop(estado, None)
+		if estado in afd['aceitacao']:
+			afd['aceitacao'].remove(estado)
 		afd['n_estados'] = str(int(afd['n_estados'])-1) 
-		
+	
 	#Eliminar os estados mortos
 	estados_mortos = get_mortos(afd)
 	for morto in estados_mortos:
 		afd['transicoes'].pop(morto, None)
+		if estado in afd['aceitacao']:
+			afd['aceitacao'].remove(estado)
 		afd['n_estados'] = str(int(afd['n_estados'])-1)
 		for estado in afd['transicoes']:
 			afd['transicoes'][estado] = {key:val for key, val in afd['transicoes'][estado].items() if val != [morto]}		
+
+	afd_minimizado['transicoes'] = afd['transicoes'].copy()
 	
 	#Fundir estados equivalentes			
 	classes = get_classes_equivalencia(afd)	
