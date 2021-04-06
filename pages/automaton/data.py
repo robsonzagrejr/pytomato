@@ -144,14 +144,19 @@ def convert_automaton_to_gr(automaton_selected, automaton_data, grammar_data):
 
     return helper_data, alert
 
-
 def check_word_in_automato(word, automaton_selected, automaton_data):
     if automaton_selected:
         automaton = automaton_data[automaton_selected]
         name = automaton_selected
-        grammar = tomato_gr_conv.afd_para_gramatica(name, automaton)['gramatica']
-
-        accept = tomato_gram.isValidExpression(word, grammar)
+        
+        # commented out first attempt of implementation
+        # grammar = tomato_gr_conv.afd_para_gramatica(name, automaton)['gramatica']
+        # accept = tomato_gram.isValidExpression(word, grammar)
+        
+        # let's remove some undesirable characters
+        palavra = word.replace('\n','').replace('\r','')
+        
+        accept = tomato_auto.automato_aceita_palavra(word, automaton, automaton['inicial'])
 
         alert_type = 'success'
         alert_text = f"Automato '{automaton_selected}' aceita palavra '{word}' ! :)"
