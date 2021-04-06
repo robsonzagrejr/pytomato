@@ -65,11 +65,8 @@ def get_afd_states(afd):
     states = set()
     for i in afd['transicoes']:
         states.add(i)        
-    if len(afd['aceitacao']) > 1:
-        for i in afd['aceitacao']:
-            states.add(i)
-    else:
-        states.add(afd['aceitacao'])
+    for i in afd['aceitacao']:
+        states.add(i)
     states.add(afd['inicial'])
     return list(states)
 
