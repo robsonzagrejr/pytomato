@@ -339,7 +339,6 @@ def get_classes_equivalencia(afd):
 	
 
 def minimiza_afd(afd):	
-	print(afd)
 	afd_minimizado = {}	
 	afd_minimizado['n_estados'] = ""
 	afd_minimizado['inicial'] = ""	
