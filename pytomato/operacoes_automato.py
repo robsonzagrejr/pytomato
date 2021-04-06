@@ -364,7 +364,7 @@ def minimiza_afd(afd):
 		for estado in afd['transicoes']:
 			afd['transicoes'][estado] = {key:val for key, val in afd['transicoes'][estado].items() if val != [morto]}		
 
-	afd_minimizado['transicoes'] = afd['transicoes'].copy()
+	afd_minimizado['transicoes'] = {}
 	
 	#Fundir estados equivalentes			
 	classes = get_classes_equivalencia(afd)	
