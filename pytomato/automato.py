@@ -105,6 +105,28 @@ def table_to_automaton(linhas, cabecalho):
 
     return estrutura
 
+
+"""Reconhecimento de sentenças em AF (caracter a carecter)
+
+Os parametros sao: uma palavra, um automato no formato de dicionario, e um estado atual.
+Para utilizar o procedimento, recomenda-se passar o estado inicial no campo 'estado_atual'.
+A partir disso, a funcao faz chamadas recursivas ate consumir toda a palavra e entao
+verifica se o automato se encontra em um estado de aceitacao.
+Basta que um ramo de computacao aceite a palavra para que a funcao retorne 'True'.
+"""
+def automato_aceita_palavra(palavra, automato, estado_atual):
+    if (len(palavra) == 0):
+        return estado_atual in automato['aceitacao']
+    else:
+        transicoes = automato['transicoes']
+        if estado_atual in transicoes:
+            simbolo_do_alfabeto = palavra[0]
+            if simbolo_do_alfabeto in transicoes[estado_atual]:
+                for estado_alvo in transicoes[estado_atual][simbolo_do_alfabeto]:
+                    if automato_aceita_palavra(palavra[1:], automato, estado_alvo):
+                        return True
+        return False
+
 """Teste
 
 Main criado para testar as funções.
