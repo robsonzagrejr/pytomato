@@ -165,7 +165,7 @@ def afnd_para_afd_com_epsilon(afnd):
 			proximos_visitados = []
 			for visitado in visitados:
 				try:
-					for e in afnd['transicoes'][visitado]['ε']:
+					for e in afnd['transicoes'][visitado]['&']:
 						if e not in fecho:
 							fecho.append(e)
 							fecho_str += e
@@ -183,13 +183,13 @@ def afnd_para_afd_com_epsilon(afnd):
 	for estado in afnd['aceitacao']:
 		afd['aceitacao'].append(epsilon_fecho_str[estado])
 	afd['alfabeto'] = afnd['alfabeto'].copy()
-	afd['alfabeto'].remove('ε')
+	afd['alfabeto'].remove('&')
 	afd['transicoes'] = {}	
 	estados_multiplos = {}
 	for estado in afnd['transicoes']:
 		afd['transicoes'][epsilon_fecho_str[estado]] = {}
 		for simbolo in afnd['transicoes'][estado]:
-			if simbolo != 'ε':
+			if simbolo != '&':
 				if len(afnd['transicoes'][estado][simbolo]) > 1:
 					soma_fecho = []
 					for estado_multiplo in afnd['transicoes'][estado][simbolo]:
@@ -244,7 +244,7 @@ def afnd_para_afd_com_epsilon(afnd):
 	
 
 def afnd_para_afd(afnd):	
-	if ('ε' in afnd['alfabeto']) or ('&' in afnd['alfabeto']):
+	if ('&' in afnd['alfabeto']):
 		return afnd_para_afd_com_epsilon(afnd)
 	else:
 		return afnd_para_afd_sem_epsilon(afnd)
@@ -265,7 +265,15 @@ def get_inalcancaveis(afd):
 		estados_alcancaveis.extend(novos_estados)
 		if novos_estados == []:
 			break
-	estados_inalcancaveis = [estado for estado in afd['transicoes'] if estado not in estados_alcancaveis]
+	estados = []
+	for estado in afd['transicoes']:
+		if estado not in estados:
+			estados.append(estado)
+		for simbolo in afd['transicoes'][estado]:
+			if afd['transicoes'][estado][simbolo][0] not in estados:
+				estados.append(afd['transicoes'][estado][simbolo][0])
+			
+	estados_inalcancaveis = [estado for estado in estados if estado not in estados_alcancaveis]
 	return estados_inalcancaveis
 
 
@@ -342,15 +350,21 @@ def minimiza_afd(afd):
 	estados_inalcancaveis = get_inalcancaveis(afd)
 	for estado in estados_inalcancaveis:
 		afd['transicoes'].pop(estado, None)
+		if estado in afd['aceitacao']:
+			afd['aceitacao'].remove(estado)
 		afd['n_estados'] = str(int(afd['n_estados'])-1) 
-		
+	
 	#Eliminar os estados mortos
 	estados_mortos = get_mortos(afd)
 	for morto in estados_mortos:
 		afd['transicoes'].pop(morto, None)
+		if estado in afd['aceitacao']:
+			afd['aceitacao'].remove(estado)
 		afd['n_estados'] = str(int(afd['n_estados'])-1)
 		for estado in afd['transicoes']:
 			afd['transicoes'][estado] = {key:val for key, val in afd['transicoes'][estado].items() if val != [morto]}		
+
+	afd_minimizado['transicoes'] = afd['transicoes'].copy()
 	
 	#Fundir estados equivalentes			
 	classes = get_classes_equivalencia(afd)	
