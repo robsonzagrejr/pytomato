@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 import pages.grammar as grammar
 import pages.automaton as automaton
 import pages.regular_exp as regular_exp
+import pages.lexical_an as lexical_an 
 
 import pytomato as tomato
 
@@ -35,43 +36,13 @@ def register_callbacks(app):
 
         elif pathname == f'{base}regular_exp':
             return regular_exp.layout
+
+        elif pathname == f'{base}lexical_an':
+            return lexical_an.layout
         
 
     grammar.register_callbacks(app)
     automaton.register_callbacks(app)
     regular_exp.register_callbacks(app)
+    lexical_an.register_callbacks(app)
 
-
-    """Callback que irá lidar com conversões entre tipos
-    """
-    """
-    @app.callback(
-        Output('store-convertion-helper', 'data'),
-        [
-            Input('grammar-btn-convert-af', 'n_clicks'),
-            Input('regular-exp-btn-convert-af', 'n_clicks'),
-        ],
-        [
-            State('store-grammar', 'data'),
-            State('store-automaton', 'data'),
-            State('store-regular-exp', 'data'),
-        ]
-    )
-    def display_page(
-        btn_grammar_automaton,
-        btn_regular_exp_automaton,
-        grammar_data, 
-        automaton_data,
-        regular_exp_data
-        ):
-        ctx = dash.callback_context
-        triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
-
-        if triggered_id == 'grammar-btn-convert-af':
-            print('conversao de Gramatica para AF')
-        elif triggered_id == 'regular-exp-btn-convert-af':
-            print('conversao de ER para AF')
-
-        raise PreventUpdate
-    """
-     
