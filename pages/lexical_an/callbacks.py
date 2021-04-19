@@ -46,7 +46,7 @@ def register_callbacks(app):
         """
      
         if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
-            data = tomato_er.obj_para_texto(lexical_an_data[lexical_an_selected])
+            data = lexical_an_data[lexical_an_selected]['texto']
             data = data.replace('\n', "%0D%0A");
             data = f"data:text/plain;UTF-8,{data}"
             return f"{lexical_an_selected}", data
@@ -77,7 +77,7 @@ def register_callbacks(app):
         if lexical_an_options:
             keys = [v['value'] for v in lexical_an_options]
             if lexical_an_selected in keys:
-                lexical_an_text = tomato_er.obj_para_texto(lexical_an_data[lexical_an_selected])
+                lexical_an_text = lexical_an_data[lexical_an_selected]['texto']
                 return lexical_an_selected, lexical_an_text, True, {'display': 'none'}, {}
         return "", "", False, {}, {'display': 'none'}
 

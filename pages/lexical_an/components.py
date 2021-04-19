@@ -87,6 +87,12 @@ widgets = {
         #page_current=0,
         #page_size=10,
     ),
-
+    'lexical_an_btn_validate': dbc.Button(
+        "Adicionar",
+        id='lexical-an-btn-add',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
 }
 

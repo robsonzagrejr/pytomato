@@ -97,7 +97,6 @@ inputs = dbc.Container(
                     ]
                 ),
                 dbc.ModalFooter(
-                    dbc.Button("Close", id="close", className="ml-auto")
                 ),
             ],
             id="lexical-an-token-modal",
