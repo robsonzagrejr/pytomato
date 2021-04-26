@@ -40,6 +40,11 @@ def render_tree(er):
 def add_node(idx, string, node):
     char = string[idx]
     
+    if string[idx+1] == '\\':
+        idx += 1
+        new = concat(Node(data=char),node)
+        return new.left, idx
+
     if char == ')':
         idx = idx+1
         char = string[idx]
@@ -60,9 +65,11 @@ def add_node(idx, string, node):
             node.left = n
             node.father.fulfilled = True
             return node.father, idx
-    elif char == '(':
+
+    if char == '(':
         return node, idx
-    elif char == '|':
+
+    if char == '|':
         n = node
         while(not n.is_first_of_chain):
             n = node.father
@@ -70,19 +77,22 @@ def add_node(idx, string, node):
         n.father.left = new
         n.father = new
         return new, idx
-    elif node.fulfilled:
+
+    if node.fulfilled:
         new = concat(Node(data=char),node)
         return new.left, idx
-    elif node.data == '|':
+
+    if node.data == '|':
         node.left = Node(data=char, first=True, father=node)
         return node.left, idx
-    elif node.data == '*':
+        
+    if node.data == '*':
         node.left = Node(data=char,father=node)
         node.fulfilled = True
         return node, idx
-    else:
-        new = concat(Node(data=char),node)
-        return new.left, idx
+
+    new = concat(Node(data=char),node)
+    return new.left, idx
     
 def concat(node1,node2):
     if node2.is_first_of_chain:
