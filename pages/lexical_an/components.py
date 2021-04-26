@@ -67,6 +67,11 @@ widgets = {
         id='lexical-an-download',
         className='btn btn-margin btn-outline-dark'
     ),
+    'lexical_an_parse': html.A(
+        "Parse",
+        id='lexical-an-parse',
+        className='btn btn-margin btn-outline-dark'
+    ),
     'lexical_an_pseudo_cod_ta': dbc.Textarea(
         id='lexical-an-pseudo-cod-ta',
         placeholder="Digite o Pseudo Código",

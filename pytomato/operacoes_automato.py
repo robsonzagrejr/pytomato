@@ -1,3 +1,6 @@
+from .Evaristo.functions import read_af_string
+from .automato import obj_para_texto
+
 """Adição de prefixo em estados
 
 Recebe um prefixo o qual será adicionado a todos os estados do automato.
@@ -28,9 +31,9 @@ um automato com um novo estado de aceitação e inicial, fazendo episolon
 transições. Renomeia os estados dos automatos que recebeu para previnir
 possíveis erros.
 """
-def uniao(automato_1, automato_2):
-    automato_1_r = _add_prefixo_estado('a1', automato_1)
-    automato_2_r = _add_prefixo_estado('a2', automato_2)
+def uniao(automato_1, automato_2, prefix_a1 = 'a1', prefix_a2 = 'a2'):
+    automato_1_r = _add_prefixo_estado(prefix_a1, automato_1)
+    automato_2_r = _add_prefixo_estado(prefix_a2, automato_2)
 
     automato_u = {}
     automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 2
@@ -243,11 +246,17 @@ def afnd_para_afd_com_epsilon(afnd):
 	return afd
 	
 
-def afnd_para_afd(afnd):	
-	if ('&' in afnd['alfabeto']):
-		return afnd_para_afd_com_epsilon(afnd)
-	else:
-		return afnd_para_afd_sem_epsilon(afnd)
+def afnd_para_afd(afnd):
+	my_texto = obj_para_texto(afnd)
+	evaristo_af = read_af_string(my_texto)
+	evaristo_af.determinize()
+	estrutura = {}
+	estrutura['n_estados'] = evaristo_af.n_states
+	estrutura['inicial'] = evaristo_af.start_state
+	estrutura['aceitacao'] = evaristo_af.accept_states
+	estrutura['alfabeto'] = evaristo_af.alphabet
+	estrutura['transicoes'] = evaristo_af.transition_table
+	return estrutura
 
 
 def get_inalcancaveis(afd):

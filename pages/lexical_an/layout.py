@@ -43,6 +43,12 @@ inputs = dbc.Container(
                     ],
                     md=1,
                 ),
+                dbc.Col(
+                    [
+                        widgets['lexical_an_parse'],
+                    ],
+                    md=1,
+                ),
             ],
             align="end",
         ),

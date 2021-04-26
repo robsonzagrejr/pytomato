@@ -17,7 +17,7 @@ def upload_lexical_an(file_name, file_content, lexical_an_options,
     else:
         decoded_content = base64.b64decode( file_content.split(',')[1] ).decode("utf-8")
         lexical_an_obj = tomato_la.text_to_obj(decoded_content, lexical_an_id)
-        breakpoint()
+        # breakpoint()
         lexical_an_data[lexical_an_id] = lexical_an_obj
 
     alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
@@ -36,7 +36,7 @@ def add_lexical_an(lexical_an_name, lexical_an_text, lexical_an_options,
         alert_type = 'danger'
     else:
         lexical_an_obj = tomato_la.text_to_obj(lexical_an_text, lexical_an_id)
-        breakpoint()
+        # breakpoint()
         lexical_an_data[lexical_an_id] = lexical_an_obj
 
     alert = dbc.Alert(alert_text, color=alert_type, duration=1000)
