@@ -40,7 +40,7 @@ def render_tree(er):
 def add_node(idx, string, node):
     char = string[idx]
     
-    if string[idx+1] == '\\':
+    if idx+1 < len(string) and string[idx+1] == '\\':
         idx += 1
         new = concat(Node(data=char),node)
         return new.left, idx

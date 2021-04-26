@@ -259,7 +259,8 @@ def register_callbacks(app):
 
     @app.callback(
         Output('store-automaton', 'data'),
-        [
+        [   
+            Input('store-lexical-an-helper', 'data'),
             Input('store-regular-exp-helper', 'data'),
             Input('store-grammar-helper', 'data'),
             Input('store-automaton-helper', 'data'),
@@ -269,6 +270,7 @@ def register_callbacks(app):
         ]
     )
     def update_automaton_data(
+            lexical_an_conv_data,
             regular_exp_conv_data,
             grammar_conv_data,
             automaton_helper_data,
@@ -286,6 +288,13 @@ def register_callbacks(app):
         if triggered_id == 'store-automaton-helper':
             if 'type' not in automaton_helper_data.keys():
                 return automaton_helper_data
+
+        elif triggered_id == 'store-lexical-an-helper' and 'type' in lexical_an_conv_data.keys():
+            if lexical_an_conv_data['type'] == 'AF':
+                automaton_name = lexical_an_conv_data['name']
+                automaton_obj = lexical_an_conv_data['data']
+                automaton_data[automaton_name] = automaton_obj
+                return automaton_data
 
         elif triggered_id == 'store-regular-exp-helper' and 'type' in regular_exp_conv_data.keys():
             if regular_exp_conv_data['type'] == 'AF':

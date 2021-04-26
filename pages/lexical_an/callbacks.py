@@ -52,25 +52,27 @@ def register_callbacks(app):
             return f"{lexical_an_selected}", data
         return '', ''
 
-    @app.callback(
-        Output('lexical-an-table', 'data'),
-        [
-            Input('lexical-an-parse', 'n_clicks'),
-        ],
-        [
-            State('lexical-an-pseudo-cod-ta', 'value'),
-            State('lexical-an-dropdown', 'value'),
-            State('store-lexical-an-helper', 'data'),
-        ]
-    )
-    def parse(btn_n_clicks, text_to_parse, lexical_an_selected, lexical_an_data):
-        if btn_n_clicks:   
-            if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
-                lenguage = lexical_an_data[lexical_an_selected]
-                analise = d.extract_token(lenguage['tokens'], text_to_parse)
-                data.append(row_sample)
-                return data
-        return []
+    # @app.callback(
+    #     [
+    #         Output('lexical-an-table', 'data'),
+    #         Output('store-lexical-an-helper', 'data')
+    #     ],
+    #     [
+    #         Input('lexical-an-parse', 'n_clicks'),
+    #     ],
+    #     [
+    #         State('lexical-an-pseudo-cod-ta', 'value'),
+    #         State('lexical-an-dropdown', 'value'),
+    #         State('store-lexical-an-helper', 'data'),
+    #     ]
+    # )
+    # def parse(btn_n_clicks, text_to_parse, lexical_an_selected, lexical_an_data):
+    #     if btn_n_clicks:   
+    #         if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
+    #             lenguage = lexical_an_data[lexical_an_selected]
+    #             data, automaton = d.extract_token(lexical_an_selected, lenguage['tokens'], text_to_parse)
+    #             return data, automaton
+    #     return [], dash.PreventUpdate
 
     @app.callback(
         [
@@ -117,6 +119,7 @@ def register_callbacks(app):
         [
             Output('store-lexical-an-helper', 'data'),
             Output('lexical-an-alert', 'children'),
+            Output('lexical-an-table', 'data'),
         ],
         [
             Input('lexical-an-upload','contents'),
@@ -124,6 +127,7 @@ def register_callbacks(app):
             Input('lexical-an-btn-add', 'n_clicks'),
             Input('lexical-an-btn-update', 'n_clicks'),
             Input('lexical-an-btn-rm', 'n_clicks'),
+            Input('lexical-an-parse', 'n_clicks'),
         ],
         [
             State('lexical-an-dropdown', 'value'),
@@ -140,6 +144,7 @@ def register_callbacks(app):
             add_click,
             update_click,
             rm_click,
+            parse_click,
 
             lexical_an_selected,
             lexical_an_options,
@@ -165,7 +170,7 @@ def register_callbacks(app):
                     lexical_an_options,
                     lexical_an_data
                 )
-                return lexical_an_data, alert
+                return lexical_an_data, alert, dash.no_update
 
         elif triggered_id == 'lexical-an-btn-add' and lexical_an_name:
             lexical_an_data, alert = d.add_lexical_an(
@@ -174,7 +179,7 @@ def register_callbacks(app):
                 lexical_an_options,
                 lexical_an_data
             )
-            return lexical_an_data, alert
+            return lexical_an_data, alert, dash.no_update
 
         elif triggered_id == 'lexical-an-btn-update' and lexical_an_selected:
             lexical_an_data, alert = d.update_lexical_an(
@@ -182,17 +187,23 @@ def register_callbacks(app):
                 lexical_an_selected,
                 lexical_an_data
             )
-            return lexical_an_data, alert 
+            return lexical_an_data, alert, dash.no_update
 
         elif triggered_id == 'lexical-an-btn-rm' and lexical_an_selected:
             lexical_an_data, alert = d.remove_lexical_an(
                 lexical_an_selected,
                 lexical_an_data
             )
-            return lexical_an_data, alert
+            return lexical_an_data, alert, dash.no_update
 
+        elif triggered_id == 'lexical-an-parse' and lexical_an_selected:
+            if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
+                lenguage = lexical_an_data[lexical_an_selected]
+                table_data, automaton = d.extract_token(lenguage, lexical_an_text)
+                print(automaton)
+                return automaton, [], table_data
 
-        return lexical_an_data, []
+        return lexical_an_data, [], dash.no_update
 
 
     #Conversoes

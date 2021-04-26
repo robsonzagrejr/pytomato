@@ -61,8 +61,19 @@ def remove_lexical_an(lexical_an_selected, lexical_an_data):
     return lexical_an_data, alert
 
 
-def extract_token(tokens, text_to_parse):
+def extract_token(lenguage, text_to_parse):
+    name = lenguage['nome']
+    tokens = lenguage['tokens']
     #1º para cada ER' em token, tem q criar um automato finito
     #2º Para todos os automatos, tem q uni-los (<id>{0,1})
     #3º Determinizar o automato gigantesco
     #4º Para cada caracter do text_to_parse, _automato_aceita_palavra
+    words_token, automaton = tomato_la.extract_token_from_text(tokens, text_to_parse)
+
+    data = []
+    for lex, token in words_token:
+        data.append({
+            'lexema': lex,
+            'token': token
+        })
+    return data, {'type': 'AF', 'name':f'la_{name}', 'data': automaton}

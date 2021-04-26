@@ -32,34 +32,35 @@ transições. Renomeia os estados dos automatos que recebeu para previnir
 possíveis erros.
 """
 def uniao(automato_1, automato_2, prefix_a1 = 'a1', prefix_a2 = 'a2'):
-    automato_1_r = _add_prefixo_estado(prefix_a1, automato_1)
-    automato_2_r = _add_prefixo_estado(prefix_a2, automato_2)
+	automato_1_r = _add_prefixo_estado(prefix_a1, automato_1)
+	automato_2_r = _add_prefixo_estado(prefix_a2, automato_2)
 
-    automato_u = {}
-    automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 2
-    automato_u['inicial'] = 'S'
-    automato_u['aceitacao'] = ['A']
-    automato_u['alfabeto'] = list(
-        set(
-            automato_1_r['alfabeto']
-            + automato_2_r['alfabeto']
-            + ['&']
-        )
-    )
+	automato_u = {}
+	automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 2
+	automato_u['inicial'] = 'S'
+	#automato_u['aceitacao'] = ['A']
+	automato_u['aceitacao'] = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
+	automato_u['alfabeto'] = list(
+		set(
+			automato_1_r['alfabeto']
+			+ automato_2_r['alfabeto']
+			+ ['&']
+		)
+	)
 
-    transicoes = automato_1_r['transicoes'].copy()
-    transicoes.update(automato_2_r['transicoes'])
-    transicoes[automato_u['inicial']] = {
-        '&': [automato_1_r['inicial'], automato_2_r['inicial']]
-    }
-    antigo_aceitacao = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
-    for antigo_a in antigo_aceitacao:
-        trans_antigo_a = transicoes.get(antigo_a, {})
-        trans_antigo_a['&'] = automato_u['aceitacao']
-        transicoes[antigo_a] = trans_antigo_a
-    automato_u['transicoes'] = transicoes
+	transicoes = automato_1_r['transicoes'].copy()
+	transicoes.update(automato_2_r['transicoes'])
+	transicoes[automato_u['inicial']] = {
+		'&': [automato_1_r['inicial'], automato_2_r['inicial']]
+	}
+	#antigo_aceitacao = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
+	#for antigo_a in antigo_aceitacao:
+	#    trans_antigo_a = transicoes.get(antigo_a, {})
+	#    trans_antigo_a['&'] = automato_u['aceitacao']
+	#    transicoes[antigo_a] = trans_antigo_a
+	automato_u['transicoes'] = transicoes
 
-    return automato_u 
+	return automato_u 
 
 
 """Intercessão de automatos
