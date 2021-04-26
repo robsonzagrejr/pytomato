@@ -64,25 +64,13 @@ def register_callbacks(app):
         ]
     )
     def parse(btn_n_clicks, text_to_parse, lexical_an_selected, lexical_an_data):
-        if btn_n_clicks:
-
-            dicionario_da_linguagem = lexical_an_data[lexical_an_selected]
-
-            if text_to_parse == None:
-                print("text_to_parse is None")
-            else:
-                print(text_to_parse)
-        
-            data = []
-            
-            row_sample = {}
-            row_sample['lexema'] = 'lex'
-            row_sample['token'] = 'tok'
-            
-            data.append(row_sample)
-            return data
-        else:
-            return []
+        if btn_n_clicks:   
+            if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
+                lenguage = lexical_an_data[lexical_an_selected]
+                analise = d.extract_token(lenguage['tokens'], text_to_parse)
+                data.append(row_sample)
+                return data
+        return []
 
     @app.callback(
         [

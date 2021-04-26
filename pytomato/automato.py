@@ -114,18 +114,34 @@ A partir disso, a funcao faz chamadas recursivas ate consumir toda a palavra e e
 verifica se o automato se encontra em um estado de aceitacao.
 Basta que um ramo de computacao aceite a palavra para que a funcao retorne 'True'.
 """
-def automato_aceita_palavra(palavra, automato, estado_atual):
+def _automato_aceita_palavra(palavra, automato, estado_atual=None):
+    if not estado_atual:
+        estado_atual = automato['inicial']
+
     if (len(palavra) == 0):
-        return estado_atual in automato['aceitacao']
+        return '', automato, estado_atual in automato['aceitacao'], estado_atual
     else:
         transicoes = automato['transicoes']
         if estado_atual in transicoes:
             simbolo_do_alfabeto = palavra[0]
             if simbolo_do_alfabeto in transicoes[estado_atual]:
                 for estado_alvo in transicoes[estado_atual][simbolo_do_alfabeto]:
-                    if automato_aceita_palavra(palavra[1:], automato, estado_alvo):
-                        return True
-        return False
+                    p = palavra[1:]
+                    if not p:
+                        p = ''
+                    return p, automato, None, estado_alvo
+        return '', automato, False, None
+
+
+def automato_aceita_palavra(palavra, automato, estado_atual=None):
+    aceita = False
+    if palavra is None:
+        palavra = ''
+    while True:
+        palavra, automato, aceita, estado_atual = _automato_aceita_palavra(palavra, automato, estado_atual)
+        if aceita is not None:
+            break
+    return aceita, estado_atual
 
 """Teste
 

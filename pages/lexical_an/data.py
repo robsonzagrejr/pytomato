@@ -61,3 +61,8 @@ def remove_lexical_an(lexical_an_selected, lexical_an_data):
     return lexical_an_data, alert
 
 
+def extract_token(tokens, text_to_parse):
+    #1º para cada ER' em token, tem q criar um automato finito
+    #2º Para todos os automatos, tem q uni-los (<id>{0,1})
+    #3º Determinizar o automato gigantesco
+    #4º Para cada caracter do text_to_parse, _automato_aceita_palavra
