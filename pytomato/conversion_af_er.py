@@ -206,8 +206,55 @@ def format_afd(automata, initial_state, final, alphabet):
         
     return afd
 
+letters = 'abcdefghijklmnopqrstuvwxyz'
+numbers = '0123456789'
+
+def transform_suffix(suffix):
+    string = ''
+    is_until = False
+    for c in suffix:
+        if c == '-':
+            is_until = True
+        else:
+            if is_until:
+                if c.isnumeric():
+                    s = numbers.split(string[-1])[1]
+                else:
+                    if c.isupper():
+                        s = letters.upper().split(string[-1])[1]
+                    else:
+                        s = letters.split(string[-1])[1]
+                string += s.split(c)[0] + c
+                is_until = False
+            else:
+                string += c
+
+    str_ref = ''
+    for c in string:
+        str_ref += c + '|'
+
+    return '(' + str_ref[0:-1] + ')'
+    
+def refatorate_regex(string):
+    preffix = ''
+    is_bracket = False
+    for c in string:
+        if c == '[':
+            is_bracket = True
+            suffix = ''
+        elif c == ']':
+            is_bracket = False
+            preffix += transform_suffix(suffix)
+        else:
+            if is_bracket:
+                suffix += c
+            else:
+                preffix += c
+
+    return preffix + '#'
+
 def er_to_afd(string):
-    string = f"{string}#"
+    string = refatorate_regex(string)
     tree = render_tree(string)
     n_nodes, nodes_idx = define_nodes(tree)
     followpos, initial_state = define_followpos(tree, n_nodes)
@@ -224,7 +271,7 @@ def er_to_afd(string):
 Main criado para testar as funções.
 """
 if __name__ == '__main__':
-    er_to_afd('(&|b)(ab)*(&|a)#')
-    # er_to_afd('a(a|b)*a#')
-    # er_to_afd('aa*(bb*aa*b)*#')
+    er_to_afd('[J-M1-9]*')
+    # er_to_afd('a(a|b)*a')
+    # er_to_afd('aa*(bb*aa*b)*')
 
