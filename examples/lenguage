@@ -1,0 +1,15 @@
+<char>:[a-zA-Z]
+<digit>:[0-9]
+<if>:if
+<then>:then
+<else>:else
+<end>:end
+<begin>:begin
+<var>:var
+<(>:\(
+<)>:\)
+<maior>:maior
+<operador>:(+|-)
+<atribuition>:=
+<str>:'<letter>'
+<int>:<digit>*
