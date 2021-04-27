@@ -68,8 +68,9 @@ def extract_token_from_text(tokens, text):
 
     # Ordernar de acordo com prioridade invertida
     # Maior o numero, maior a prioridade
-    #automatons = sorted(automatons)
-
+    automatons = sorted(automatons)
+    token_priorits = [(int(er['prioridade']), k) for k, er in tokens.items()]
+    token_priorits = sorted(token_priorits, reverse=True)
     # Unir os automatos
     automaton_union = _add_prefixo_estado(
         automatons[0][1]['name'],
@@ -80,20 +81,26 @@ def extract_token_from_text(tokens, text):
             automaton_union,
             automaton[1]['automato'],
             prefix_a1='',
+            #aceitacao_prefix_a1='',
+            #prefix_a2=automaton[1]['name'].replace('<', '|').replace('>','|'),
             prefix_a2=automaton[1]['name'],
-            inicial=f"_{automaton_union['inicial']}"
+            #aceitacao_prefix_a2=automaton[1]['name']
+            inicial=f"_{automaton_union['inicial']}",
         )
     # Determinizar
     automaton = afnd_para_afd(automaton_union)
     automaton = reordernar_nomes(automaton, tokens)
-    print(automaton)
+
     # Identificar os lexemas
     lexemas = {}
     # Primeiro um caracter reservado 'espaço'
-    # for lex in text.split(' '):
-    #     acepted, state = automato_aceita_palavra(lex, automaton)
-    #     if acepted:
-    #         token = state.split('>')[0].split('<')[-1]
-    #         lexemas[lex]: token 
+    for lex in text.split(' '):
+        acepted, state = automato_aceita_palavra(lex, automaton)
+        if acepted:
+            for t in token_priorits:
+                if t[1] in state:
+                    token = t[1]
+                    break
+            lexemas[lex]= token 
 
-    return lexemas, automaton_union
+    return lexemas, automaton

@@ -155,40 +155,31 @@ def reordenar_nome(nome, token_order):
         la.append(aux)
     
     la = sorted(la)
+    k = []
     for l in la:
+        aux = l
         for token in token_order:
             if f'{token[0]}{token[1]}' in l:
                 aux = aux.replace(f"{token[0]}{token[1]}", token[1])
-        la.append(aux)
-    new_nome = "{"+";".join(la)+"}"
+        k.append(aux)
+    new_nome = "{"+";".join(k)+"}"
     return nome
     
 
-
 def reordernar_nomes(automato, tokens):
-    token_order = [(v['prioridade'],k) for k, v in tokens.items()]
-    token_order = sorted(token_order)
-    nome = automato['inicial'].replace('_', '')
-    novo_nome_inicial = reordenar_nome(nome, token_order)
-    print("KAKKAK")
-    breakpoint()
-
-    velho_inicial = automato['inicial']
-    automato['inicial'] = novo_estado
+    novo_estado = ''
     transicoes = {}
     for estado, trans in automato['transicoes'].items():
         estado_trans = {}
         for simbolo, estados in trans.items():
             estado_trans[simbolo] = []
             for e in estados:
-                if e == velho_inicial:
-                    estado_trans[simbolo].append(novo_estado)
-                else:
-                    estado_trans[simbolo].append(e)
-        if estado == velho_inicial:
-            estado = novo_estado
+                estado_trans[simbolo].append(e)
+        if len(estado) == len(automato['inicial']):
+            novo_estado = estado
         transicoes[estado] = estado_trans
-    automato['transicoes'] = transicoes 
+    automato['transicoes'] = transicoes
+    automato['inicial'] = novo_estado
     return automato  
 
 """Teste
