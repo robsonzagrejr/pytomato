@@ -172,7 +172,7 @@ def afd(followpos, nodes_idx, initial_state):
     states.append(initial_state)
     visited_states = list()
     automata = dict()
-    
+    idx = -1
     while(not len(states) == 0):
         state = states.pop()
         visited_states.append(state)
@@ -188,7 +188,11 @@ def afd(followpos, nodes_idx, initial_state):
             if visited_states.count(s[1]) == 0:
                 states.append(s[1])
 
-        automata[str(state)] = union.copy()
+        if automata.get(str(state)):
+            automata[str(state)]['states'] = union.copy()
+        else:
+            idx += 1
+            automata[str(state)] = {'states': union.copy(), 'name': f'q{idx}'}
         union.clear()
 
     return automata
@@ -198,22 +202,26 @@ def format_afd(automata, initial_state, final, alphabet):
     afd = dict()
     afd['n_estados'] = len(automata)
     afd['inicial'] = "{"  + ', '.join(initial_state) + "}"
+    afd['inicial'] = automata[afd['inicial']]['name']
     afd['aceitacao'] = list()
     afd['alfabeto'] = list(alphabet)
     afd['transicoes'] = dict()
 
     for transiction in automata:
+        trans = automata.get(transiction)
         if transiction.find(final) >= 0:
-            afd.get('aceitacao').append(transiction)
+            afd.get('aceitacao').append(trans['name'])
         t = dict()
         for a in alphabet:
-            tr = automata.get(transiction).get(a)
+            tr = trans['states'].get(a)
             if (tr):
-                t[a] = [str(tr)]
+                
+                t[a] = [automata.get(f'{tr}')['name']]
             #else:
             #    t[a] = []
-        afd.get('transicoes')[transiction] = t
         
+        afd.get('transicoes')[automata.get(transiction)['name']] = t
+    
     return afd
 
 letters = 'abcdefghijklmnopqrstuvwxyz'
@@ -281,7 +289,7 @@ def er_to_afd(string):
 Main criado para testar as funções.
 """
 if __name__ == '__main__':
-    er_to_afd('[J-M1-9]*')
+    print(er_to_afd('[J-M1-9]abc'))
     # er_to_afd('a(a|b)*a')
     # er_to_afd('aa*(bb*aa*b)*')
 
