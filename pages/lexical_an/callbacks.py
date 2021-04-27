@@ -134,6 +134,7 @@ def register_callbacks(app):
             State('lexical-an-dropdown', 'options'),
             State('lexical-an-input', 'value'),
             State('lexical-an-text-area', 'value'),
+            State('lexical-an-pseudo-cod-ta', 'value'),
             State('store-lexical-an', 'data'),
             State('store-automaton', 'data'),
         ]
@@ -150,6 +151,7 @@ def register_callbacks(app):
             lexical_an_options,
             lexical_an_name,
             lexical_an_text,
+            lexical_an_pseudo_cod,
             lexical_an_data,
             automaton_data,
         ):
@@ -199,8 +201,7 @@ def register_callbacks(app):
         elif triggered_id == 'lexical-an-parse' and lexical_an_selected:
             if lexical_an_selected and lexical_an_selected in lexical_an_data.keys():
                 lenguage = lexical_an_data[lexical_an_selected]
-                table_data, automaton = d.extract_token(lenguage, lexical_an_text)
-                print(automaton)
+                table_data, automaton = d.extract_token(lenguage, lexical_an_pseudo_cod)
                 return automaton, [], table_data
 
         return lexical_an_data, [], dash.no_update

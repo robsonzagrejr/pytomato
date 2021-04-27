@@ -119,6 +119,7 @@ class AF:
         # cria a lista contendo os símbolos do alfabeto
         self.alphabet = [str(symbol) for symbol in meta_data[3].split(",")]
         if self.start_state in self.alphabet:
+            print(self.start_state)
             raise Exception(self.ERRO_4 + "2)")
         for state in self.accept_states:
             if state in self.alphabet:

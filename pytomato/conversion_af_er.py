@@ -203,7 +203,7 @@ def format_afd(automata, initial_state, final, alphabet):
     afd['transicoes'] = dict()
 
     for transiction in automata:
-        if transiction.find(final):
+        if transiction.find(final) >= 0:
             afd.get('aceitacao').append(transiction)
         t = dict()
         for a in alphabet:

@@ -143,6 +143,27 @@ def automato_aceita_palavra(palavra, automato, estado_atual=None):
             break
     return aceita, estado_atual
 
+
+def renomear_estado_inicial(automato, novo_estado='S'):
+    breakpoint()
+    velho_inicial = automato['inicial']
+    automato['inicial'] = novo_estado
+    transicoes = {}
+    for estado, trans in automato['transicoes'].items():
+        estado_trans = {}
+        for simbolo, estados in trans.items():
+            estado_trans[simbolo] = []
+            for e in estados:
+                if e == velho_inicial:
+                    estado_trans[simbolo].append(novo_estado)
+                else:
+                    estado_trans[simbolo].append(e)
+        if estado == velho_inicial:
+            estado = novo_estado
+        transicoes[estado] = estado_trans
+    automato['transicoes'] = transicoes 
+    return automato  
+
 """Teste
 
 Main criado para testar as funções.

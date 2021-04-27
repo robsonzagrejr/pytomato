@@ -11,15 +11,15 @@ Retorna o mesmo automato porem com os estados posusindo tal prefixo.
 def _add_prefixo_estado(prefixo, automato):
     automato_r = {} 
     automato_r['n_estados'] = automato['n_estados']
-    automato_r['inicial'] = f"{prefixo}_{automato['inicial']}"
-    automato_r['aceitacao'] = [f"{prefixo}_{e}" for e in automato['aceitacao']]
+    automato_r['inicial'] = f"{prefixo}{automato['inicial']}"
+    automato_r['aceitacao'] = [f"{prefixo}{e}" for e in automato['aceitacao']]
     automato_r['alfabeto'] = automato['alfabeto']
     transicoes = {}
     for estado, trans in automato['transicoes'].items():
         estado_trans = {}
         for simbolo, estados in trans.items():
-            estado_trans[simbolo] = [f"{prefixo}_{e}" for e in estados]
-        transicoes[f"{prefixo}_{estado}"] = estado_trans
+            estado_trans[simbolo] = [f"{prefixo}{e}" for e in estados]
+        transicoes[f"{prefixo}{estado}"] = estado_trans
     automato_r['transicoes'] = transicoes    
     return automato_r
 
@@ -31,13 +31,13 @@ um automato com um novo estado de aceitação e inicial, fazendo episolon
 transições. Renomeia os estados dos automatos que recebeu para previnir
 possíveis erros.
 """
-def uniao(automato_1, automato_2, prefix_a1 = 'a1', prefix_a2 = 'a2'):
+def uniao(automato_1, automato_2, prefix_a1 = 'a1_', prefix_a2 = 'a2_', inicial='_S'):
 	automato_1_r = _add_prefixo_estado(prefix_a1, automato_1)
 	automato_2_r = _add_prefixo_estado(prefix_a2, automato_2)
 
 	automato_u = {}
-	automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 2
-	automato_u['inicial'] = 'S'
+	automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 1
+	automato_u['inicial'] = inicial
 	#automato_u['aceitacao'] = ['A']
 	automato_u['aceitacao'] = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
 	automato_u['alfabeto'] = list(
@@ -49,7 +49,7 @@ def uniao(automato_1, automato_2, prefix_a1 = 'a1', prefix_a2 = 'a2'):
 	)
 
 	transicoes = automato_1_r['transicoes'].copy()
-	transicoes.update(automato_2_r['transicoes'])
+	transicoes.update(automato_2_r['transicoes'].copy())
 	transicoes[automato_u['inicial']] = {
 		'&': [automato_1_r['inicial'], automato_2_r['inicial']]
 	}

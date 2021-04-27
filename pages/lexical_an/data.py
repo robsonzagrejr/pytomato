@@ -71,9 +71,10 @@ def extract_token(lenguage, text_to_parse):
     words_token, automaton = tomato_la.extract_token_from_text(tokens, text_to_parse)
 
     data = []
-    for lex, token in words_token:
+    for lex, token in words_token.items():
         data.append({
             'lexema': lex,
             'token': token
         })
+    print(data)
     return data, {'type': 'AF', 'name':f'la_{name}', 'data': automaton}
