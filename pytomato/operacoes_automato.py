@@ -1,3 +1,6 @@
+from .Evaristo.functions import read_af_string
+from .automato import obj_para_texto
+
 """Adição de prefixo em estados
 
 Recebe um prefixo o qual será adicionado a todos os estados do automato.
@@ -5,20 +8,32 @@ Resolve o problema de estados com mesmo nome em operações envolvendo dois
 automatos.
 Retorna o mesmo automato porem com os estados posusindo tal prefixo.
 """
-def _add_prefixo_estado(prefixo, automato):
-    automato_r = {} 
-    automato_r['n_estados'] = automato['n_estados']
-    automato_r['inicial'] = f"{prefixo}_{automato['inicial']}"
-    automato_r['aceitacao'] = [f"{prefixo}_{e}" for e in automato['aceitacao']]
-    automato_r['alfabeto'] = automato['alfabeto']
-    transicoes = {}
-    for estado, trans in automato['transicoes'].items():
-        estado_trans = {}
-        for simbolo, estados in trans.items():
-            estado_trans[simbolo] = [f"{prefixo}_{e}" for e in estados]
-        transicoes[f"{prefixo}_{estado}"] = estado_trans
-    automato_r['transicoes'] = transicoes    
-    return automato_r
+def _add_prefixo_estado(prefixo, automato, aceitacao_prefixo=None):
+	if not aceitacao_prefixo:
+		aceitacao_prefixo = prefixo
+	automato_r = {} 
+	automato_r['n_estados'] = automato['n_estados']
+	automato_r['inicial'] = f"{prefixo}{automato['inicial']}"
+	aceitacao = automato['aceitacao']
+	automato_r['aceitacao'] = [f"{aceitacao_prefixo}{e}" for e in automato['aceitacao']]
+	automato_r['alfabeto'] = automato['alfabeto']
+	transicoes = {}
+	for estado, trans in automato['transicoes'].items():
+		estado_trans = {}
+		for simbolo, estados in trans.items():
+			aux = []
+			for e in estados:
+				if e in aceitacao:
+					aux.append(f"{aceitacao_prefixo}{e}")
+				else:
+					aux.append(f"{prefixo}{e}")
+			estado_trans[simbolo] = aux
+		if estado in aceitacao:
+			transicoes[f"{aceitacao_prefixo}{estado}"] = estado_trans
+		else:
+			transicoes[f"{prefixo}{estado}"] = estado_trans
+	automato_r['transicoes'] = transicoes    
+	return automato_r
 
 
 """União de automatos
@@ -28,35 +43,44 @@ um automato com um novo estado de aceitação e inicial, fazendo episolon
 transições. Renomeia os estados dos automatos que recebeu para previnir
 possíveis erros.
 """
-def uniao(automato_1, automato_2):
-    automato_1_r = _add_prefixo_estado('a1', automato_1)
-    automato_2_r = _add_prefixo_estado('a2', automato_2)
+def uniao(
+	automato_1,
+	automato_2,
+	prefix_a1='a1_',
+	aceitacao_prefix_a1=None,
+	prefix_a2='a2_',
+	aceitacao_prefix_a2=None,
+	inicial='_S'
+	):
+	automato_1_r = _add_prefixo_estado(prefix_a1, automato_1, aceitacao_prefix_a1)
+	automato_2_r = _add_prefixo_estado(prefix_a2, automato_2, aceitacao_prefix_a2)
 
-    automato_u = {}
-    automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 2
-    automato_u['inicial'] = 'S'
-    automato_u['aceitacao'] = ['A']
-    automato_u['alfabeto'] = list(
-        set(
-            automato_1_r['alfabeto']
-            + automato_2_r['alfabeto']
-            + ['&']
-        )
-    )
+	automato_u = {}
+	automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 1
+	automato_u['inicial'] = inicial
+	#automato_u['aceitacao'] = ['A']
+	automato_u['aceitacao'] = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
+	automato_u['alfabeto'] = list(
+		set(
+			automato_1_r['alfabeto']
+			+ automato_2_r['alfabeto']
+			+ ['&']
+		)
+	)
 
-    transicoes = automato_1_r['transicoes'].copy()
-    transicoes.update(automato_2_r['transicoes'])
-    transicoes[automato_u['inicial']] = {
-        '&': [automato_1_r['inicial'], automato_2_r['inicial']]
-    }
-    antigo_aceitacao = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
-    for antigo_a in antigo_aceitacao:
-        trans_antigo_a = transicoes.get(antigo_a, {})
-        trans_antigo_a['&'] = automato_u['aceitacao']
-        transicoes[antigo_a] = trans_antigo_a
-    automato_u['transicoes'] = transicoes
+	transicoes = automato_1_r['transicoes'].copy()
+	transicoes.update(automato_2_r['transicoes'].copy())
+	transicoes[automato_u['inicial']] = {
+		'&': [automato_1_r['inicial'], automato_2_r['inicial']]
+	}
+	#antigo_aceitacao = automato_1_r['aceitacao'] + automato_2_r['aceitacao']
+	#for antigo_a in antigo_aceitacao:
+	#    trans_antigo_a = transicoes.get(antigo_a, {})
+	#    trans_antigo_a['&'] = automato_u['aceitacao']
+	#    transicoes[antigo_a] = trans_antigo_a
+	automato_u['transicoes'] = transicoes
 
-    return automato_u 
+	return automato_u 
 
 
 """Intercessão de automatos
@@ -243,11 +267,17 @@ def afnd_para_afd_com_epsilon(afnd):
 	return afd
 	
 
-def afnd_para_afd(afnd):	
-	if ('&' in afnd['alfabeto']):
-		return afnd_para_afd_com_epsilon(afnd)
-	else:
-		return afnd_para_afd_sem_epsilon(afnd)
+def afnd_para_afd(afnd):
+	my_texto = obj_para_texto(afnd)
+	evaristo_af = read_af_string(my_texto)
+	evaristo_af.determinize()
+	estrutura = {}
+	estrutura['n_estados'] = evaristo_af.n_states
+	estrutura['inicial'] = evaristo_af.start_state
+	estrutura['aceitacao'] = evaristo_af.accept_states
+	estrutura['alfabeto'] = evaristo_af.alphabet
+	estrutura['transicoes'] = evaristo_af.transition_table
+	return estrutura
 
 
 def get_inalcancaveis(afd):

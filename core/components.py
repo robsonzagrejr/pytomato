@@ -18,6 +18,7 @@ def make_navbar(url_base):
             dbc.NavItem(dbc.NavLink("Gramática", href=f"{url_base}grammar")),
             dbc.NavItem(dbc.NavLink("Automato", href=f"{url_base}automaton")),
             dbc.NavItem(dbc.NavLink("Expressão Regular", href=f"{url_base}regular_exp")),
+            dbc.NavItem(dbc.NavLink("Análise Léxica", href=f"{url_base}lexical_an")),
         ],
         brand="Pytomato",
         brand_href="#",
@@ -31,7 +32,9 @@ stores = {
     'store-automaton': dcc.Store(data={}, id='store-automaton', storage_type='local'),
     'store-automaton-helper': dcc.Store(data={}, id='store-automaton-helper', storage_type='memory'),
     'store-regular-exp': dcc.Store(data={}, id='store-regular-exp', storage_type='local'),
-    'store-regular-exp-helper': dcc.Store(data={}, id='store-regular-exp-helper', storage_type='memory')
+    'store-regular-exp-helper': dcc.Store(data={}, id='store-regular-exp-helper', storage_type='memory'),
+    'store-lexical-an': dcc.Store(data={}, id='store-lexical-an', storage_type='local'),
+    'store-lexical-an-helper': dcc.Store(data={}, id='store-lexical-an-helper', storage_type='memory')
 }
 
 page_content = html.Div(
@@ -43,6 +46,8 @@ page_content = html.Div(
         stores['store-automaton-helper'],
         stores['store-regular-exp'],
         stores['store-regular-exp-helper'],
+        stores['store-lexical-an'],
+        stores['store-lexical-an-helper'],
         html.Div(id='page-content'),
     ]
 )

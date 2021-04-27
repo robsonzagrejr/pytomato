@@ -1,0 +1,7 @@
+begin
+var i = 1
+if ( 1 maior 10 ) then
+    i = i + 1
+else
+    i = i - 1
+end

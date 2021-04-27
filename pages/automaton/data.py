@@ -154,10 +154,12 @@ def check_word_in_automato(word, automaton_selected, automaton_data):
         # accept = tomato_gram.isValidExpression(word, grammar)
         
         # let's remove some undesirable characters
-        palavra = word.replace('\n','').replace('\r','')
+        if word:
+            palavra = word.replace('\n','').replace('\r','')
+        else:
+            palavra = word
         
-        accept = tomato_auto.automato_aceita_palavra(word, automaton, automaton['inicial'])
-
+        accept, _ = tomato_auto.automato_aceita_palavra(word, automaton)
         alert_type = 'success'
         alert_text = f"Automato '{automaton_selected}' aceita palavra '{word}' ! :)"
         if not accept:

@@ -55,27 +55,6 @@ widgets = {
         id='regular-exp-download',
         className='btn btn-margin btn-outline-dark'
     ),
-    'regular_exp_btn_update_from_table': dbc.Button(
-        "Atualizar a partir da Tabela",
-        id='regular-exp-btn-update-from-table',
-        color='secondary',
-        outline=True,
-        style={'display': 'none'},
-    ),
-    'regular_exp_table': DataTable(
-        id='regular-exp-table',
-        editable=True,
-        #filter_action="native",
-        #sort_action="native",
-        #sort_mode="multi",
-        #page_action="native",
-        #page_current=0,
-        #page_size=10,
-        style_table={
-            'overflow': 'auto',
-            'margin': '0 15px 0 15px',
-        },
-    ),
     'regular_exp_btn_convert_af': dbc.Button(
         "Converter para AF",
         id='regular-exp-btn-convert-af',
