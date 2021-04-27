@@ -8,20 +8,32 @@ Resolve o problema de estados com mesmo nome em operações envolvendo dois
 automatos.
 Retorna o mesmo automato porem com os estados posusindo tal prefixo.
 """
-def _add_prefixo_estado(prefixo, automato):
-    automato_r = {} 
-    automato_r['n_estados'] = automato['n_estados']
-    automato_r['inicial'] = f"{prefixo}{automato['inicial']}"
-    automato_r['aceitacao'] = [f"{prefixo}{e}" for e in automato['aceitacao']]
-    automato_r['alfabeto'] = automato['alfabeto']
-    transicoes = {}
-    for estado, trans in automato['transicoes'].items():
-        estado_trans = {}
-        for simbolo, estados in trans.items():
-            estado_trans[simbolo] = [f"{prefixo}{e}" for e in estados]
-        transicoes[f"{prefixo}{estado}"] = estado_trans
-    automato_r['transicoes'] = transicoes    
-    return automato_r
+def _add_prefixo_estado(prefixo, automato, aceitacao_prefixo=None):
+	if not aceitacao_prefixo:
+		aceitacao_prefixo = prefixo
+	automato_r = {} 
+	automato_r['n_estados'] = automato['n_estados']
+	automato_r['inicial'] = f"{prefixo}{automato['inicial']}"
+	aceitacao = automato['aceitacao']
+	automato_r['aceitacao'] = [f"{aceitacao_prefixo}{e}" for e in automato['aceitacao']]
+	automato_r['alfabeto'] = automato['alfabeto']
+	transicoes = {}
+	for estado, trans in automato['transicoes'].items():
+		estado_trans = {}
+		for simbolo, estados in trans.items():
+			aux = []
+			for e in estados:
+				if e in aceitacao:
+					aux.append(f"{aceitacao_prefixo}{e}")
+				else:
+					aux.append(f"{prefixo}{e}")
+			estado_trans[simbolo] = aux
+		if estado in aceitacao:
+			transicoes[f"{aceitacao_prefixo}{estado}"] = estado_trans
+		else:
+			transicoes[f"{prefixo}{estado}"] = estado_trans
+	automato_r['transicoes'] = transicoes    
+	return automato_r
 
 
 """União de automatos
@@ -31,9 +43,17 @@ um automato com um novo estado de aceitação e inicial, fazendo episolon
 transições. Renomeia os estados dos automatos que recebeu para previnir
 possíveis erros.
 """
-def uniao(automato_1, automato_2, prefix_a1 = 'a1_', prefix_a2 = 'a2_', inicial='_S'):
-	automato_1_r = _add_prefixo_estado(prefix_a1, automato_1)
-	automato_2_r = _add_prefixo_estado(prefix_a2, automato_2)
+def uniao(
+	automato_1,
+	automato_2,
+	prefix_a1='a1_',
+	aceitacao_prefix_a1=None,
+	prefix_a2='a2_',
+	aceitacao_prefix_a2=None,
+	inicial='_S'
+	):
+	automato_1_r = _add_prefixo_estado(prefix_a1, automato_1, aceitacao_prefix_a1)
+	automato_2_r = _add_prefixo_estado(prefix_a2, automato_2, aceitacao_prefix_a2)
 
 	automato_u = {}
 	automato_u['n_estados'] = int(automato_1_r['n_estados']) + int(automato_1_r['n_estados']) + 1

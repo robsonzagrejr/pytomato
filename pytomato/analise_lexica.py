@@ -73,18 +73,18 @@ def extract_token_from_text(tokens, text):
     token_priorits = sorted(token_priorits, reverse=True)
     # Unir os automatos
     automaton_union = _add_prefixo_estado(
-        automatons[0][1]['name'],
-        automatons[0][1]['automato']
+        automatons[0][1]['name'].replace('<', '|').replace('>','|'),
+        automatons[0][1]['automato'],
+        automatons[0][1]['name']
     )
     for automaton in automatons[1:]:
         automaton_union = uniao(
             automaton_union,
             automaton[1]['automato'],
             prefix_a1='',
-            #aceitacao_prefix_a1='',
-            #prefix_a2=automaton[1]['name'].replace('<', '|').replace('>','|'),
-            prefix_a2=automaton[1]['name'],
-            #aceitacao_prefix_a2=automaton[1]['name']
+            prefix_a2=automaton[1]['name'].replace('<', '|').replace('>','|'),
+            #prefix_a2=automaton[1]['name'],
+            aceitacao_prefix_a2=automaton[1]['name'],
             inicial=f"_{automaton_union['inicial']}",
         )
     # Determinizar
@@ -94,6 +94,7 @@ def extract_token_from_text(tokens, text):
     # Identificar os lexemas
     lexemas = {}
     # Primeiro um caracter reservado 'espaço'
+    text = text.replace('\n', ' ').replace('\r', ' ')
     for lex in text.split(' '):
         acepted, state = automato_aceita_palavra(lex, automaton)
         if acepted:

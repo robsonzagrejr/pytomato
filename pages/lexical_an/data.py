@@ -76,5 +76,4 @@ def extract_token(lenguage, text_to_parse):
             'lexema': lex,
             'token': token
         })
-    print(data)
     return data, {'type': 'AF', 'name':f'la_{name}', 'data': automaton}
