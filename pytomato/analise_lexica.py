@@ -1,7 +1,7 @@
 import io
 from .conversion_af_er import er_to_afd
 from .operacoes_automato import uniao, afnd_para_afd
-from .automato import obj_para_texto, automato_aceita_palavra, renomear_estado_inicial
+from .automato import obj_para_texto, automato_aceita_palavra, reordernar_nomes
 from .operacoes_automato import uniao, _add_prefixo_estado, afnd_para_afd
 from .conversion_af_er import er_to_afd
 
@@ -68,7 +68,7 @@ def extract_token_from_text(tokens, text):
 
     # Ordernar de acordo com prioridade invertida
     # Maior o numero, maior a prioridade
-    automatons = sorted(automatons)
+    #automatons = sorted(automatons)
 
     # Unir os automatos
     automaton_union = _add_prefixo_estado(
@@ -84,16 +84,16 @@ def extract_token_from_text(tokens, text):
             inicial=f"_{automaton_union['inicial']}"
         )
     # Determinizar
-    #automaton = afnd_para_afd(automaton_union) #FIXME estado inicial
-    #automaton = renomear_estado_inicial(automaton, 'S')
+    automaton = afnd_para_afd(automaton_union)
+    automaton = reordernar_nomes(automaton, tokens)
     print(automaton)
     # Identificar os lexemas
     lexemas = {}
     # Primeiro um caracter reservado 'espaço'
-    for lex in text.split(' '):
-        acepted, state = automato_aceita_palavra(lex, automaton)
-        if acepted:
-            token = state.split('>')[0].split('<')[-1]
-            lexemas[lex]: token 
+    # for lex in text.split(' '):
+    #     acepted, state = automato_aceita_palavra(lex, automaton)
+    #     if acepted:
+    #         token = state.split('>')[0].split('<')[-1]
+    #         lexemas[lex]: token 
 
-    return lexemas, automaton
+    return lexemas, automaton_union

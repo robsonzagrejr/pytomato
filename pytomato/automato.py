@@ -144,8 +144,35 @@ def automato_aceita_palavra(palavra, automato, estado_atual=None):
     return aceita, estado_atual
 
 
-def renomear_estado_inicial(automato, novo_estado='S'):
+def reordenar_nome(nome, token_order):
+    new_nome = nome[1:-1].split(";")
+    la=[]
+    for n in new_nome:
+        aux = n
+        for token in token_order:
+            if token[1] in n:
+                aux = aux.replace(token[1], f"{token[0]}{token[1]}")
+        la.append(aux)
+    
+    la = sorted(la)
+    for l in la:
+        for token in token_order:
+            if f'{token[0]}{token[1]}' in l:
+                aux = aux.replace(f"{token[0]}{token[1]}", token[1])
+        la.append(aux)
+    new_nome = "{"+";".join(la)+"}"
+    return nome
+    
+
+
+def reordernar_nomes(automato, tokens):
+    token_order = [(v['prioridade'],k) for k, v in tokens.items()]
+    token_order = sorted(token_order)
+    nome = automato['inicial'].replace('_', '')
+    novo_nome_inicial = reordenar_nome(nome, token_order)
+    print("KAKKAK")
     breakpoint()
+
     velho_inicial = automato['inicial']
     automato['inicial'] = novo_estado
     transicoes = {}
