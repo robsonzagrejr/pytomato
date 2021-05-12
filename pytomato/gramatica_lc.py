@@ -190,7 +190,13 @@ def search_items(grammar):
                     aux_i += 1
                 elif equivalent_item:
                     add_new_item = True
-                    items[f"{equivalent_item}"][(f"I{analise_index}", symbol)] = equivalent_item
+                    key = list(items[f"{equivalent_item}"].keys())[0]
+                    origin = key[0]
+                    new_origin = f"{origin}_I{analise_index}"
+                    value = items[f"{equivalent_item}"][key]
+                    items[f"{equivalent_item}"] = {
+                        (new_origin, key[1]): value
+                    }
 
         analise_index += 1
         if analise_index >= aux_i:
