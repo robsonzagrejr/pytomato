@@ -13,5 +13,5 @@ C->cC | d
     grammar_dict = glc.texto_para_obj(grammar_text, 'GLC_Test')
     print(grammar_dict)
     g_glc = glc.define_components(grammar_dict)
-    print(json.dumps(g_glc, indent=4))
+    #print(json.dumps(g_glc, indent=4))
 
