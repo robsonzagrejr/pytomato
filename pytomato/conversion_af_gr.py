@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+import copy
 # usado para construir classe RegularGrammar a partir do construtor
 def search_initial(gramatica):
 	if 'S\'' in gramatica:
@@ -44,6 +44,68 @@ def create_grammar_with_dict(arg_dict):
 
 
 class RegularGrammar():
+    # Encontra se existe alguma & produção (que não esteja no símbolo inicial da gram)
+    def epsilon_free(self):
+        for head, body in self.regras_producao.items():
+            if head != self.gramatica_inicial:
+                for production in body:
+                    if production == '&':
+                        return False
+        return True
+    # instancia uma glc, remove recursões, se receber uma gramatica sem & producoes.
+    def remove_left_recursions(self):        
+        GLC = copy.deepcopy(self)
+        # se GLC nao for livre de & prod
+        if not GLC.epsilon_free():
+            return "Gramatica possui & prod, algoritmo nao funciona para gramáticas com & producoes"
+        heads_list = list(GLC.gramatica_nao_terminais)
+        for i in range(len(heads_list)):
+            # resolvendo recursoes indiretas
+            # para todos os simbolos em heads_list[i]
+            for j in range(i):
+                store = []
+                productions = []
+                if heads_list[i] in GLC.regras_producao:
+                    for p in GLC.regras_producao[heads_list[i]]:
+                        # se heads_list[j]store pertence a uma das producoes de heads_list[i]
+                        if len(p) > 1 and p[0] == heads_list[j]:
+                            # producao a armazenar
+                            store.append(p[1:])
+                            # producao a remover
+                            productions.append(p)
+                    for k in range(len(productions)):
+                        # remover a producao de heads_list[i]
+                        GLC.regras_producao[heads_list[i]].remove(productions[k])
+                        heads_list_j_body = GLC.regras_producao.get(heads_list[j])
+                        # se heads_list[j] existir como cabeca
+                        if heads_list_j_body:
+                            # adicionar as prod de heads_list[j] (concatenado com valores armazenados em store)
+                            # no corpo de heads_list[i]
+                            for p in heads_list_j_body:
+                                GLC.regras_producao[heads_list[i]].add(p + store[k])
+            # recursoes diretas
+            new_head = heads_list[i] + "'"
+            new_body = set()
+            to_keep = set()
+            # caso o terminal seja cabeca de alguma prod
+            if heads_list[i] in GLC.regras_producao:
+                for p in GLC.regras_producao[heads_list[i]]:
+                    # Se houver recursao direta a esquerda da produção
+                    if p[0] == heads_list[i]:
+                        # concatenar o restante da producao mais a nova cabeça no novo corpo
+                        new_body.add(p[1:] + new_head)
+                    else:
+                        to_keep.add(p + new_head)
+                # se alguma recursao direta foi encontrada atualizar as cabecas
+                if new_body:
+                    GLC.regras_producao[heads_list[i]] = to_keep
+                    new_body.add('&')
+                    GLC.regras_producao[new_head] = new_body
+        novos_nao_terminais = set()
+        for nao_terminal in GLC.regras_producao.keys():
+            novos_nao_terminais.add(nao_terminal)
+        GLC.gramatica_nao_terminais = novos_nao_terminais
+        return GLC
     # retorna a gramática em forma de dicionario
     def asdict(self):
         regras={}
