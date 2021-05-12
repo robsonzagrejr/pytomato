@@ -72,7 +72,7 @@ def find_element_first(element, grammar, firsts={}):
 
 
 def define_first(grammar):
-    symbols = grammar['s_terminal'] + grammar['s_n_terminal']
+    symbols = grammar['s_n_terminal'] + grammar['s_terminal']
     firsts = {}
     for s in symbols:
         s_first, s_firsts = find_element_first(s, grammar, firsts)
@@ -84,7 +84,7 @@ def define_first(grammar):
 
 
 def find_first_in_expression(expression, grammar):
-    symbols = grammar['s_terminal'] + grammar['s_n_terminal']
+    symbols = grammar['s_n_terminal'] + grammar['s_terminal']
     first = []
     for e in expression:
         e_first = []
@@ -112,8 +112,14 @@ def define_closure(item, grammar):
                 a = i[1]
                 if B in grammar['s_n_terminal']:
                     for gama in grammar['producoes'][B]:
-                        b_firsts = find_first_in_expression(f"{beta}{a}", grammar)
+                        beta_first, beta_firsts = find_element_first(beta, grammar)
+                        b_firsts = beta_first
+                        if ('&' in beta_first) or not b_firsts:
+                            b_firsts += a.split('|')
+
                         b_firsts = sorted(b_firsts)
+                        if b_firsts == ['c']:
+                            breakpoint()
                         n_item = ((B, f".{gama}"), "|".join(b_firsts))
                         if n_item not in item:
                             add_new_item = True
@@ -127,9 +133,7 @@ def define_closure(item, grammar):
 def define_goto(item, symbol, grammar):
     j = []
     for i in item:
-        print(i)
         production = i[0][1]
-        print(f"Production {production}")
         alpha, symbol_beta = production.split('.')
         if len(symbol_beta) > 0:
             if symbol_beta[0] == symbol:
@@ -138,16 +142,16 @@ def define_goto(item, symbol, grammar):
                 j.append(((i[0][0], new_i), i[1]))
 
     j = list(set(j))
-    print(j)
     return define_closure(j, grammar)
 
 
 def find_all_symbols(grammar):
-    symbols = set(grammar['s_n_terminal'] + grammar['s_terminal'])
+    symbols = list(grammar['s_n_terminal'] + grammar['s_terminal'])
     for productions in grammar['producoes'].values():
         for production in productions:
             for c in production:
-                symbols.add(c)
+                if c not in symbols:
+                    symbols.append(c)
 
     return list(symbols)
 
@@ -163,9 +167,6 @@ def find_eqivalent_item(symbol, item, items):
     return None
 
 
-
-
-
 def search_items(grammar):
     #((cabeça, corpo), terminal/$)
     closer_i0 = define_closure([(("S'", ".S"), "$")], grammar)
@@ -179,13 +180,8 @@ def search_items(grammar):
     while True:
         add_new_item = False
         for item in list(items[f"I{analise_index}"].values()):
-            print(item)
-            print(f"==========ANALISE DO ITEM I{analise_index}")
             for symbol in symbols:
-                print(f"Simbolo {symbol}")
                 goto_item_symbol = define_goto(item, symbol, grammar)
-                print(f"GOTO {goto_item_symbol}")
-                print(items.values())
 
                 equivalent_item  = find_eqivalent_item(symbol, goto_item_symbol, items)
                 if goto_item_symbol and not equivalent_item:#(goto_item_symbol not in items.values()):
@@ -193,14 +189,15 @@ def search_items(grammar):
                     items[f"I{aux_i}"] = {(f"I{analise_index}", symbol): goto_item_symbol}
                     aux_i += 1
                 elif equivalent_item:
-                    items[f"I{aux_i}"] = {(f"I{analise_index}", symbol): equivalent_item}
+                    add_new_item = True
+                    items[f"{equivalent_item}"][(f"I{analise_index}", symbol)] = equivalent_item
 
         analise_index += 1
-        if not add_new_item and analise_index >= aux_i:
+        if analise_index >= aux_i:
             break
-    #print(items)
-    items_s = {key: {str(k): v}for key, val in items.items() for k,v in
-            val.items()}
+
+    items_s = {key: {str(k): v for k, v in val.items()} for key, val in
+            items.items()}
     print(json.dumps(items_s, indent=4))
     #print(analise_index)
 
