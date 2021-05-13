@@ -24,7 +24,12 @@ def define_components(grammar):
     grammar['producoes'] = _search_productions(grammar['gramatica'])
 
     grammar['first'] = define_first(grammar)
+
+    # Primeiro passo é definir os itens
     grammar['itens'] = search_items(grammar)
+
+    # Após deffinir os items, devemos definir as tabelas
+    grammar['table'] = create_canonical_lr_table(grammar)
     #grammar['follow'] = search_follow(gramatica['gramatica'])
     
     return grammar 
@@ -168,7 +173,7 @@ def find_eqivalent_item(symbol, item, items):
 
 
 def search_items(grammar):
-    #((cabeça, corpo), terminal/$)
+    # Criação dos items canonicos LR(1)
     closer_i0 = define_closure([(("S'", ".S"), "$")], grammar)
     items = {
         'I0': {("->", "$") : closer_i0}
@@ -202,21 +207,54 @@ def search_items(grammar):
         if analise_index >= aux_i:
             break
 
-    items_s = {key: {str(k): v for k, v in val.items()} for key, val in
-            items.items()}
-    print(json.dumps(items_s, indent=4))
-    #print(analise_index)
-
     return items
-    
 
-if "__name__" == "__main__":
-    "d > c"
-    grammar_text = f"""
-S'->S
-S->CC
-C->cC | d
-    """
-    grammar_dict = texto_para_obj(grammar_text, 'GLC_Test')
-    glc = define_components(grammar_dict)
-    print(json.dumps(glc, ident=4))
+
+def create_canonical_lr_table(grammar):
+    # Assumimos que os items canonicos LR(1) ja foram criados
+    #Tabela sera um dicionario com chave igual a tupla (estado, acao)
+    #estado correspondo a ordem do closure de S'
+    table = {
+        'acao': {},
+        'goto': {}
+    }
+    reductions = {}
+    for item, productions in grammar['itens'].items():
+        for transition, t_productions in productions.items():
+            # Para montar a tabela, seguiremos as 3 condições
+
+            items_from = transition[0].split('_')
+            symbol = transition[1]
+            for i in items_from:
+                if i in grammar['itens'].keys():
+                    if symbol not in grammar['s_n_terminal']:
+                        #2.a Transição por shift
+                        table['acao'][(i[1:], symbol)] = f's{item[1:]}'
+
+                    else:
+                        #3 GOTO para estado
+                        table['goto'][(i[1:], symbol)] = f'{item[1:]}'
+
+            for t_p in t_productions:
+                alpha = t_p[0][1]
+                a = t_p[1]
+                if alpha[-1] == '.':
+                    if (a == '$') and (t_p[0] == "S'") and (alpha == 'S.'):
+                        #2.c definindo função de aceite
+                        table['acao'][(f'{item[1:]}', a)] = f'accept'
+                    else:
+                        #2.b definindo função de reducao
+                        table['acao'][(f'{item[1:]}', a)] = f'r{item[1:]}'  
+                        reductions[f'{item[1:]}'] = t_p
+
+    table_s = {
+        'acao': {str(key): val for key, val in table['acao'].items()},
+        'goto': {str(key): val for key, val in table['goto'].items()},
+    }
+    print(reductions)
+    print(json.dumps(table_s, indent=2))
+
+    return {
+        'table': table,
+        'reductions': reductions
+    }
