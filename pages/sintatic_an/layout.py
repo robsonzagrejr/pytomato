@@ -65,10 +65,17 @@ inputs = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.Label('Gramática:'),
+                        html.Label('Gramática LC:'),
                         widgets['sintatic_an_text_area'],
                     ],
                     md=7,
+                ),
+                dbc.Col(
+                    [
+                        html.Label('Items:'),
+                        widgets['sintatic_an_items_div'],
+                    ],
+                    md=5,
                 ),
             ]
         ),
@@ -82,6 +89,7 @@ outputs = dbc.Container(
     children=[
         html.Br(),
         html.Hr(),
+        widgets['sintatic_an_table']
     ]
 )
 

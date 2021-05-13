@@ -10,6 +10,18 @@ from pytomato.conversion_af_gr import (
     search_productions
 )
 
+
+def text_to_obj(text, name):
+    grammar = texto_para_obj(text, name)
+    #grammar = define_components(grammar)
+    return grammar
+
+
+def obj_to_text(grammar):
+    grammar_text = obj_para_texto(grammar)
+    return grammar_text
+
+
 def _search_productions(grammar_text):
     _productions = search_productions(grammar_text)
     productions = {}
@@ -219,7 +231,13 @@ def create_canonical_lr_table(grammar):
         'acao': {},
         'goto': {}
     }
-    reductions = {}
+    reductions = list(grammar['itens']['I0'].values())[0]
+    reductions_dict = {}
+    aux = 0
+    for r in reductions:
+        print(r[0])
+        reductions_dict[r[0][1].replace('.','')] = aux
+        aux += 1
     for item, productions in grammar['itens'].items():
         for transition, t_productions in productions.items():
             # Para montar a tabela, seguiremos as 3 condições
@@ -230,7 +248,8 @@ def create_canonical_lr_table(grammar):
                 if i in grammar['itens'].keys():
                     if symbol not in grammar['s_n_terminal']:
                         #2.a Transição por shift
-                        table['acao'][(i[1:], symbol)] = f's{item[1:]}'
+                        for s in symbol.split('|'):
+                            table['acao'][(i[1:], s)] = f's{item[1:]}'
 
                     else:
                         #3 GOTO para estado
@@ -240,20 +259,19 @@ def create_canonical_lr_table(grammar):
                 alpha = t_p[0][1]
                 a = t_p[1]
                 if alpha[-1] == '.':
-                    if (a == '$') and (t_p[0] == "S'") and (alpha == 'S.'):
+                    if (a == '$') and (t_p[0] == ("S'", 'S.')):
                         #2.c definindo função de aceite
                         table['acao'][(f'{item[1:]}', a)] = f'accept'
                     else:
                         #2.b definindo função de reducao
-                        table['acao'][(f'{item[1:]}', a)] = f'r{item[1:]}'  
-                        reductions[f'{item[1:]}'] = t_p
+                        for sa in a.split('|'):
+                            r_index = reductions_dict[alpha[:-1]]
+                            table['acao'][(f'{item[1:]}', sa)] = f'r{r_index}'  
 
     table_s = {
         'acao': {str(key): val for key, val in table['acao'].items()},
         'goto': {str(key): val for key, val in table['goto'].items()},
     }
-    print(reductions)
-    print(json.dumps(table_s, indent=2))
 
     return {
         'table': table,

@@ -48,7 +48,7 @@ def register_callbacks(app):
         [
             Input('sintatic-an-dropdown', 'value'),
             Input('sintatic-an-dropdown', 'options'),
-            Input('store-sintatic_an', 'data')
+            Input('store-sintatic-an', 'data')
         ]
     )
     def select_sintatic_an(sintatic_an_selected, sintatic_an_options,
@@ -70,12 +70,33 @@ def register_callbacks(app):
     @app.callback(
         Output('sintatic-an-dropdown', 'options'),
         [
-            Input('store-sintatic_an', 'data'),
+            Input('store-sintatic-an', 'data'),
         ],
     )
     def update_options(sintatic_an_data):
         options = [{'label': k, 'value': k} for k in sintatic_an_data.keys()]
         return options
+
+
+    @app.callback(
+        [
+            Output('sintatic-an-items-div', 'children'),
+            Output('sintatic-an-table', 'columns'),
+            Output('sintatic-an-table', 'data'),
+        ],
+        [
+            Input('sintatic-an-dropdown', 'value'),
+            Input('store-sintatic-an', 'data'),
+        ],
+    )
+    def update_items(sintatic_an_selected, sintatic_an_data):
+        if sintatic_an_selected in sintatic_an_data.keys():
+            print('ALGO')
+            return d.print_items_table(sintatic_an_selected, sintatic_an_data)
+        print("LALAL")
+        return '',[],[]
+
+
 
 
     @app.callback(
@@ -96,7 +117,7 @@ def register_callbacks(app):
             State('sintatic-an-dropdown', 'options'),
             State('sintatic-an-input', 'value'),
             State('sintatic-an-text-area', 'value'),
-            State('store-sintatic_an', 'data'),
+            State('store-sintatic-an', 'data'),
             State('store-automaton', 'data'),
         ]
     )
@@ -159,28 +180,18 @@ def register_callbacks(app):
             )
             return sintatic_an_data, alert
 
-        elif (triggered_id == 'sintatic-an-btn-convert-af' and
-             sintatic_an_selected and sintatic_an_selected in sintatic_an_data.keys()):
-
-            helper_data, alert = d.convert_sintatic_an_to_af(
-                sintatic_an_selected,
-                sintatic_an_data,
-                automaton_data
-            ) 
-            return helper_data, alert
-
         return sintatic_an_data, []
 
 
     #Conversoes
     @app.callback(
-        Output('store-sintatic_an', 'data'),
+        Output('store-sintatic-an', 'data'),
         [
             Input('store-sintatic-an-helper', 'data'),
             Input('store-automaton-helper', 'data'),
         ],
         [
-            State('store-sintatic_an', 'data')
+            State('store-sintatic-an', 'data')
         ]
     )
     def sintatic_an_data(sintatic_an_data_helper, automaton_data_helper,

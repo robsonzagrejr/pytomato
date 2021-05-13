@@ -57,16 +57,6 @@ widgets = {
     ),
     'sintatic_an_table': DataTable(
         id='sintatic-an-table',
-        columns=[
-            {'name':'nonterminal','id':'nonterminal'},
-            {'name':'first set','id':'first set',},
-            {'name':'follow set','id':'follow set',},
-            {'name':'nullable','id':'nullable',},
-            {'name':'endable','id':'endable',},
-        ],
-        data = [
-            {'nonterminal':'S'},
-        ],
         editable=False,
         filter_action="native",
         sort_action="native",
@@ -79,6 +69,10 @@ widgets = {
             'margin': '0 15px 0 15px',
         },
     ),
+    'sintatic_an_items_div': html.Div(
+        id='sintatic-an-items-div',
+    ),
+ 
     'sintatic_an_btn_convert_af': dbc.Button(
         "Converter para AF",
         id='sintatic-an-btn-convert-af',
