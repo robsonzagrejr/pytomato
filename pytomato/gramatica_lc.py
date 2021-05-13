@@ -235,7 +235,6 @@ def create_canonical_lr_table(grammar):
     reductions_dict = {}
     aux = 0
     for r in reductions:
-        print(r[0])
         reductions_dict[r[0][1].replace('.','')] = aux
         aux += 1
     for item, productions in grammar['itens'].items():

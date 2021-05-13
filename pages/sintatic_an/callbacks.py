@@ -91,9 +91,7 @@ def register_callbacks(app):
     )
     def update_items(sintatic_an_selected, sintatic_an_data):
         if sintatic_an_selected in sintatic_an_data.keys():
-            print('ALGO')
             return d.print_items_table(sintatic_an_selected, sintatic_an_data)
-        print("LALAL")
         return '',[],[]
 
 
@@ -110,7 +108,6 @@ def register_callbacks(app):
             Input('sintatic-an-btn-add', 'n_clicks'),
             Input('sintatic-an-btn-update', 'n_clicks'),
             Input('sintatic-an-btn-rm', 'n_clicks'),
-            Input('sintatic-an-btn-convert-af', 'n_clicks'),
         ],
         [
             State('sintatic-an-dropdown', 'value'),
@@ -127,7 +124,6 @@ def register_callbacks(app):
             add_click,
             update_click,
             rm_click,
-            gr_convert_af_click,
 
             sintatic_an_selected,
             sintatic_an_options,

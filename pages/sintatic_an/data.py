@@ -83,7 +83,6 @@ def print_items_table(sintatic_an_selected, sintatic_an_data):
             add_col_symbol.append(symbol)
         data.append((state,json.dumps({'state': state, symbol: goto})))
 
-    print(data)
     data_s = sorted(data)
     data_final = []
     state = data_s[0][0]

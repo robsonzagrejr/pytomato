@@ -53,7 +53,6 @@ inputs = dbc.Container(
                         widgets['sintatic_an_btn_add'],
                         widgets['sintatic_an_btn_update'],
                         widgets['sintatic_an_btn_rm'],
-                        widgets['sintatic_an_btn_convert_af'],
                     ],
                     md=6,
                 ),
