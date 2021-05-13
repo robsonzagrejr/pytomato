@@ -1,6 +1,7 @@
 import json
 from pytomato.gramatica import (
-    texto_para_obj
+    texto_para_obj,
+    obj_para_texto
 )
 from pytomato.conversion_af_gr import (
     search_initial,
