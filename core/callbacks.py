@@ -7,6 +7,7 @@ import pages.grammar as grammar
 import pages.automaton as automaton
 import pages.regular_exp as regular_exp
 import pages.lexical_an as lexical_an 
+import pages.sintatic_an as sintatic_an 
 
 import pytomato as tomato
 
@@ -40,9 +41,13 @@ def register_callbacks(app):
         elif pathname == f'{base}lexical_an':
             return lexical_an.layout
         
+        elif pathname == f'{base}sintatic_an':
+            return sintatic_an.layout
+        
 
     grammar.register_callbacks(app)
     automaton.register_callbacks(app)
     regular_exp.register_callbacks(app)
     lexical_an.register_callbacks(app)
+    sintatic_an.register_callbacks(app)
 

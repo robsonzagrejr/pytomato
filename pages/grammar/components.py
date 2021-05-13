@@ -86,5 +86,19 @@ widgets = {
         outline=True,
         className='btn-margin',
     ),
+    'grammar_btn_fatoration': dbc.Button(
+        "Fatorar",
+        id='grammar-btn-fatoration',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
+    'grammar_btn_remove_lr': dbc.Button(
+        "Remover Recursao a Esquerda",
+        id='grammar-btn-remove-lr',
+        color='dark',
+        outline=True,
+        className='btn-margin',
+    ),
 }
 

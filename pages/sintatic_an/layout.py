@@ -10,7 +10,7 @@ inputs = dbc.Container(
         html.Br(),
         html.Br(),
         dbc.Row(
-            html.H1('Gramática'),
+            html.H1('Análise Sintática'),
         ),
         html.Br(),
         html.Br(),
@@ -18,20 +18,20 @@ inputs = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.Label('Selecione a Gramática:'),
-                        widgets['grammar_dropdown'],
+                        html.Label('Selecione a GLC:'),
+                        widgets['sintatic_an_dropdown'],
                     ],
                     md=3
                 ),
                 dbc.Col(
                     [
-                        widgets['grammar_download'],
+                        widgets['sintatic_an_download'],
                     ],
                     md=1,
                 ),
                 dbc.Col(
                     [
-                        widgets['grammar_upload'],
+                        widgets['sintatic_an_upload'],
                     ],
                     md=1,
                 ),
@@ -44,20 +44,18 @@ inputs = dbc.Container(
                 dbc.Col(
                     [
                         html.Label('Nome:'),
-                        widgets['grammar_input'],
+                        widgets['sintatic_an_input'],
                     ],
                     md=3
                 ),
                 dbc.Col(
                     [
-                        widgets['grammar_btn_add'],
-                        widgets['grammar_btn_update'],
-                        widgets['grammar_btn_rm'],
-                        widgets['grammar_btn_convert_af'],
-                        widgets['grammar_btn_fatoration'],
-                        widgets['grammar_btn_remove_lr'],
+                        widgets['sintatic_an_btn_add'],
+                        widgets['sintatic_an_btn_update'],
+                        widgets['sintatic_an_btn_rm'],
+                        widgets['sintatic_an_btn_convert_af'],
                     ],
-                    md=9,
+                    md=6,
                 ),
             ],
             align="end",
@@ -67,15 +65,22 @@ inputs = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.Label('Gramática:'),
-                        widgets['grammar_text_area'],
+                        html.Label('Gramática LC:'),
+                        widgets['sintatic_an_text_area'],
                     ],
                     md=7,
+                ),
+                dbc.Col(
+                    [
+                        html.Label('Items:'),
+                        widgets['sintatic_an_items_div'],
+                    ],
+                    md=5,
                 ),
             ]
         ),
         html.Br(),
-        widgets['grammar_alert'],
+        widgets['sintatic_an_alert'],
         ]
 )
 
@@ -84,6 +89,7 @@ outputs = dbc.Container(
     children=[
         html.Br(),
         html.Hr(),
+        widgets['sintatic_an_table']
     ]
 )
 
