@@ -1,11 +1,11 @@
+import copy
 from pytomato.conversion_af_gr import (
     search_initial,
     search_non_terminal,
-    search_terminal
+    search_terminal    
 )
 
-import copy
-
+#from conversion_af_gr import search_initial,search_non_terminal,search_terminal,create_grammar_with_dict
 """Conversão de Texto x Objeto
 Recebe duas strings, Gramática e Nome, do usuário e as
 converte em objeto e insere na estrutura de dicionário.
@@ -348,3 +348,14 @@ A -> D | bA | a\n\
 B -> b | D\n\
 S' -> & | &D | D | aA"
     print(texto_para_obj(texto2, 'nome'))
+    caso_1="S -> Aa | b \n\
+A -> Ac | Sd | a"
+    caso_2="S -> Aa | Sb \n\
+A -> Sd | d"
+    obj = texto_para_obj(caso_1,'teste_recursao')
+    GLC = create_grammar_with_dict(obj)
+    obj_2 = texto_para_obj(caso_2,'teste_recursao_2')
+    GLC_2 = create_grammar_with_dict(obj_2)
+    # resultado igual slide https://moodle.ufsc.br/pluginfile.php/3837961/mod_resource/content/3/10-GLC-Algoritmos.pdf
+    print(GLC.remove_left_recursions().asdict())
+    print(GLC_2.remove_left_recursions().asdict())
