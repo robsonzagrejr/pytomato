@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import base64
 
 import pytomato.gramatica as tomato_gram
+import pytomato.conversion_af_gr as tomato_gram_conv
 import pages.grammar.data as d
 
 """Funções de Callback
@@ -89,6 +90,8 @@ def register_callbacks(app):
             Input('grammar-btn-update', 'n_clicks'),
             Input('grammar-btn-rm', 'n_clicks'),
             Input('grammar-btn-convert-af', 'n_clicks'),
+            Input('grammar-btn-fatoration', 'n_clicks'),
+            Input('grammar-btn-remove-lr', 'n_clicks'),
         ],
         [
             State('grammar-dropdown', 'value'),
@@ -106,6 +109,8 @@ def register_callbacks(app):
             update_click,
             rm_click,
             gr_convert_af_click,
+            gr_fatoration_click,
+            gr_remove_lr,
 
             grammar_selected,
             grammar_options,
@@ -167,6 +172,20 @@ def register_callbacks(app):
                 automaton_data
             ) 
             return helper_data, alert
+
+        elif (triggered_id == 'grammar-btn-fatoration' and
+             grammar_selected and grammar_selected in grammar_data.keys()):
+            grammar = grammar_data[grammar_selected]
+            new_obj = tomato_gram.fatorar_gramatica(grammar, 0)
+            grammar_data[new_obg['nome']] = new_obj
+
+        elif (triggered_id == 'grammar-btn-remove-lr' and
+             grammar_selected and grammar_selected in grammar_data.keys()):
+            grammar = grammar_data[grammar_selected]
+            obj_grammar = tomato_gram_conv.create_grammar_with_dict(grammar)
+            obj_grammar.remove_left_recursion()
+            new_grammar = obj_grammar.asdict()
+            grammar_data[f'lrf_{grammar_selected}'] = new_grammar
 
         return grammar_data, []
 
